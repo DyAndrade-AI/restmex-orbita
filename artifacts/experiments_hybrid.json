@@ -1,0 +1,219 @@
+{
+  "protocol": "Comparación de señales de recuperación con selección en calibración y reporte en prueba.\n\nProtocolo (sin consultas escritas a mano):\n1. Holdout autosupervisado: reseñas reservadas fuera del índice, nombres enmascarados.\n2. División estratificada por pueblo: reseñas alternas a calibración y a prueba.\n3. Para cada consulta se calculan una sola vez las cuatro señales escaladas a [0, 1]:\n   perfil TF-IDF, evidencia por reseñas, BM25 medio por reseña y E5.\n4. Cualquier sistema es una combinación convexa s(w) = Σ_i w_i·signal_i (+ ajustes de exclusión).\n5. Se elige w en calibración (MRR) y se reporta en prueba contra el híbrido actual con un\n   bootstrap pareado (IC 95 % de la diferencia). Solo se adopta un cambio si el IC excluye 0.",
+  "queries": {
+    "calibration": 320,
+    "test": 280
+  },
+  "semantic": true,
+  "reference": "hibrido_actual (0.38/0.17/0.45)",
+  "grid_size": 286,
+  "systems": {
+    "tfidf_perfil": {
+      "weights": {
+        "lexical": 1.0,
+        "evidence": 0.0,
+        "bm25": 0.0,
+        "semantic": 0.0
+      },
+      "calibration": {
+        "mrr": 0.5202153166625092,
+        "hit_at_1": 0.396875,
+        "hit_at_5": 0.665625,
+        "ndcg_at_5": 0.5369059897906501,
+        "bottom5_rate": 0.009375,
+        "mean_rank": 6.928125
+      },
+      "test": {
+        "mrr": 0.4953513561713102,
+        "hit_at_1": 0.3678571428571429,
+        "hit_at_5": 0.6214285714285714,
+        "ndcg_at_5": 0.5048688038948718,
+        "bottom5_rate": 0.02142857142857143,
+        "mean_rank": 7.625
+      }
+    },
+    "evidencia_reseñas": {
+      "weights": {
+        "lexical": 0.0,
+        "evidence": 1.0,
+        "bm25": 0.0,
+        "semantic": 0.0
+      },
+      "calibration": {
+        "mrr": 0.360119827613458,
+        "hit_at_1": 0.24375,
+        "hit_at_5": 0.45625,
+        "ndcg_at_5": 0.3542618118433615,
+        "bottom5_rate": 0.021875,
+        "mean_rank": 10.85
+      },
+      "test": {
+        "mrr": 0.31607839878808536,
+        "hit_at_1": 0.19642857142857142,
+        "hit_at_5": 0.41785714285714287,
+        "ndcg_at_5": 0.30808857457208355,
+        "bottom5_rate": 0.02857142857142857,
+        "mean_rank": 11.292857142857143
+      }
+    },
+    "bm25_medio": {
+      "weights": {
+        "lexical": 0.0,
+        "evidence": 0.0,
+        "bm25": 1.0,
+        "semantic": 0.0
+      },
+      "calibration": {
+        "mrr": 0.4973597946553081,
+        "hit_at_1": 0.35625,
+        "hit_at_5": 0.65,
+        "ndcg_at_5": 0.5142868844993265,
+        "bottom5_rate": 0.015625,
+        "mean_rank": 7.0875
+      },
+      "test": {
+        "mrr": 0.4658842980374069,
+        "hit_at_1": 0.3357142857142857,
+        "hit_at_5": 0.6035714285714285,
+        "ndcg_at_5": 0.47684120985194767,
+        "bottom5_rate": 0.025,
+        "mean_rank": 7.792857142857143
+      }
+    },
+    "lexico_actual (0.68·tfidf + 0.32·evid)": {
+      "weights": {
+        "lexical": 0.68,
+        "evidence": 0.32,
+        "bm25": 0.0,
+        "semantic": 0.0
+      },
+      "calibration": {
+        "mrr": 0.5293959503131223,
+        "hit_at_1": 0.415625,
+        "hit_at_5": 0.659375,
+        "ndcg_at_5": 0.5408380061325567,
+        "bottom5_rate": 0.0125,
+        "mean_rank": 6.775
+      },
+      "test": {
+        "mrr": 0.5113917761007768,
+        "hit_at_1": 0.3964285714285714,
+        "hit_at_5": 0.6142857142857143,
+        "ndcg_at_5": 0.5133931849046541,
+        "bottom5_rate": 0.010714285714285714,
+        "mean_rank": 7.382142857142857
+      }
+    },
+    "bm25 + evidencia (0.68/0.32)": {
+      "weights": {
+        "lexical": 0.0,
+        "evidence": 0.32,
+        "bm25": 0.68,
+        "semantic": 0.0
+      },
+      "calibration": {
+        "mrr": 0.5326952606997192,
+        "hit_at_1": 0.415625,
+        "hit_at_5": 0.64375,
+        "ndcg_at_5": 0.5382518561444358,
+        "bottom5_rate": 0.009375,
+        "mean_rank": 6.796875
+      },
+      "test": {
+        "mrr": 0.5002578014777637,
+        "hit_at_1": 0.38571428571428573,
+        "hit_at_5": 0.6142857142857143,
+        "ndcg_at_5": 0.5056409544497759,
+        "bottom5_rate": 0.017857142857142856,
+        "mean_rank": 7.4678571428571425
+      }
+    },
+    "e5": {
+      "weights": {
+        "lexical": 0.0,
+        "evidence": 0.0,
+        "bm25": 0.0,
+        "semantic": 1.0
+      },
+      "calibration": {
+        "mrr": 0.31492642617204974,
+        "hit_at_1": 0.2,
+        "hit_at_5": 0.421875,
+        "ndcg_at_5": 0.31359076002569963,
+        "bottom5_rate": 0.046875,
+        "mean_rank": 12.809375
+      },
+      "test": {
+        "mrr": 0.2528791126884774,
+        "hit_at_1": 0.14642857142857144,
+        "hit_at_5": 0.3142857142857143,
+        "ndcg_at_5": 0.23299999836837643,
+        "bottom5_rate": 0.04642857142857143,
+        "mean_rank": 14.321428571428571
+      }
+    },
+    "hibrido_actual (0.38/0.17/0.45)": {
+      "weights": {
+        "lexical": 0.38,
+        "evidence": 0.17,
+        "bm25": 0.0,
+        "semantic": 0.45
+      },
+      "calibration": {
+        "mrr": 0.501215881355396,
+        "hit_at_1": 0.384375,
+        "hit_at_5": 0.603125,
+        "ndcg_at_5": 0.5027476276564771,
+        "bottom5_rate": 0.0125,
+        "mean_rank": 7.603125
+      },
+      "test": {
+        "mrr": 0.4675331061514741,
+        "hit_at_1": 0.3464285714285714,
+        "hit_at_5": 0.6,
+        "ndcg_at_5": 0.4780554327166029,
+        "bottom5_rate": 0.010714285714285714,
+        "mean_rank": 8.282142857142857
+      }
+    },
+    "ajustado_en_calibracion": {
+      "weights": {
+        "lexical": 0.4,
+        "evidence": 0.2,
+        "bm25": 0.3,
+        "semantic": 0.1
+      },
+      "calibration": {
+        "mrr": 0.5548622017658975,
+        "hit_at_1": 0.44375,
+        "hit_at_5": 0.65625,
+        "ndcg_at_5": 0.5578498477513939,
+        "bottom5_rate": 0.015625,
+        "mean_rank": 6.421875
+      },
+      "test": {
+        "mrr": 0.5255686863444674,
+        "hit_at_1": 0.4035714285714286,
+        "hit_at_5": 0.6678571428571428,
+        "ndcg_at_5": 0.5437311533687995,
+        "bottom5_rate": 0.014285714285714285,
+        "mean_rank": 7.2178571428571425
+      }
+    }
+  },
+  "tuned_vs_reference_test": {
+    "mrr": {
+      "mean_diff": 0.058035580192993284,
+      "ci95_low": 0.027655783430231253,
+      "ci95_high": 0.0884199850368792,
+      "p_two_sided": 0.0
+    },
+    "hit_at_5": {
+      "mean_diff": 0.06785714285714285,
+      "ci95_low": 0.02142857142857143,
+      "ci95_high": 0.11071428571428571,
+      "p_two_sided": 0.0028
+    }
+  },
+  "duration_s": 79.2
+}

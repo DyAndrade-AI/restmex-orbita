@@ -1,0 +1,48 @@
+name: orbita-strange-loop
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    image: orbita-api:local
+    environment:
+      ORBITA_HOST: 0.0.0.0
+      ORBITA_API_PORT: 8765
+      ORBITA_CORS_ORIGIN: "*"
+    volumes:
+      - orbita-labels:/app/eval/labels
+    expose:
+      - "8765"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import json,urllib.request; json.load(urllib.request.urlopen('http://127.0.0.1:8765/health', timeout=4))"
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    restart: unless-stopped
+
+  web:
+    build:
+      context: web
+      dockerfile: Dockerfile
+    image: orbita-web:local
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${ORBITA_WEB_PORT:-4321}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  orbita-labels:

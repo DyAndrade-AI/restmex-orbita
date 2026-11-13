@@ -1,0 +1,149 @@
+{
+  "scope": "Auditoría interna de constelaciones; no estima relevancia humana.",
+  "queries": 10,
+  "all_contracts_pass": true,
+  "mean_pairwise_lexical_distance": 0.5004,
+  "mean_resilience": 88.44,
+  "results": [
+    {
+      "query": "Quiero playas tranquilas, agua turquesa y snorkel",
+      "destinations": [
+        "Tulum",
+        "Isla_Mujeres",
+        "Sayulita",
+        "Palenque",
+        "Bacalar"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.4102,
+      "mean_resilience": 93.02
+    },
+    {
+      "query": "Busco pirámides, arqueología e historia prehispánica",
+      "destinations": [
+        "Teotihuacan",
+        "Cholula",
+        "Cuetzalan",
+        "Dolores_Hidalgo",
+        "Izamal"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.5601,
+      "mean_resilience": 92.18
+    },
+    {
+      "query": "Me interesan viñedos, vino y recorridos por bodegas",
+      "destinations": [
+        "Parras",
+        "Dolores_Hidalgo",
+        "Tequila",
+        "Cuetzalan",
+        "Chiapa_de_Corzo"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.6085,
+      "mean_resilience": 88.32
+    },
+    {
+      "query": "Quiero bosque, montaña, cabañas y senderismo",
+      "destinations": [
+        "Cuetzalan",
+        "Zacatlan",
+        "Tapalpa",
+        "Tepoztlan",
+        "Creel"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.4552,
+      "mean_resilience": 81.28
+    },
+    {
+      "query": "Busco cenotes para nadar y naturaleza",
+      "destinations": [
+        "Valladolid",
+        "Bacalar",
+        "Tulum",
+        "Huasca_de_Ocampo",
+        "Cuatro_Cienegas"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.5163,
+      "mean_resilience": 87.18
+    },
+    {
+      "query": "Quiero gastronomía mexicana, mercados y restaurantes tradicionales",
+      "destinations": [
+        "Tlaquepaque",
+        "Tepoztlan",
+        "Izamal",
+        "Valladolid",
+        "Coatepec"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.464,
+      "mean_resilience": 92.0
+    },
+    {
+      "query": "Deseo arquitectura colonial, iglesias y calles históricas",
+      "destinations": [
+        "Cholula",
+        "Taxco",
+        "Dolores_Hidalgo",
+        "Atlixco",
+        "San_Cristobal_de_las_Casas"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.5341,
+      "mean_resilience": 84.88
+    },
+    {
+      "query": "Quiero cascadas, vegetación y aventura al aire libre",
+      "destinations": [
+        "Palenque",
+        "Xilitla",
+        "Zacatlan",
+        "Huasca_de_Ocampo",
+        "Tapalpa"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.5076,
+      "mean_resilience": 88.94
+    },
+    {
+      "query": "Busco un viaje relajante con spa y aguas termales",
+      "destinations": [
+        "Ixtapan_de_la_Sal",
+        "Tepoztlan",
+        "Palenque",
+        "Tequisquiapan",
+        "Loreto"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.4191,
+      "mean_resilience": 87.18
+    },
+    {
+      "query": "Quiero desierto y paisajes naturales, sin playa",
+      "destinations": [
+        "Cuatro_Cienegas",
+        "Huasca_de_Ocampo",
+        "Creel",
+        "Zacatlan",
+        "Tepoztlan"
+      ],
+      "unique": true,
+      "deterministic": true,
+      "mean_pairwise_lexical_distance": 0.5293,
+      "mean_resilience": 89.4
+    }
+  ]
+}

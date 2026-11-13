@@ -1,0 +1,642 @@
+[
+  {
+    "town": "Ajijic",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Ajijic",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Ajijic",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Ajijic",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Atlixco",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Atlixco",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Atlixco",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Atlixco",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Bacalar",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Bacalar",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Bacalar",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Bacalar",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Bernal",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Bernal",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Bernal",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Bernal",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Chiapa_de_Corzo",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Chiapa_de_Corzo",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Chiapa_de_Corzo",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Chiapa_de_Corzo",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Cholula",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Cholula",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Cholula",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Cholula",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Coatepec",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Coatepec",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Coatepec",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Coatepec",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Creel",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Creel",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Creel",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Creel",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Cuatro_Cienegas",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Cuatro_Cienegas",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Cuatro_Cienegas",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Cuatro_Cienegas",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Cuetzalan",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Cuetzalan",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Cuetzalan",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Cuetzalan",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Dolores_Hidalgo",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Dolores_Hidalgo",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Dolores_Hidalgo",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Dolores_Hidalgo",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Huasca_de_Ocampo",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Huasca_de_Ocampo",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Huasca_de_Ocampo",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Huasca_de_Ocampo",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Isla_Mujeres",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Isla_Mujeres",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Isla_Mujeres",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Isla_Mujeres",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Ixtapan_de_la_Sal",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Ixtapan_de_la_Sal",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Ixtapan_de_la_Sal",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Ixtapan_de_la_Sal",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Izamal",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Izamal",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Izamal",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Izamal",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Loreto",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Loreto",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Loreto",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Loreto",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Malinalco",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Malinalco",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Malinalco",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Malinalco",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Mazunte",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Mazunte",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Mazunte",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Mazunte",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Metepec",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Metepec",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Metepec",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Metepec",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Orizaba",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Orizaba",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Orizaba",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Orizaba",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Palenque",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Palenque",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Palenque",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Palenque",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Parras",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Parras",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Parras",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Parras",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Patzcuaro",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Patzcuaro",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Patzcuaro",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Patzcuaro",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Real_de_Catorce",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Real_de_Catorce",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Real_de_Catorce",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Real_de_Catorce",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "San_Cristobal_de_las_Casas",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "San_Cristobal_de_las_Casas",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "San_Cristobal_de_las_Casas",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "San_Cristobal_de_las_Casas",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Sayulita",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Sayulita",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Sayulita",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Sayulita",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Tapalpa",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Tapalpa",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Tapalpa",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Tapalpa",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Taxco",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Taxco",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Taxco",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Taxco",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Teotihuacan",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Teotihuacan",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Teotihuacan",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Teotihuacan",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Tepotzotlan",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Tepotzotlan",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Tepotzotlan",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Tepotzotlan",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Tepoztlan",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Tepoztlan",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Tepoztlan",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Tepoztlan",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Tequila",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Tequila",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Tequila",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Tequila",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Tequisquiapan",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Tequisquiapan",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Tequisquiapan",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Tequisquiapan",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Tlaquepaque",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Tlaquepaque",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Tlaquepaque",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Tlaquepaque",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "TodosSantos",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "TodosSantos",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "TodosSantos",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "TodosSantos",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Tulum",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Tulum",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Tulum",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Tulum",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Valladolid",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Valladolid",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Valladolid",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Valladolid",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Valle_de_Bravo",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Valle_de_Bravo",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Valle_de_Bravo",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Valle_de_Bravo",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Xilitla",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Xilitla",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Xilitla",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Xilitla",
+    "profile_type": "Restaurant"
+  },
+  {
+    "town": "Zacatlan",
+    "profile_type": "ALL"
+  },
+  {
+    "town": "Zacatlan",
+    "profile_type": "Attractive"
+  },
+  {
+    "town": "Zacatlan",
+    "profile_type": "Hotel"
+  },
+  {
+    "town": "Zacatlan",
+    "profile_type": "Restaurant"
+  }
+]

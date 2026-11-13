@@ -1,0 +1,365 @@
+{
+  "convergence": [
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "futures": 1000,
+      "max_abs_diff_pp": 1.322
+    },
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "futures": 5000,
+      "max_abs_diff_pp": 0.834
+    },
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "futures": 10000,
+      "max_abs_diff_pp": 1.027
+    },
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "futures": 50000,
+      "max_abs_diff_pp": 0.295
+    },
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "futures": 100000,
+      "max_abs_diff_pp": 0.183
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "futures": 1000,
+      "max_abs_diff_pp": 1.341
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "futures": 5000,
+      "max_abs_diff_pp": 0.478
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "futures": 10000,
+      "max_abs_diff_pp": 0.956
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "futures": 50000,
+      "max_abs_diff_pp": 0.204
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "futures": 100000,
+      "max_abs_diff_pp": 0.098
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "futures": 1000,
+      "max_abs_diff_pp": 0.347
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "futures": 5000,
+      "max_abs_diff_pp": 0.563
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "futures": 10000,
+      "max_abs_diff_pp": 0.537
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "futures": 50000,
+      "max_abs_diff_pp": 0.167
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "futures": 100000,
+      "max_abs_diff_pp": 0.07
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "futures": 1000,
+      "max_abs_diff_pp": 1.418
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "futures": 5000,
+      "max_abs_diff_pp": 0.385
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "futures": 10000,
+      "max_abs_diff_pp": 0.218
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "futures": 50000,
+      "max_abs_diff_pp": 0.219
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "futures": 100000,
+      "max_abs_diff_pp": 0.103
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "futures": 1000,
+      "max_abs_diff_pp": 1.361
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "futures": 5000,
+      "max_abs_diff_pp": 0.579
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "futures": 10000,
+      "max_abs_diff_pp": 0.519
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "futures": 50000,
+      "max_abs_diff_pp": 0.226
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "futures": 100000,
+      "max_abs_diff_pp": 0.362
+    }
+  ],
+  "seeds": [
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "top_destination_agreement": 1.0,
+      "max_share_sd_pp": 0.138,
+      "entropy_sd": 0.088
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "top_destination_agreement": 1.0,
+      "max_share_sd_pp": 0.161,
+      "entropy_sd": 0.112
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "top_destination_agreement": 1.0,
+      "max_share_sd_pp": 0.117,
+      "entropy_sd": 0.108
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "top_destination_agreement": 1.0,
+      "max_share_sd_pp": 0.195,
+      "entropy_sd": 0.103
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "top_destination_agreement": 1.0,
+      "max_share_sd_pp": 0.219,
+      "entropy_sd": 0.133
+    }
+  ],
+  "risk": [
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "risk": 0.0,
+      "entropy": 45.67,
+      "top": "Tlaquepaque",
+      "top_share": 31.68
+    },
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "risk": 0.25,
+      "entropy": 55.11,
+      "top": "Tlaquepaque",
+      "top_share": 24.37
+    },
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "risk": 0.5,
+      "entropy": 64.97,
+      "top": "Tlaquepaque",
+      "top_share": 18.97
+    },
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "risk": 0.75,
+      "entropy": 72.88,
+      "top": "Tlaquepaque",
+      "top_share": 14.65
+    },
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "risk": 1.0,
+      "entropy": 78.56,
+      "top": "Valladolid",
+      "top_share": 12.1
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "risk": 0.0,
+      "entropy": 6.55,
+      "top": "Zacatlan",
+      "top_share": 94.9
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "risk": 0.25,
+      "entropy": 20.09,
+      "top": "Zacatlan",
+      "top_share": 79.49
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "risk": 0.5,
+      "entropy": 31.85,
+      "top": "Zacatlan",
+      "top_share": 63.72
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "risk": 0.75,
+      "entropy": 42.42,
+      "top": "Zacatlan",
+      "top_share": 50.71
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "risk": 1.0,
+      "entropy": 54.25,
+      "top": "Zacatlan",
+      "top_share": 38.55
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "risk": 0.0,
+      "entropy": 3.14,
+      "top": "Tulum",
+      "top_share": 97.54
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "risk": 0.25,
+      "entropy": 8.24,
+      "top": "Tulum",
+      "top_share": 91.4
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "risk": 0.5,
+      "entropy": 14.4,
+      "top": "Tulum",
+      "top_share": 83.48
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "risk": 0.75,
+      "entropy": 23.51,
+      "top": "Tulum",
+      "top_share": 74.14
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "risk": 1.0,
+      "entropy": 37.7,
+      "top": "Tulum",
+      "top_share": 62.19
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "risk": 0.0,
+      "entropy": 12.51,
+      "top": "Izamal",
+      "top_share": 82.7
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "risk": 0.25,
+      "entropy": 15.42,
+      "top": "Izamal",
+      "top_share": 77.11
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "risk": 0.5,
+      "entropy": 22.2,
+      "top": "Izamal",
+      "top_share": 69.53
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "risk": 0.75,
+      "entropy": 34.13,
+      "top": "Izamal",
+      "top_share": 60.09
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "risk": 1.0,
+      "entropy": 51.05,
+      "top": "Izamal",
+      "top_share": 46.54
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "risk": 0.0,
+      "entropy": 12.59,
+      "top": "Cuatro Cienegas",
+      "top_share": 87.04
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "risk": 0.25,
+      "entropy": 18.19,
+      "top": "Cuatro Cienegas",
+      "top_share": 79.8
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "risk": 0.5,
+      "entropy": 28.1,
+      "top": "Cuatro Cienegas",
+      "top_share": 68.83
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "risk": 0.75,
+      "entropy": 40.59,
+      "top": "Cuatro Cienegas",
+      "top_share": 56.91
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "risk": 1.0,
+      "entropy": 52.64,
+      "top": "Cuatro Cienegas",
+      "top_share": 43.87
+    }
+  ],
+  "coherence": [
+    {
+      "query": "Quiero arquitectura colonial, gastronomí",
+      "multiverse_top5_in_classic_top5": 3,
+      "classic_bottom5_win_share_pp": 0.0
+    },
+    {
+      "query": "Quiero bosque, cabañas, gastronomía y av",
+      "multiverse_top5_in_classic_top5": 3,
+      "classic_bottom5_win_share_pp": 0.004
+    },
+    {
+      "query": "Playas tranquilas, agua turquesa, snorke",
+      "multiverse_top5_in_classic_top5": 4,
+      "classic_bottom5_win_share_pp": 0.008
+    },
+    {
+      "query": "Cenotes, comida yucateca, historia y tra",
+      "multiverse_top5_in_classic_top5": 5,
+      "classic_bottom5_win_share_pp": 0.048
+    },
+    {
+      "query": "Desierto, silencio, paisajes naturales y",
+      "multiverse_top5_in_classic_top5": 3,
+      "classic_bottom5_win_share_pp": 0.01
+    }
+  ]
+}

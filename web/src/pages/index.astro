@@ -1,0 +1,620 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Órbita — 5 destinos más y 5 menos afines"
+  description="Recomendador local de Pueblos Mágicos: los 5 destinos más afines y los 5 menos afines a tu consulta, con evidencia de 208,051 reseñas y evaluación automática."
+>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Órbita, inicio">
+      <span class="brand-mark"><i></i></span>
+      <span>ÓRBITA</span>
+    </a>
+    <nav aria-label="Navegación principal">
+      <a href="#recomendar">Recomendar 5 + 5</a>
+      <a href="#laboratorio">Laboratorio</a>
+      <a href="#evaluacion">Evaluación</a>
+      <a href="#metodo">Cómo funciona</a>
+      <span class="status"><i></i> Motor local</span>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow">SISTEMA DE RECOMENDACIÓN · REST-MEX 2025</p>
+        <h1>Describe tu viaje.<br /><em>Te damos 5 sí y 5 no.</em></h1>
+        <p class="hero-lede">
+          Los 5 Pueblos Mágicos más afines a lo que escribes y los 5 menos afines, cada uno con
+          evidencia de las reseñas del train. Después, el laboratorio explora futuros alternativos.
+        </p>
+        <a class="text-link" href="#recomendar">Ver los 5 más y 5 menos afines <span>↓</span></a>
+      </div>
+
+      <div class="orbit-visual" aria-label="Cinco futuros orbitando alrededor de tu intención">
+        <div class="portal-gate" aria-hidden="true">
+          <div class="portal-ring ring-a"></div>
+          <div class="portal-ring ring-b"></div>
+          <div class="portal-ring ring-c"></div>
+          <div class="portal-sparks" id="hero-sparks"></div>
+        </div>
+        <div class="orbit orbit-one"><span class="planet p-one" data-orbit-label="Ancla"></span></div>
+        <div class="orbit orbit-two"><span class="planet p-two" data-orbit-label="Portal"></span></div>
+        <div class="orbit orbit-three"><span class="planet p-three" data-orbit-label="Comodín"></span></div>
+        <div class="core">
+          <span>TU</span>
+          <strong>INTENCIÓN</strong>
+        </div>
+        <div class="coordinate coord-a">19.4326° N</div>
+        <div class="coordinate coord-b">40 DESTINOS</div>
+      </div>
+    </section>
+
+    <section class="lab-section classic-section" id="recomendar">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RECOMENDACIÓN 5 + 5</p>
+            <h2>Los 5 más afines y los 5 menos afines.</h2>
+          </div>
+          <p>Afinidad temática con tu consulta. La calidad se muestra aparte y no altera el orden.</p>
+        </div>
+        <form class="query-console" id="classic-form">
+          <div class="console-bar"><span><i></i> CONSULTA / 5 + 5</span><span id="classic-status">LISTO</span></div>
+          <label for="classic-query">¿Qué experiencia estás buscando?</label>
+          <textarea id="classic-query" name="classic-query" rows="2" required minlength="8"
+            placeholder="Quiero cenotes para nadar y comida yucateca, sin Tulum…">Quiero cenotes para nadar y comida yucateca, sin Tulum</textarea>
+          <div class="console-controls classic-controls">
+            <button class="submit-button" type="submit"><span>Recomendar</span><b>↗</b></button>
+          </div>
+          <div class="examples" aria-label="Consultas de ejemplo">
+            <span>Prueba:</span>
+            <button type="button" data-classic="Playas tranquilas, agua turquesa y snorkel">Playa</button>
+            <button type="button" data-classic="Busco pirámides, arqueología e historia prehispánica">Arqueología</button>
+            <button type="button" data-classic="Naturaleza y aventura en la sierra, sin playa ni mar">Sierra sin mar</button>
+          </div>
+        </form>
+        <div class="classic-results" id="classic-results" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="lab-section" id="laboratorio">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">LABORATORIO DE POSIBILIDADES</p>
+            <h2>Describe tu viaje imposible.</h2>
+          </div>
+          <p>El motor lo separa en gustos, límites y futuros alternativos.</p>
+        </div>
+
+        <form class="query-console" id="query-form">
+          <div class="console-bar">
+            <span><i></i> INTENCIÓN / 001</span>
+            <span id="api-status">CONECTANDO AL MOTOR…</span>
+          </div>
+          <label for="query">¿Qué experiencia estás buscando?</label>
+          <textarea
+            id="query"
+            name="query"
+            rows="3"
+            required
+            minlength="8"
+            placeholder="Quiero bosque, cabañas, comida tradicional y aventura, sin playa…"
+          >Quiero bosque, cabañas, gastronomía y aventura, sin playa</textarea>
+          <div class="console-controls">
+            <div class="risk-control">
+              <div class="risk-labels">
+                <label for="risk">Riesgo creativo</label>
+                <output id="risk-output" for="risk">55%</output>
+              </div>
+              <input id="risk" name="risk" type="range" min="0" max="100" value="55" />
+              <div class="risk-scale"><span>PRECISO</span><span>INESPERADO</span></div>
+            </div>
+            <button class="submit-button" type="submit">
+              <span>Ver mis futuros</span><b>↗</b>
+            </button>
+          </div>
+          <div class="examples" aria-label="Consultas de ejemplo">
+            <span>Prueba:</span>
+            <button type="button" data-query="Playas tranquilas, agua turquesa y snorkel">Agua y snorkel</button>
+            <button type="button" data-query="Arquitectura colonial, mercados y comida tradicional">Historia y sabor</button>
+            <button type="button" data-query="Desierto, silencio y paisajes naturales, sin playa">Desierto sin playa</button>
+          </div>
+        </form>
+
+        <div class="loading-panel" id="loading" hidden>
+          <div class="loader-orbit"><i></i><i></i><i></i></div>
+          <p>Observando 50,000 líneas temporales…</p>
+          <span>Cada partícula es una versión posible de tus preferencias</span>
+        </div>
+
+        <div class="results multiverse-results" id="results" hidden>
+          <div class="multiverse-head">
+            <div>
+              <p class="eyebrow">STRANGE LOOP / SIMULACIÓN 001</p>
+              <h2>El multiverso está abierto.</h2>
+            </div>
+            <button class="reset-loop" id="reset-loop" type="button">↺ Reiniciar decisiones</button>
+          </div>
+
+          <div class="multiverse-stats">
+            <div><strong id="total-futures">0</strong><span>futuros observados</span></div>
+            <div><strong id="surviving-futures">0</strong><span>siguen abiertos</span></div>
+            <div><strong id="collapsed-futures">0</strong><span>colapsaron</span></div>
+            <div><strong id="entropy-value">0</strong><span>entropía de decisión</span></div>
+          </div>
+
+          <div class="facet-row multiverse-facets" id="facets"></div>
+
+          <div class="multiverse-chamber" id="multiverse-chamber">
+            <canvas id="multiverse-canvas" aria-label="Partículas de futuros viajando hacia destinos"></canvas>
+            <div class="canvas-overlay">
+              <span>MAPA DE CONVERGENCIA</span>
+              <b id="particle-caption">Cada luz es un posible tú</b>
+            </div>
+            <div class="portal-legend" id="portal-legend"></div>
+            <div class="collapse-flash" id="collapse-flash"></div>
+          </div>
+
+          <section class="sacrifice-console" id="sacrifice-console">
+            <div class="sacrifice-symbol">
+              <span></span><i></i><b></b>
+            </div>
+            <div class="sacrifice-content">
+              <p class="eyebrow">PUNTO DE SACRIFICIO</p>
+              <h3 id="sacrifice-question">Calculando la pregunta que cierra más futuros…</h3>
+              <p id="information-gain"></p>
+              <div class="sacrifice-actions" id="sacrifice-actions"></div>
+              <div class="decision-trail" id="decision-trail"></div>
+            </div>
+          </section>
+
+          <div class="basin-heading">
+            <div><p class="eyebrow">CUENCAS DE DESTINO</p><h3>¿Dónde terminan tus otros yo?</h3></div>
+            <p>El porcentaje indica cuántas versiones de tus preferencias eligieron cada lugar.</p>
+          </div>
+          <div class="basin-grid" id="basin-grid"></div>
+          <p class="simulation-disclaimer" id="mc-note"></p>
+
+          <section class="shift-panel" id="shift-panel" hidden aria-labelledby="shift-title">
+            <h3 id="shift-title">Antes y después de tu decisión</h3>
+            <ol class="shift-list" id="shift-list"></ol>
+          </section>
+
+          <section class="orbit-panel" aria-labelledby="orbit-title">
+            <div class="basin-heading">
+              <div><p class="eyebrow">ÓRBITA · CONSTELACIÓN CONTRAFACTUAL</p><h3 id="orbit-title">Cinco futuros con roles distintos.</h3></div>
+              <p>Ancla, Superviviente, Portal, Especialista y Comodín. La estabilidad es el % de 2,000 perturbaciones de tus pesos en que el destino sigue en el top 10.</p>
+            </div>
+            <div class="orbit-grid" id="orbit-grid"></div>
+            <h4>¿Por qué los 5 menos compatibles están abajo?</h4>
+            <ul class="bottom-orbit" id="bottom-orbit"></ul>
+            <h4>Los 5 menos compatibles dentro del multiverso</h4>
+            <ul class="bottom-orbit" id="bottom-multiverse"></ul>
+          </section>
+
+          <section class="trajectory-panel">
+            <div class="trajectory-copy">
+              <p class="eyebrow">TRAYECTORIA ESPECULATIVA</p>
+              <h3>Un viaje cambia al siguiente.</h3>
+              <p>Simulamos cómo la afinidad despertada por un destino podría modificar tu próxima elección.</p>
+            </div>
+            <div class="trajectory-line" id="trajectory-line"></div>
+          </section>
+
+          <p class="simulation-disclaimer" id="simulation-disclaimer"></p>
+        </div>
+
+        <div class="error-panel" id="error" hidden>
+          <strong>No pudimos abrir las líneas temporales.</strong>
+          <p id="error-message"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="eval-section" id="evaluacion">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">EVALUACIÓN AUTOMÁTICA</p>
+            <h2>Evalúa el sistema en minutos.</h2>
+          </div>
+          <p>Un clic corre el banco de consultas, referencias, casos adversariales y determinismo.</p>
+        </div>
+        <div class="eval-panel" id="eval-panel">
+          <div class="eval-actions">
+            <button type="button" class="submit-button" id="eval-run"><span>Ejecutar evaluación</span><b>▶</b></button>
+            <button type="button" class="ghost-button" id="eval-last">Ver último reporte completo</button>
+          </div>
+          <div id="eval-output" aria-live="polite"></div>
+        </div>
+
+        <div class="blind-panel" id="lab-panel">
+          <h3>Laboratorio de evaluación humana ciega</h3>
+          <p>Cada consulta muestra un conjunto de destinos (unión de los extremos de varios sistemas y algunos de la zona media) en orden aleatorio, sin puntuaciones, posiciones ni sistema. Califica de 0 a 3, marca la restricción y si la evidencia no alcanza. Los juicios se guardan en el registro local persistente (<code>eval/judgments.jsonl</code> en desarrollo; volumen <code>orbita-labels</code> en Docker).</p>
+          <div class="blind-form">
+            <label for="lab-evaluator">Evaluador</label>
+            <input id="lab-evaluator" type="text" maxlength="60" autocomplete="off" placeholder="Iniciales o seudónimo" />
+            <label for="lab-split">Partición</label>
+            <select id="lab-split">
+              <option value="dev">dev (desarrollo, aprendizaje activo)</option>
+              <option value="calibration">calibration (ajuste de pesos)</option>
+              <option value="test">test (evaluación final, orden aleatorio)</option>
+            </select>
+            <button type="button" class="submit-button" id="lab-load"><span>Ver cola</span><b>→</b></button>
+          </div>
+          <p id="lab-status" role="status"></p>
+          <div id="lab-queue"></div>
+          <div id="lab-stage"></div>
+          <div id="lab-report" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="method-section shell" id="metodo">
+      <div class="section-heading method-title">
+        <div>
+          <p class="eyebrow">EL MÉTODO</p>
+          <h2>Un Doctor Strange para tus viajes.</h2>
+        </div>
+        <p>No adivina. Simula qué ocurre cuando una prioridad desaparece.</p>
+      </div>
+      <div class="method-steps">
+        <article><span>01</span><h3>Desarma</h3><p>Convierte tu frase en átomos como bosque, comida, aventura y límites.</p></article>
+        <article><span>02</span><h3>Multiplica</h3><p>Crea 50,000 versiones de ti con prioridades y experiencias ligeramente distintas.</p></article>
+        <article><span>03</span><h3>Sacrifica</h3><p>Encuentra la pregunta capaz de cerrar la mayor cantidad esperada de futuros.</p></article>
+        <article><span>04</span><h3>Colapsa</h3><p>Tus decisiones borran líneas temporales hasta revelar un futuro estable.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <a class="brand" href="#top"><span class="brand-mark"><i></i></span><span>ÓRBITA</span></a>
+      <p>40 Pueblos Mágicos · 208,051 reseñas · funcionamiento local</p>
+      <span>EXPERIMENTO 2026</span>
+    </div>
+  </footer>
+
+  <script>
+    import {
+      basinMarkup,
+      bottomMultiverseMarkup,
+      branchMarkup,
+      decisionTrailMarkup,
+      rankingShiftMarkup,
+      trajectoryMarkup,
+    } from "../scripts/multiverse-markup";
+    import cardMarkup from "../scripts/card-markup";
+    import { escapeHtml, postJson, renderClassic, type RecommendResult } from "../scripts/classic";
+    import { renderEvaluation } from "../scripts/evaluator";
+    import { setupLab } from "../scripts/lab";
+
+    const API_URL = "";
+    const form = document.querySelector<HTMLFormElement>("#query-form")!;
+    const query = document.querySelector<HTMLTextAreaElement>("#query")!;
+    const risk = document.querySelector<HTMLInputElement>("#risk")!;
+    const riskOutput = document.querySelector<HTMLOutputElement>("#risk-output")!;
+    const apiStatus = document.querySelector<HTMLElement>("#api-status")!;
+    const loading = document.querySelector<HTMLElement>("#loading")!;
+    const results = document.querySelector<HTMLElement>("#results")!;
+    const errorPanel = document.querySelector<HTMLElement>("#error")!;
+    const errorMessage = document.querySelector<HTMLElement>("#error-message")!;
+    const facets = document.querySelector<HTMLElement>("#facets")!;
+    const chamber = document.querySelector<HTMLElement>("#multiverse-chamber")!;
+    const canvas = document.querySelector<HTMLCanvasElement>("#multiverse-canvas")!;
+    const basinGrid = document.querySelector<HTMLElement>("#basin-grid")!;
+    const portalLegend = document.querySelector<HTMLElement>("#portal-legend")!;
+    const sacrificeQuestion = document.querySelector<HTMLElement>("#sacrifice-question")!;
+    const sacrificeActions = document.querySelector<HTMLElement>("#sacrifice-actions")!;
+    const decisionTrail = document.querySelector<HTMLElement>("#decision-trail")!;
+    const trajectoryLine = document.querySelector<HTMLElement>("#trajectory-line")!;
+    const flash = document.querySelector<HTMLElement>("#collapse-flash")!;
+    const colors = ["#78f0ce", "#f3c969", "#ff826b", "#8db6ff", "#d89cff"];
+    let activeChoices: Array<{ keep: string; sacrifice: string }> = [];
+    let currentData: any = null;
+    let animationFrame = 0;
+
+    const sparkContainer = document.querySelector<HTMLElement>("#hero-sparks")!;
+    sparkContainer.innerHTML = Array.from({ length: 42 }, (_, index) =>
+      `<i style="--i:${index};--d:${(index % 7) * -0.23}s"></i>`
+    ).join("");
+
+    risk.addEventListener("input", () => {
+      riskOutput.value = `${risk.value}%`;
+      risk.style.background = `linear-gradient(90deg, #216d61 ${risk.value}%, #c8d5d0 ${risk.value}%)`;
+    });
+
+    document.querySelectorAll<HTMLButtonElement>("[data-query]").forEach((button) => {
+      button.addEventListener("click", () => {
+        query.value = button.dataset.query ?? "";
+        query.focus();
+      });
+    });
+
+    async function checkApi() {
+      try {
+        const response = await fetch(`${API_URL}/health`);
+        if (!response.ok) throw new Error();
+        const health = await response.json();
+        apiStatus.textContent = `MOTOR ${String(health.mode).toUpperCase()} / LOCAL`;
+        apiStatus.title = `Semántica: ${health.semantic_status}`;
+        apiStatus.classList.add("online");
+      } catch {
+        apiStatus.textContent = "MOTOR SIN CONEXIÓN";
+      }
+    }
+
+    function countTo(element: HTMLElement, value: number, suffix = "") {
+      const start = performance.now();
+      const duration = 700;
+      const frame = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        element.textContent = `${Math.round(value * eased).toLocaleString("es-MX")}${suffix}`;
+        if (progress < 1) requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    }
+
+    function drawMultiverse(data: any) {
+      cancelAnimationFrame(animationFrame);
+      const context = canvas.getContext("2d")!;
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      const bounds = chamber.getBoundingClientRect();
+      canvas.width = Math.max(600, bounds.width * ratio);
+      canvas.height = Math.max(430, bounds.height * ratio);
+      context.scale(ratio, ratio);
+      const width = canvas.width / ratio;
+      const height = canvas.height / ratio;
+      const portals = data.destinations.map((_: any, index: number) => {
+        const angle = -Math.PI / 2 + index * (Math.PI * 2 / data.destinations.length);
+        const radius = Math.min(width, height) * 0.32;
+        return {
+          x: width / 2 + Math.cos(angle) * radius,
+          y: height / 2 + Math.sin(angle) * radius,
+          color: colors[index],
+        };
+      });
+      const shares = data.destinations.map((destination: any) => destination.share);
+      const particles = Array.from({ length: 520 }, (_, index) => {
+        const selector = (index * 73.137) % 100;
+        let accumulated = 0;
+        let destination = 0;
+        for (let i = 0; i < shares.length; i += 1) {
+          accumulated += shares[i];
+          if (selector <= accumulated) { destination = i; break; }
+        }
+        return {
+          destination,
+          angle: index * 2.39996,
+          radius: 16 + (index % 31) * 3.1,
+          speed: .0015 + (index % 9) * .00017,
+          size: 1 + (index % 4) * .45,
+          phase: (index % 17) * .31,
+        };
+      });
+      const start = performance.now();
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const animate = (time: number) => {
+        const elapsed = time - start;
+        context.clearRect(0, 0, width, height);
+        const glow = context.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width * .4);
+        glow.addColorStop(0, "rgba(95, 221, 193, .09)");
+        glow.addColorStop(1, "rgba(4, 17, 28, 0)");
+        context.fillStyle = glow;
+        context.fillRect(0, 0, width, height);
+        portals.forEach((portal: any, index: number) => {
+          const pulse = 23 + Math.sin(elapsed * .003 + index) * 4;
+          context.beginPath();
+          context.arc(portal.x, portal.y, pulse, 0, Math.PI * 2);
+          context.strokeStyle = `${portal.color}aa`;
+          context.lineWidth = 2;
+          context.stroke();
+          context.beginPath();
+          context.arc(portal.x, portal.y, pulse + 7, elapsed * .001, elapsed * .001 + Math.PI * 1.45);
+          context.strokeStyle = `${portal.color}55`;
+          context.lineWidth = 1;
+          context.stroke();
+        });
+        particles.forEach((particle: any) => {
+          const portal = portals[particle.destination] || portals[0];
+          const progress = .58 + .42 * Math.sin(elapsed * particle.speed + particle.phase);
+          const spiral = particle.angle + elapsed * particle.speed * 2.3;
+          const localRadius = particle.radius * (1 - progress * .78);
+          const x = width / 2 + (portal.x - width / 2) * progress + Math.cos(spiral) * localRadius;
+          const y = height / 2 + (portal.y - height / 2) * progress + Math.sin(spiral) * localRadius;
+          context.beginPath();
+          context.arc(x, y, particle.size, 0, Math.PI * 2);
+          context.fillStyle = `${portal.color}${progress > .88 ? "ff" : "99"}`;
+          context.fill();
+        });
+        if (!reduceMotion) animationFrame = requestAnimationFrame(animate);
+      };
+      if (reduceMotion) animate(0);
+      else animationFrame = requestAnimationFrame(animate);
+    }
+
+    function renderData(data: any, collapsing = false) {
+      const previous = currentData;
+      currentData = data;
+      const shiftPanel = document.querySelector<HTMLElement>("#shift-panel")!;
+      if (collapsing && previous) {
+        document.querySelector("#shift-list")!.innerHTML = rankingShiftMarkup(previous.destinations, data.destinations);
+        shiftPanel.hidden = false;
+      } else {
+        shiftPanel.hidden = true;
+      }
+      const mc = data.monte_carlo;
+      document.querySelector("#mc-note")!.textContent =
+        `Monte Carlo: error estándar máximo ${mc.worst_case_se_pp} pp con ${data.surviving_futures.toLocaleString("es-MX")} futuros; ` +
+        `con ${mc.convergence[0].futures.toLocaleString("es-MX")} los porcentajes se moverían hasta ${mc.convergence[0].max_abs_share_diff_vs_full_pp} pp. ${mc.note}`;
+      document.querySelector("#bottom-multiverse")!.innerHTML = bottomMultiverseMarkup(data.bottom_in_multiverse);
+      countTo(document.querySelector("#total-futures")!, data.total_futures);
+      countTo(document.querySelector("#surviving-futures")!, data.surviving_futures);
+      countTo(document.querySelector("#collapsed-futures")!, data.collapsed_futures);
+      countTo(document.querySelector("#entropy-value")!, data.decision_entropy, "%");
+      facets.innerHTML = data.facets.map((facet: any) =>
+        `<span>${escapeHtml(facet.label)}<b>${facet.weight}%</b></span>`
+      ).join("");
+      basinGrid.innerHTML = data.destinations.map(basinMarkup).join("");
+      portalLegend.innerHTML = data.destinations.map((destination: any, index: number) =>
+        `<span style="--portal-color:${colors[index]}"><i></i>${escapeHtml(destination.name)} <b>${destination.share}%</b></span>`
+      ).join("");
+      trajectoryLine.innerHTML = data.trajectory.map(trajectoryMarkup).join("");
+      decisionTrail.innerHTML = decisionTrailMarkup(data.choices);
+      document.querySelector("#simulation-disclaimer")!.textContent = data.disclaimer;
+
+      if (data.question) {
+        sacrificeQuestion.textContent = data.question.prompt;
+        document.querySelector("#information-gain")!.textContent =
+          `En promedio, esta pregunta puede reducir la incertidumbre ${data.question.information_gain.toFixed(2)} puntos.`;
+        sacrificeActions.innerHTML = data.question.branches.map(branchMarkup).join("");
+      } else {
+        sacrificeQuestion.textContent = "La línea temporal ya es estable.";
+        document.querySelector("#information-gain")!.textContent =
+          "No queda otra pregunta capaz de cambiar materialmente el resultado.";
+        sacrificeActions.innerHTML = "";
+      }
+
+      sacrificeActions.querySelectorAll<HTMLButtonElement>("[data-keep]").forEach((button) => {
+        button.addEventListener("click", () => collapseFuture({
+          keep: button.dataset.keep!,
+          sacrifice: button.dataset.sacrifice!,
+        }));
+      });
+      if (collapsing) {
+        flash.classList.remove("active");
+        void flash.offsetWidth;
+        flash.classList.add("active");
+      }
+      drawMultiverse(data);
+    }
+
+    async function simulate(collapsing = false) {
+      errorPanel.hidden = true;
+      if (!collapsing) {
+        results.hidden = true;
+        loading.hidden = false;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/api/multiverse`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query: query.value,
+            risk: Number(risk.value) / 100,
+            futures: 50000,
+            choices: activeChoices,
+          }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "El motor rechazó la consulta.");
+        results.hidden = false;
+        renderData(data, collapsing);
+        if (!collapsing) loadOrbit();
+        if (!collapsing) results.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (error) {
+        errorMessage.textContent = error instanceof Error ? error.message : "Error desconocido.";
+        errorPanel.hidden = false;
+      } finally {
+        loading.hidden = true;
+      }
+    }
+
+    async function loadOrbit() {
+      try {
+        const response = await fetch(`${API_URL}/api/futures`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: query.value, risk: Number(risk.value) / 100 }),
+        });
+        const orbit = await response.json();
+        if (!response.ok) throw new Error(orbit.error);
+        document.querySelector("#orbit-grid")!.innerHTML = orbit.destinations.map(cardMarkup).join("");
+        document.querySelector("#bottom-orbit")!.innerHTML = orbit.bottom_perspective.map((b: any) =>
+          `<li><b>#${b.global_rank} ${escapeHtml(b.name)}</b> <span>${escapeHtml(b.verdict)}</span></li>`).join("");
+      } catch (error) {
+        document.querySelector("#orbit-grid")!.textContent = error instanceof Error ? error.message : "Error desconocido.";
+      }
+    }
+
+    async function collapseFuture(choice: { keep: string; sacrifice: string }) {
+      activeChoices.push(choice);
+      document.querySelector("#particle-caption")!.textContent =
+        `Sacrificando ${choice.sacrifice}… las líneas temporales están colapsando`;
+      chamber.classList.add("collapsing");
+      await simulate(true);
+      chamber.classList.remove("collapsing");
+      document.querySelector("#particle-caption")!.textContent = "Cada luz es un posible tú";
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      activeChoices = [];
+      await simulate(false);
+    });
+
+    document.querySelector("#reset-loop")!.addEventListener("click", async () => {
+      activeChoices = [];
+      await simulate(true);
+    });
+
+    window.addEventListener("resize", () => {
+      if (currentData && !results.hidden) drawMultiverse(currentData);
+    });
+
+    const classicForm = document.querySelector<HTMLFormElement>("#classic-form")!;
+    const classicQuery = document.querySelector<HTMLTextAreaElement>("#classic-query")!;
+    const classicResults = document.querySelector<HTMLElement>("#classic-results")!;
+    const classicStatus = document.querySelector<HTMLElement>("#classic-status")!;
+    async function recommend() {
+      classicStatus.textContent = "CALCULANDO…";
+      classicResults.setAttribute("aria-busy", "true");
+      try {
+        const data = await postJson<RecommendResult>("/api/recommend", { query: classicQuery.value });
+        classicResults.innerHTML = renderClassic(data);
+        classicStatus.textContent = data.mode.toUpperCase();
+      } catch (error) {
+        classicResults.innerHTML = `<div class="error-panel" role="alert"><strong>No se pudo recomendar.</strong><p></p></div>`;
+        classicResults.querySelector("p")!.textContent = error instanceof Error ? error.message : "Error desconocido.";
+        classicStatus.textContent = "ERROR";
+      } finally {
+        classicResults.removeAttribute("aria-busy");
+      }
+    }
+    classicForm.addEventListener("submit", (event) => { event.preventDefault(); recommend(); });
+    document.querySelectorAll<HTMLButtonElement>("[data-classic]").forEach((button) => {
+      button.addEventListener("click", () => { classicQuery.value = button.dataset.classic ?? ""; recommend(); });
+    });
+
+    const evalOutput = document.querySelector<HTMLElement>("#eval-output")!;
+    const evalButtons = document.querySelectorAll<HTMLButtonElement>("#eval-run, #eval-last");
+    async function showEvaluation(run: boolean) {
+      evalButtons.forEach((button) => { button.disabled = true; });
+      evalOutput.innerHTML = `<p class="eval-meta">${run ? "Ejecutando el banco de consultas…" : "Cargando reporte…"}</p>`;
+      try {
+        const report = run ? await postJson<any>("/api/evaluation/run", {}) : await (async () => {
+          const response = await fetch("/api/evaluation");
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error);
+          return data;
+        })();
+        evalOutput.innerHTML = renderEvaluation(report);
+      } catch (error) {
+        evalOutput.innerHTML = `<div class="error-panel" role="alert"><p></p></div>`;
+        evalOutput.querySelector("p")!.textContent = error instanceof Error ? error.message : "Error desconocido.";
+      } finally {
+        evalButtons.forEach((button) => { button.disabled = false; });
+      }
+    }
+    document.querySelector("#eval-run")!.addEventListener("click", () => showEvaluation(true));
+    document.querySelector("#eval-last")!.addEventListener("click", () => showEvaluation(false));
+    setupLab(document.querySelector<HTMLElement>("#lab-panel")!);
+
+    checkApi();
+  </script>
+</BaseLayout>

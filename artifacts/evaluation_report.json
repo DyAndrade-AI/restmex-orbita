@@ -1,0 +1,2073 @@
+{
+  "generated_at": "2026-11-12T07:02:58.094332+00:00",
+  "mode": "híbrido",
+  "semantic_status": "activo (multilingual-e5-base)",
+  "gold_provenance": {
+    "author": "asistente de IA (Claude) a petición del equipo",
+    "method": "conocimiento general + palabras clave del corpus",
+    "saw_system_output": true,
+    "created": "2026-11-11"
+  },
+  "rubric": [
+    {
+      "check": "Precision@5 (gold, 11 consultas con ≥5 relevantes)",
+      "value": 0.8909,
+      "threshold": 0.7,
+      "pass": true
+    },
+    {
+      "check": "Hit@1 (gold)",
+      "value": 0.975,
+      "threshold": 0.8,
+      "pass": true
+    },
+    {
+      "check": "Contrato 5 + 5",
+      "value": 1.0,
+      "threshold": 1.0,
+      "pass": true
+    },
+    {
+      "check": "Determinismo",
+      "value": 1.0,
+      "threshold": 1.0,
+      "pass": true
+    },
+    {
+      "check": "Latencia p95 en proceso (s)",
+      "value": 0.2612,
+      "threshold": 3.0,
+      "pass": true
+    }
+  ],
+  "gold": {
+    "aggregate": {
+      "precision_at_5": 0.515,
+      "recall_at_5": 0.7923,
+      "capped_recall_at_5": 0.8721,
+      "hit_at_1": 0.975,
+      "hit_at_5": 1.0,
+      "mrr": 0.9833,
+      "ndcg_at_5": 0.8847,
+      "precision_at_5_wide": 0.8909,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.0,
+      "exclusion_violation_rate": 0.0,
+      "queries": 40
+    },
+    "by_category": {
+      "agua-dulce": {
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.875,
+        "capped_recall_at_5": 0.875,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.916,
+        "precision_at_5_wide": 0.0,
+        "wide_queries": 0,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 2
+      },
+      "arqueologia": {
+        "precision_at_5": 0.9,
+        "recall_at_5": 0.8125,
+        "capped_recall_at_5": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.9779,
+        "precision_at_5_wide": 1.0,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 2
+      },
+      "artesania": {
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.875,
+        "capped_recall_at_5": 0.875,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.9024,
+        "precision_at_5_wide": 0.0,
+        "wide_queries": 0,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 2
+      },
+      "bebidas": {
+        "precision_at_5": 0.3,
+        "recall_at_5": 0.6666,
+        "capped_recall_at_5": 0.7,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.7544,
+        "precision_at_5_wide": 0.4,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 2
+      },
+      "cultura": {
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.8214,
+        "capped_recall_at_5": 0.8929,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.9168,
+        "precision_at_5_wide": 1.0,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 7
+      },
+      "gastronomia": {
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.5556,
+        "capped_recall_at_5": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "precision_at_5_wide": 1.0,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 1
+      },
+      "montana": {
+        "precision_at_5": 0.4667,
+        "recall_at_5": 0.9048,
+        "capped_recall_at_5": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "precision_at_5_wide": 1.0,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 3
+      },
+      "naturaleza": {
+        "precision_at_5": 0.3714,
+        "recall_at_5": 0.8259,
+        "capped_recall_at_5": 0.8667,
+        "hit_at_1": 0.8571,
+        "hit_at_5": 1.0,
+        "mrr": 0.9048,
+        "ndcg_at_5": 0.8528,
+        "precision_at_5_wide": 0.7,
+        "wide_queries": 2,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 7
+      },
+      "negacion": {
+        "precision_at_5": 0.6667,
+        "recall_at_5": 0.7937,
+        "capped_recall_at_5": 0.8889,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.8836,
+        "precision_at_5_wide": 1.0,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 3
+      },
+      "parafrasis": {
+        "precision_at_5": 0.7,
+        "recall_at_5": 0.6459,
+        "capped_recall_at_5": 0.8334,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.8827,
+        "precision_at_5_wide": 1.0,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 2
+      },
+      "playa": {
+        "precision_at_5": 0.65,
+        "recall_at_5": 0.8661,
+        "capped_recall_at_5": 0.9375,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.9073,
+        "precision_at_5_wide": 1.0,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 4
+      },
+      "relax": {
+        "precision_at_5": 0.3333,
+        "recall_at_5": 0.5278,
+        "capped_recall_at_5": 0.5278,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.6234,
+        "precision_at_5_wide": 0.0,
+        "wide_queries": 0,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 3
+      },
+      "ruido": {
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7143,
+        "capped_recall_at_5": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "precision_at_5_wide": 1.0,
+        "wide_queries": 1,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 1
+      },
+      "vino": {
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.9829,
+        "precision_at_5_wide": 0.0,
+        "wide_queries": 0,
+        "bottom_error_rate": 0.0,
+        "exclusion_violation_rate": 0.0,
+        "queries": 1
+      }
+    },
+    "contract_pass_rate": 1.0,
+    "latency_s": {
+      "p50": 0.2303,
+      "p95": 0.2612,
+      "max": 0.5387
+    },
+    "queries": [
+      {
+        "id": "playa-snorkel",
+        "category": "playa",
+        "query": "Quiero playas tranquilas, agua turquesa y snorkel",
+        "top": [
+          "Tulum",
+          "Isla_Mujeres",
+          "Sayulita",
+          "TodosSantos",
+          "Loreto"
+        ],
+        "bottom": [
+          "Parras",
+          "Coatepec",
+          "Metepec",
+          "Dolores_Hidalgo",
+          "Real_de_Catorce"
+        ],
+        "relevant": [
+          "Isla_Mujeres",
+          "Tulum",
+          "Sayulita",
+          "Mazunte",
+          "TodosSantos",
+          "Loreto",
+          "Bacalar"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7143,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 7.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "piramides",
+        "category": "arqueologia",
+        "query": "Busco pirámides, arqueología e historia prehispánica",
+        "top": [
+          "Teotihuacan",
+          "Cholula",
+          "Cuetzalan",
+          "Palenque",
+          "Malinalco"
+        ],
+        "bottom": [
+          "Sayulita",
+          "Isla_Mujeres",
+          "Ixtapan_de_la_Sal",
+          "Tequisquiapan",
+          "Valle_de_Bravo"
+        ],
+        "relevant": [
+          "Teotihuacan",
+          "Cholula",
+          "Palenque",
+          "Tulum",
+          "Malinalco",
+          "Izamal",
+          "Tepoztlan",
+          "Cuetzalan"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.625,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 8.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "vino",
+        "category": "vino",
+        "query": "Me interesan viñedos, vino y recorridos por bodegas",
+        "top": [
+          "Parras",
+          "Dolores_Hidalgo",
+          "Tequisquiapan",
+          "Tequila",
+          "Bernal"
+        ],
+        "bottom": [
+          "Teotihuacan",
+          "Isla_Mujeres",
+          "Bacalar",
+          "Izamal",
+          "Malinalco"
+        ],
+        "relevant": [
+          "Parras",
+          "Dolores_Hidalgo",
+          "Bernal",
+          "Tequisquiapan"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 4.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.9829,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "bosque",
+        "category": "montana",
+        "query": "Quiero bosque, montaña, cabañas y senderismo",
+        "top": [
+          "Creel",
+          "Zacatlan",
+          "Cuetzalan",
+          "Huasca_de_Ocampo",
+          "Valle_de_Bravo"
+        ],
+        "bottom": [
+          "Tlaquepaque",
+          "Dolores_Hidalgo",
+          "Tequisquiapan",
+          "Valladolid",
+          "Metepec"
+        ],
+        "relevant": [
+          "Creel",
+          "Tapalpa",
+          "Valle_de_Bravo",
+          "Zacatlan",
+          "Huasca_de_Ocampo",
+          "Cuetzalan",
+          "Real_de_Catorce"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7143,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 7.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "cenotes",
+        "category": "agua-dulce",
+        "query": "Busco cenotes para nadar y naturaleza",
+        "top": [
+          "Valladolid",
+          "Bacalar",
+          "Tulum",
+          "Xilitla",
+          "Chiapa_de_Corzo"
+        ],
+        "bottom": [
+          "Tequila",
+          "Dolores_Hidalgo",
+          "Parras",
+          "Metepec",
+          "Tlaquepaque"
+        ],
+        "relevant": [
+          "Valladolid",
+          "Tulum",
+          "Bacalar",
+          "Izamal"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "capped_recall_at_5": 0.75,
+        "relevant_count": 4.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.8319,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "gastronomia",
+        "category": "gastronomia",
+        "query": "Quiero gastronomía mexicana, mercados y restaurantes tradicionales",
+        "top": [
+          "Tlaquepaque",
+          "Tepoztlan",
+          "Valladolid",
+          "Izamal",
+          "Patzcuaro"
+        ],
+        "bottom": [
+          "Xilitla",
+          "Mazunte",
+          "Real_de_Catorce",
+          "Orizaba",
+          "Tapalpa"
+        ],
+        "relevant": [
+          "Patzcuaro",
+          "Tlaquepaque",
+          "Izamal",
+          "Valladolid",
+          "San_Cristobal_de_las_Casas",
+          "Tepoztlan",
+          "Cholula",
+          "Atlixco",
+          "Ajijic"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.5556,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 9.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "colonial",
+        "category": "cultura",
+        "query": "Deseo arquitectura colonial, iglesias y calles históricas",
+        "top": [
+          "Cholula",
+          "Taxco",
+          "Dolores_Hidalgo",
+          "Izamal",
+          "San_Cristobal_de_las_Casas"
+        ],
+        "bottom": [
+          "Mazunte",
+          "Ixtapan_de_la_Sal",
+          "Bacalar",
+          "Tulum",
+          "Isla_Mujeres"
+        ],
+        "relevant": [
+          "Taxco",
+          "San_Cristobal_de_las_Casas",
+          "Patzcuaro",
+          "Izamal",
+          "Cholula",
+          "Dolores_Hidalgo",
+          "Valladolid",
+          "Tepotzotlan",
+          "Orizaba",
+          "Atlixco"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.5,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 10.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "cascadas",
+        "category": "naturaleza",
+        "query": "Quiero cascadas, vegetación y aventura al aire libre",
+        "top": [
+          "Palenque",
+          "Xilitla",
+          "Zacatlan",
+          "Cuetzalan",
+          "Huasca_de_Ocampo"
+        ],
+        "bottom": [
+          "Metepec",
+          "Bernal",
+          "Patzcuaro",
+          "Dolores_Hidalgo",
+          "Cholula"
+        ],
+        "relevant": [
+          "Xilitla",
+          "Palenque",
+          "Zacatlan",
+          "Cuetzalan",
+          "Huasca_de_Ocampo",
+          "Chiapa_de_Corzo",
+          "Tapalpa"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7143,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 7.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "termales",
+        "category": "relax",
+        "query": "Busco un viaje relajante con spa y aguas termales",
+        "top": [
+          "Ixtapan_de_la_Sal",
+          "Tepoztlan",
+          "Loreto",
+          "Palenque",
+          "Valle_de_Bravo"
+        ],
+        "bottom": [
+          "Real_de_Catorce",
+          "Parras",
+          "Cholula",
+          "Tepotzotlan",
+          "Cuatro_Cienegas"
+        ],
+        "relevant": [
+          "Ixtapan_de_la_Sal",
+          "Tequisquiapan"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.5,
+        "capped_recall_at_5": 0.5,
+        "relevant_count": 2.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.6131,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "desierto",
+        "category": "negacion",
+        "query": "Quiero desierto y paisajes naturales, sin playa",
+        "top": [
+          "Cuatro_Cienegas",
+          "Huasca_de_Ocampo",
+          "Creel",
+          "Zacatlan",
+          "Real_de_Catorce"
+        ],
+        "bottom": [
+          "Sayulita",
+          "Isla_Mujeres",
+          "Tulum",
+          "Coatepec",
+          "Mazunte"
+        ],
+        "relevant": [
+          "Cuatro_Cienegas",
+          "Real_de_Catorce",
+          "Parras"
+        ],
+        "has_exclusion": true,
+        "confidence": "alta",
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6667,
+        "capped_recall_at_5": 0.6667,
+        "relevant_count": 3.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.6508,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "tequila",
+        "category": "bebidas",
+        "query": "Quiero visitar destilerías y conocer el proceso del tequila",
+        "top": [
+          "Tequila",
+          "Coatepec",
+          "Parras",
+          "Dolores_Hidalgo",
+          "Tlaquepaque"
+        ],
+        "bottom": [
+          "Metepec",
+          "Ixtapan_de_la_Sal",
+          "Valle_de_Bravo",
+          "Sayulita",
+          "Isla_Mujeres"
+        ],
+        "relevant": [
+          "Tequila"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "cafe",
+        "category": "bebidas",
+        "query": "Pueblo cafetalero con niebla, café de altura y clima fresco",
+        "top": [
+          "Coatepec",
+          "Real_de_Catorce",
+          "Zacatlan",
+          "Tapalpa",
+          "Huasca_de_Ocampo"
+        ],
+        "bottom": [
+          "Tlaquepaque",
+          "Metepec",
+          "Tulum",
+          "Teotihuacan",
+          "Ixtapan_de_la_Sal"
+        ],
+        "relevant": [
+          "Coatepec",
+          "Cuetzalan",
+          "Xilitla",
+          "Orizaba",
+          "San_Cristobal_de_las_Casas",
+          "Zacatlan"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.3333,
+        "capped_recall_at_5": 0.4,
+        "relevant_count": 6.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.5087,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "plata",
+        "category": "artesania",
+        "query": "Comprar joyería de plata y recorrer calles empedradas en cerro",
+        "top": [
+          "Taxco",
+          "Orizaba",
+          "Tepoztlan",
+          "Real_de_Catorce",
+          "Atlixco"
+        ],
+        "bottom": [
+          "Ixtapan_de_la_Sal",
+          "Mazunte",
+          "Bacalar",
+          "Valle_de_Bravo",
+          "Metepec"
+        ],
+        "relevant": [
+          "Taxco"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "laguna",
+        "category": "agua-dulce",
+        "query": "Laguna de siete colores para navegar en kayak",
+        "top": [
+          "Bacalar",
+          "Cuatro_Cienegas",
+          "Loreto",
+          "Mazunte",
+          "Ajijic"
+        ],
+        "bottom": [
+          "Tepotzotlan",
+          "Coatepec",
+          "Tequila",
+          "Bernal",
+          "Huasca_de_Ocampo"
+        ],
+        "relevant": [
+          "Bacalar"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "surf",
+        "category": "playa",
+        "query": "Aprender surf, ambiente relajado y tacos frente al mar",
+        "top": [
+          "TodosSantos",
+          "Sayulita",
+          "Tulum",
+          "Isla_Mujeres",
+          "Loreto"
+        ],
+        "bottom": [
+          "Chiapa_de_Corzo",
+          "Creel",
+          "Tepotzotlan",
+          "Huasca_de_Ocampo",
+          "Xilitla"
+        ],
+        "relevant": [
+          "Sayulita",
+          "TodosSantos",
+          "Mazunte",
+          "Tulum"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "capped_recall_at_5": 0.75,
+        "relevant_count": 4.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.8319,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "tortugas",
+        "category": "playa",
+        "query": "Ver tortugas, atardeceres en la punta y ambiente bohemio",
+        "top": [
+          "Mazunte",
+          "TodosSantos",
+          "Tulum",
+          "Sayulita",
+          "Isla_Mujeres"
+        ],
+        "bottom": [
+          "Ixtapan_de_la_Sal",
+          "Dolores_Hidalgo",
+          "Valle_de_Bravo",
+          "Atlixco",
+          "Tepotzotlan"
+        ],
+        "relevant": [
+          "Mazunte",
+          "Isla_Mujeres",
+          "TodosSantos"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 3.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.9469,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "canon",
+        "category": "naturaleza",
+        "query": "Paseo en lancha por un cañón con cocodrilos",
+        "top": [
+          "Chiapa_de_Corzo",
+          "Bacalar",
+          "Mazunte",
+          "Creel",
+          "Valle_de_Bravo"
+        ],
+        "bottom": [
+          "Metepec",
+          "Atlixco",
+          "Tequisquiapan",
+          "Malinalco",
+          "Teotihuacan"
+        ],
+        "relevant": [
+          "Chiapa_de_Corzo"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "lago",
+        "category": "naturaleza",
+        "query": "Caminar junto al lago, malecón tranquilo y comida con vista al agua",
+        "top": [
+          "Ajijic",
+          "Valle_de_Bravo",
+          "Cuetzalan",
+          "Loreto",
+          "Tepoztlan"
+        ],
+        "bottom": [
+          "Real_de_Catorce",
+          "Metepec",
+          "Parras",
+          "Orizaba",
+          "Tequila"
+        ],
+        "relevant": [
+          "Ajijic",
+          "Patzcuaro",
+          "Valle_de_Bravo",
+          "Bacalar",
+          "Creel"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.4,
+        "capped_recall_at_5": 0.4,
+        "relevant_count": 5.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.5531,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "surrealista",
+        "category": "cultura",
+        "query": "Jardín surrealista con esculturas en la selva y pozas",
+        "top": [
+          "Xilitla",
+          "Palenque",
+          "Cuatro_Cienegas",
+          "Taxco",
+          "Valladolid"
+        ],
+        "bottom": [
+          "Bernal",
+          "Coatepec",
+          "Loreto",
+          "Teotihuacan",
+          "Sayulita"
+        ],
+        "relevant": [
+          "Xilitla"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "artesania",
+        "category": "artesania",
+        "query": "Artesanías de barro, mariachi y tiendas de arte popular",
+        "top": [
+          "Tlaquepaque",
+          "Patzcuaro",
+          "Valladolid",
+          "Metepec",
+          "Creel"
+        ],
+        "bottom": [
+          "Mazunte",
+          "Chiapa_de_Corzo",
+          "Bernal",
+          "Malinalco",
+          "Parras"
+        ],
+        "relevant": [
+          "Tlaquepaque",
+          "Metepec",
+          "Patzcuaro",
+          "Atlixco"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "capped_recall_at_5": 0.75,
+        "relevant_count": 4.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.8048,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "teleferico",
+        "category": "cultura",
+        "query": "Subir en teleférico y visitar museos en la ciudad",
+        "top": [
+          "Orizaba",
+          "Teotihuacan",
+          "Taxco",
+          "Izamal",
+          "Tepoztlan"
+        ],
+        "bottom": [
+          "Isla_Mujeres",
+          "Ixtapan_de_la_Sal",
+          "Metepec",
+          "Ajijic",
+          "Bacalar"
+        ],
+        "relevant": [
+          "Orizaba",
+          "Taxco",
+          "Tepotzotlan",
+          "Zacatlan"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.5,
+        "capped_recall_at_5": 0.5,
+        "relevant_count": 4.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.5856,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "monolito",
+        "category": "naturaleza",
+        "query": "Escalar un monolito enorme y comer gorditas",
+        "top": [
+          "Bernal",
+          "Teotihuacan",
+          "Dolores_Hidalgo",
+          "Izamal",
+          "Sayulita"
+        ],
+        "bottom": [
+          "Tulum",
+          "Metepec",
+          "San_Cristobal_de_las_Casas",
+          "Chiapa_de_Corzo",
+          "Valle_de_Bravo"
+        ],
+        "relevant": [
+          "Bernal"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "prismas",
+        "category": "naturaleza",
+        "query": "Formaciones de prismas basálticos, haciendas y tirolesa",
+        "top": [
+          "Huasca_de_Ocampo",
+          "Tapalpa",
+          "Zacatlan",
+          "Tepotzotlan",
+          "Orizaba"
+        ],
+        "bottom": [
+          "Loreto",
+          "Coatepec",
+          "Isla_Mujeres",
+          "Metepec",
+          "Malinalco"
+        ],
+        "relevant": [
+          "Huasca_de_Ocampo"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "fantasma",
+        "category": "cultura",
+        "query": "Pueblo minero fantasma, túnel y paseo a caballo por el desierto",
+        "top": [
+          "Real_de_Catorce",
+          "Cuatro_Cienegas",
+          "Tapalpa",
+          "Creel",
+          "Huasca_de_Ocampo"
+        ],
+        "bottom": [
+          "Ixtapan_de_la_Sal",
+          "Tlaquepaque",
+          "Metepec",
+          "San_Cristobal_de_las_Casas",
+          "Isla_Mujeres"
+        ],
+        "relevant": [
+          "Real_de_Catorce"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "barrancas",
+        "category": "montana",
+        "query": "Barrancas profundas, tren y cultura rarámuri",
+        "top": [
+          "Creel",
+          "Teotihuacan",
+          "Cholula",
+          "Tulum",
+          "Tequila"
+        ],
+        "bottom": [
+          "Valle_de_Bravo",
+          "Tapalpa",
+          "TodosSantos",
+          "Mazunte",
+          "Sayulita"
+        ],
+        "relevant": [
+          "Creel"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "mision",
+        "category": "playa",
+        "query": "Misión antigua, malecón y paseo en barco por el mar de Cortés",
+        "top": [
+          "Loreto",
+          "Chiapa_de_Corzo",
+          "Tulum",
+          "Ajijic",
+          "TodosSantos"
+        ],
+        "bottom": [
+          "Bernal",
+          "Tepoztlan",
+          "Malinalco",
+          "Tepotzotlan",
+          "Huasca_de_Ocampo"
+        ],
+        "relevant": [
+          "Loreto",
+          "TodosSantos"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 2.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.8503,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "ruinas-selva",
+        "category": "arqueologia",
+        "query": "Ruinas mayas escondidas en la selva con monos",
+        "top": [
+          "Palenque",
+          "Tulum",
+          "Chiapa_de_Corzo",
+          "Izamal",
+          "Valladolid"
+        ],
+        "bottom": [
+          "Tequila",
+          "Coatepec",
+          "Tlaquepaque",
+          "Patzcuaro",
+          "Metepec"
+        ],
+        "relevant": [
+          "Palenque",
+          "Tulum",
+          "Valladolid",
+          "Izamal"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 4.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.9558,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "relojes",
+        "category": "montana",
+        "query": "Mirador sobre la barranca, fábrica de relojes y sidra",
+        "top": [
+          "Zacatlan",
+          "Tequila",
+          "Bernal",
+          "Parras",
+          "Creel"
+        ],
+        "bottom": [
+          "Malinalco",
+          "Ixtapan_de_la_Sal",
+          "Tequisquiapan",
+          "Tulum",
+          "Metepec"
+        ],
+        "relevant": [
+          "Zacatlan"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "amarillo",
+        "category": "cultura",
+        "query": "Ciudad amarilla con un gran convento franciscano",
+        "top": [
+          "Izamal",
+          "Tepotzotlan",
+          "Orizaba",
+          "San_Cristobal_de_las_Casas",
+          "TodosSantos"
+        ],
+        "bottom": [
+          "Mazunte",
+          "Bacalar",
+          "Huasca_de_Ocampo",
+          "Tequisquiapan",
+          "Ixtapan_de_la_Sal"
+        ],
+        "relevant": [
+          "Izamal"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "independencia",
+        "category": "cultura",
+        "query": "Historia de la independencia de México y nieves de sabores raros",
+        "top": [
+          "Dolores_Hidalgo",
+          "Tepoztlan",
+          "Taxco",
+          "Teotihuacan",
+          "Atlixco"
+        ],
+        "bottom": [
+          "Creel",
+          "Sayulita",
+          "TodosSantos",
+          "Isla_Mujeres",
+          "Chiapa_de_Corzo"
+        ],
+        "relevant": [
+          "Dolores_Hidalgo"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "familia",
+        "category": "relax",
+        "query": "Vacaciones familiares con niños, albercas y toboganes",
+        "top": [
+          "Ixtapan_de_la_Sal",
+          "Ajijic",
+          "Isla_Mujeres",
+          "Orizaba",
+          "Palenque"
+        ],
+        "bottom": [
+          "Real_de_Catorce",
+          "Cholula",
+          "Metepec",
+          "Parras",
+          "San_Cristobal_de_las_Casas"
+        ],
+        "relevant": [
+          "Ixtapan_de_la_Sal",
+          "Tequisquiapan",
+          "Valle_de_Bravo"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.3333,
+        "capped_recall_at_5": 0.3333,
+        "relevant_count": 3.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.4693,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "virreinato",
+        "category": "cultura",
+        "query": "Museo del virreinato y arte religioso barroco",
+        "top": [
+          "Tepotzotlan",
+          "Cholula",
+          "Taxco",
+          "Orizaba",
+          "Dolores_Hidalgo"
+        ],
+        "bottom": [
+          "Chiapa_de_Corzo",
+          "Ixtapan_de_la_Sal",
+          "Tapalpa",
+          "Valle_de_Bravo",
+          "Mazunte"
+        ],
+        "relevant": [
+          "Tepotzotlan",
+          "Taxco",
+          "Cholula",
+          "Patzcuaro"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "capped_recall_at_5": 0.75,
+        "relevant_count": 4.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.8319,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "parafrasis-caribe",
+        "category": "parafrasis",
+        "query": "Un sitio caluroso junto al Caribe para descansar frente al mar",
+        "top": [
+          "Tulum",
+          "Isla_Mujeres",
+          "Sayulita",
+          "TodosSantos",
+          "Loreto"
+        ],
+        "bottom": [
+          "Metepec",
+          "Atlixco",
+          "Tequila",
+          "Cholula",
+          "San_Cristobal_de_las_Casas"
+        ],
+        "relevant": [
+          "Tulum",
+          "Isla_Mujeres",
+          "Bacalar"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6667,
+        "capped_recall_at_5": 0.6667,
+        "relevant_count": 3.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.7654,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "parafrasis-frio",
+        "category": "parafrasis",
+        "query": "Escapada a un lugar frío para tomar chocolate junto a la chimenea",
+        "top": [
+          "Creel",
+          "Zacatlan",
+          "Tapalpa",
+          "San_Cristobal_de_las_Casas",
+          "Valle_de_Bravo"
+        ],
+        "bottom": [
+          "Atlixco",
+          "Metepec",
+          "Tepotzotlan",
+          "Malinalco",
+          "Tlaquepaque"
+        ],
+        "relevant": [
+          "Creel",
+          "Tapalpa",
+          "Zacatlan",
+          "Cuetzalan",
+          "San_Cristobal_de_las_Casas",
+          "Valle_de_Bravo",
+          "Huasca_de_Ocampo",
+          "Real_de_Catorce"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.625,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 8.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "typo-playa",
+        "category": "ruido",
+        "query": "plallas con snorkell y aga cristalina",
+        "top": [
+          "Tulum",
+          "Isla_Mujeres",
+          "Sayulita",
+          "TodosSantos",
+          "Loreto"
+        ],
+        "bottom": [
+          "Metepec",
+          "Valle_de_Bravo",
+          "Patzcuaro",
+          "Teotihuacan",
+          "Dolores_Hidalgo"
+        ],
+        "relevant": [
+          "Isla_Mujeres",
+          "Tulum",
+          "Sayulita",
+          "Mazunte",
+          "TodosSantos",
+          "Loreto",
+          "Bacalar"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7143,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 7.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "sin-mar",
+        "category": "negacion",
+        "query": "Naturaleza y aventura en la sierra, sin playa ni mar",
+        "top": [
+          "Xilitla",
+          "Zacatlan",
+          "Huasca_de_Ocampo",
+          "Creel",
+          "Tapalpa"
+        ],
+        "bottom": [
+          "Isla_Mujeres",
+          "Sayulita",
+          "Tulum",
+          "TodosSantos",
+          "Coatepec"
+        ],
+        "relevant": [
+          "Creel",
+          "Tapalpa",
+          "Zacatlan",
+          "Huasca_de_Ocampo",
+          "Cuetzalan",
+          "Xilitla",
+          "Valle_de_Bravo"
+        ],
+        "has_exclusion": true,
+        "confidence": "alta",
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7143,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 7.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "sin-tulum",
+        "category": "negacion",
+        "query": "Cenotes y comida yucateca, sin Tulum",
+        "top": [
+          "Izamal",
+          "Valladolid",
+          "Bacalar",
+          "Tepoztlan",
+          "Tlaquepaque"
+        ],
+        "bottom": [
+          "Tulum",
+          "Orizaba",
+          "Huasca_de_Ocampo",
+          "Tapalpa",
+          "Real_de_Catorce"
+        ],
+        "relevant": [
+          "Valladolid",
+          "Izamal",
+          "Bacalar"
+        ],
+        "has_exclusion": true,
+        "confidence": "alta",
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 3.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "volcan",
+        "category": "naturaleza",
+        "query": "Clima templado, viveros de flores y vista al volcán",
+        "top": [
+          "Taxco",
+          "Zacatlan",
+          "Atlixco",
+          "Malinalco",
+          "Cholula"
+        ],
+        "bottom": [
+          "Metepec",
+          "Tequila",
+          "Valladolid",
+          "Tequisquiapan",
+          "Tlaquepaque"
+        ],
+        "relevant": [
+          "Atlixco",
+          "Cholula",
+          "Tepoztlan"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6667,
+        "capped_recall_at_5": 0.6667,
+        "relevant_count": 3.0,
+        "hit_at_1": 0.0,
+        "hit_at_5": 1.0,
+        "mrr": 0.3333,
+        "ndcg_at_5": 0.4162,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "temazcal",
+        "category": "relax",
+        "query": "Retiro místico con temazcal, energía y cerro sagrado",
+        "top": [
+          "Tepoztlan",
+          "Tequisquiapan",
+          "Orizaba",
+          "Teotihuacan",
+          "Real_de_Catorce"
+        ],
+        "bottom": [
+          "Valladolid",
+          "Dolores_Hidalgo",
+          "Bernal",
+          "Ixtapan_de_la_Sal",
+          "Ajijic"
+        ],
+        "relevant": [
+          "Tepoztlan",
+          "Tequisquiapan",
+          "Malinalco",
+          "Real_de_Catorce"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "capped_recall_at_5": 0.75,
+        "relevant_count": 4.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 0.7877,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      },
+      {
+        "id": "dunas",
+        "category": "naturaleza",
+        "query": "Dunas de yeso blanco y pozas de agua azul",
+        "top": [
+          "Cuatro_Cienegas",
+          "Xilitla",
+          "Palenque",
+          "Tulum",
+          "Taxco"
+        ],
+        "bottom": [
+          "Coatepec",
+          "Metepec",
+          "Atlixco",
+          "Malinalco",
+          "Tepotzotlan"
+        ],
+        "relevant": [
+          "Cuatro_Cienegas"
+        ],
+        "has_exclusion": false,
+        "confidence": "alta",
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "capped_recall_at_5": 1.0,
+        "relevant_count": 1.0,
+        "hit_at_1": 1.0,
+        "hit_at_5": 1.0,
+        "mrr": 1.0,
+        "ndcg_at_5": 1.0,
+        "relevant_in_bottom": 0.0,
+        "exclusion_violation": 0.0
+      }
+    ]
+  },
+  "baselines": {
+    "random": {
+      "precision_at_5": 0.0946,
+      "recall_at_5": 0.1257,
+      "capped_recall_at_5": 0.1427,
+      "hit_at_1": 0.0958,
+      "hit_at_5": 0.3715,
+      "mrr": 0.2376,
+      "ndcg_at_5": 0.1193,
+      "precision_at_5_wide": 0.1902,
+      "wide_queries": 2200,
+      "bottom_error_rate": 0.3639,
+      "exclusion_violation_rate": 0.4217,
+      "queries": 8000
+    },
+    "popularity": {
+      "precision_at_5": 0.135,
+      "recall_at_5": 0.1599,
+      "capped_recall_at_5": 0.1825,
+      "hit_at_1": 0.175,
+      "hit_at_5": 0.375,
+      "mrr": 0.2778,
+      "ndcg_at_5": 0.162,
+      "precision_at_5_wide": 0.2545,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.3,
+      "exclusion_violation_rate": 1.0,
+      "queries": 40
+    }
+  },
+  "ablation": {
+    "solo_perfil_lexico": {
+      "precision_at_5": 0.505,
+      "recall_at_5": 0.7792,
+      "capped_recall_at_5": 0.8575,
+      "hit_at_1": 1.0,
+      "hit_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8821,
+      "precision_at_5_wide": 0.8909,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.0,
+      "exclusion_violation_rate": 0.0,
+      "queries": 40
+    },
+    "solo_evidencia": {
+      "precision_at_5": 0.425,
+      "recall_at_5": 0.7161,
+      "capped_recall_at_5": 0.7704,
+      "hit_at_1": 0.8,
+      "hit_at_5": 1.0,
+      "mrr": 0.8821,
+      "ndcg_at_5": 0.7532,
+      "precision_at_5_wide": 0.6727,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.0,
+      "exclusion_violation_rate": 0.0,
+      "queries": 40
+    },
+    "lexico_mas_evidencia": {
+      "precision_at_5": 0.505,
+      "recall_at_5": 0.7863,
+      "capped_recall_at_5": 0.8621,
+      "hit_at_1": 1.0,
+      "hit_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8889,
+      "precision_at_5_wide": 0.8545,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.0,
+      "exclusion_violation_rate": 0.0,
+      "queries": 40
+    },
+    "bm25": {
+      "precision_at_5": 0.445,
+      "recall_at_5": 0.7177,
+      "capped_recall_at_5": 0.7829,
+      "hit_at_1": 0.95,
+      "hit_at_5": 1.0,
+      "mrr": 0.9625,
+      "ndcg_at_5": 0.8096,
+      "precision_at_5_wide": 0.7636,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.025,
+      "exclusion_violation_rate": 0.0,
+      "queries": 40
+    },
+    "solo_semantico": {
+      "precision_at_5": 0.335,
+      "recall_at_5": 0.6295,
+      "capped_recall_at_5": 0.6671,
+      "hit_at_1": 0.75,
+      "hit_at_5": 0.975,
+      "mrr": 0.8448,
+      "ndcg_at_5": 0.671,
+      "precision_at_5_wide": 0.4182,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.05,
+      "exclusion_violation_rate": 0.0,
+      "queries": 40
+    },
+    "hibrido": {
+      "precision_at_5": 0.515,
+      "recall_at_5": 0.7923,
+      "capped_recall_at_5": 0.8721,
+      "hit_at_1": 0.975,
+      "hit_at_5": 1.0,
+      "mrr": 0.9833,
+      "ndcg_at_5": 0.8847,
+      "precision_at_5_wide": 0.8909,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.0,
+      "exclusion_violation_rate": 0.0,
+      "queries": 40
+    },
+    "hibrido_anterior": {
+      "precision_at_5": 0.47,
+      "recall_at_5": 0.765,
+      "capped_recall_at_5": 0.8308,
+      "hit_at_1": 0.975,
+      "hit_at_5": 1.0,
+      "mrr": 0.9875,
+      "ndcg_at_5": 0.8563,
+      "precision_at_5_wide": 0.7636,
+      "wide_queries": 11,
+      "bottom_error_rate": 0.0,
+      "exclusion_violation_rate": 0.0,
+      "queries": 40
+    }
+  },
+  "robustness": {
+    "mean_top5_jaccard": 0.9349,
+    "min_top5_jaccard": 0.4286,
+    "pairs": 120
+  },
+  "adversarial": {
+    "pass_rate": 1.0,
+    "cases": [
+      {
+        "case": "vacía",
+        "expected": "reject",
+        "outcome": "rechazada: Describe al menos dos palabras sobre el viaje que buscas.",
+        "pass": true
+      },
+      {
+        "case": "una palabra",
+        "expected": "reject",
+        "outcome": "rechazada: Describe al menos dos palabras sobre el viaje que buscas.",
+        "pass": true
+      },
+      {
+        "case": "solo stopwords",
+        "expected": "reject_or_low",
+        "outcome": "servida (confianza baja)",
+        "pass": true
+      },
+      {
+        "case": "fuera de vocabulario",
+        "expected": "reject_or_low",
+        "outcome": "servida (confianza baja)",
+        "pass": true
+      },
+      {
+        "case": "solo números",
+        "expected": "reject_or_low",
+        "outcome": "servida (confianza baja)",
+        "pass": true
+      },
+      {
+        "case": "emoji",
+        "expected": "serve",
+        "outcome": "servida (confianza alta)",
+        "pass": true
+      },
+      {
+        "case": "html",
+        "expected": "serve",
+        "outcome": "servida (confianza alta)",
+        "pass": true
+      },
+      {
+        "case": "muy larga",
+        "expected": "serve",
+        "outcome": "servida (confianza alta)",
+        "pass": true
+      },
+      {
+        "case": "todo negado",
+        "expected": "reject",
+        "outcome": "rechazada: La consulta solo contiene exclusiones; di también qué buscas.",
+        "pass": true
+      },
+      {
+        "case": "pueblo excluido",
+        "expected": "serve",
+        "outcome": "servida (confianza alta)",
+        "pass": true
+      }
+    ]
+  },
+  "determinism": {
+    "identical_rate": 1.0,
+    "ranking_fingerprint": "7c8a32042f5295ee290fc9677698b2c83a617b000016d09d18309bf91727820c"
+  },
+  "volume_bias": {
+    "spearman_exposure_vs_reviews": 0.2969,
+    "p_value": 0.0628,
+    "max_exposure": [
+      "Tulum",
+      10
+    ],
+    "towns_never_in_top5": [],
+    "exposure": {
+      "Ajijic": 4,
+      "Atlixco": 3,
+      "Bacalar": 4,
+      "Bernal": 3,
+      "Chiapa_de_Corzo": 4,
+      "Cholula": 5,
+      "Coatepec": 2,
+      "Creel": 9,
+      "Cuatro_Cienegas": 5,
+      "Cuetzalan": 4,
+      "Dolores_Hidalgo": 6,
+      "Huasca_de_Ocampo": 7,
+      "Isla_Mujeres": 6,
+      "Ixtapan_de_la_Sal": 2,
+      "Izamal": 7,
+      "Loreto": 8,
+      "Malinalco": 2,
+      "Mazunte": 3,
+      "Metepec": 1,
+      "Orizaba": 7,
+      "Palenque": 7,
+      "Parras": 3,
+      "Patzcuaro": 2,
+      "Real_de_Catorce": 5,
+      "San_Cristobal_de_las_Casas": 3,
+      "Sayulita": 6,
+      "Tapalpa": 5,
+      "Taxco": 8,
+      "Teotihuacan": 6,
+      "Tepotzotlan": 3,
+      "Tepoztlan": 8,
+      "Tequila": 4,
+      "Tequisquiapan": 2,
+      "Tlaquepaque": 4,
+      "TodosSantos": 7,
+      "Tulum": 10,
+      "Valladolid": 6,
+      "Valle_de_Bravo": 5,
+      "Xilitla": 5,
+      "Zacatlan": 9
+    }
+  },
+  "human": {
+    "sessions": 0
+  },
+  "holdout": {
+    "description": "Cada reseña reservada (no vista al construir el índice) actúa como consulta con nombres de pueblo y región enmascarados; el destino correcto es su pueblo.",
+    "mode": "híbrido",
+    "held_out_reviews": 600,
+    "evaluated_queries": 600,
+    "metrics": {
+      "precision_at_5": 0.1323,
+      "recall_at_5": 0.6617,
+      "capped_recall_at_5": 0.6617,
+      "hit_at_1": 0.425,
+      "hit_at_5": 0.6617,
+      "mrr": 0.5412,
+      "ndcg_at_5": 0.5513,
+      "precision_at_5_wide": 0.0,
+      "wide_queries": 0,
+      "bottom_error_rate": 0.015,
+      "exclusion_violation_rate": 0.0,
+      "queries": 600
+    },
+    "random_expectation": {
+      "hit_at_5": 0.125,
+      "bottom_error_rate": 0.125
+    },
+    "popularity_baseline": {
+      "precision_at_5": 0.025,
+      "recall_at_5": 0.125,
+      "capped_recall_at_5": 0.125,
+      "hit_at_1": 0.025,
+      "hit_at_5": 0.125,
+      "mrr": 0.107,
+      "ndcg_at_5": 0.0737,
+      "precision_at_5_wide": 0.0,
+      "wide_queries": 0,
+      "bottom_error_rate": 0.125,
+      "exclusion_violation_rate": 0.0,
+      "queries": 600
+    },
+    "per_town_hit_at_5": {
+      "Ajijic": 0.6,
+      "Atlixco": 1.0,
+      "Bacalar": 0.333,
+      "Bernal": 0.6,
+      "Chiapa_de_Corzo": 0.8,
+      "Cholula": 0.733,
+      "Coatepec": 0.667,
+      "Creel": 0.6,
+      "Cuatro_Cienegas": 0.4,
+      "Cuetzalan": 0.533,
+      "Dolores_Hidalgo": 0.6,
+      "Huasca_de_Ocampo": 0.933,
+      "Isla_Mujeres": 0.667,
+      "Ixtapan_de_la_Sal": 0.8,
+      "Izamal": 0.8,
+      "Loreto": 0.6,
+      "Malinalco": 0.667,
+      "Mazunte": 0.467,
+      "Metepec": 0.867,
+      "Orizaba": 0.533,
+      "Palenque": 0.8,
+      "Parras": 0.6,
+      "Patzcuaro": 0.867,
+      "Real_de_Catorce": 0.6,
+      "San_Cristobal_de_las_Casas": 0.533,
+      "Sayulita": 0.667,
+      "Tapalpa": 0.333,
+      "Taxco": 0.8,
+      "Teotihuacan": 0.733,
+      "Tepotzotlan": 0.667,
+      "Tepoztlan": 0.867,
+      "Tequila": 0.533,
+      "Tequisquiapan": 0.4,
+      "Tlaquepaque": 0.867,
+      "TodosSantos": 0.6,
+      "Tulum": 0.8,
+      "Valladolid": 0.867,
+      "Valle_de_Bravo": 0.533,
+      "Xilitla": 0.6,
+      "Zacatlan": 0.6
+    },
+    "spearman_hit5_vs_reviews": 0.1951
+  },
+  "duration_s": 132.2
+}

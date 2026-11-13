@@ -1,0 +1,42 @@
+{
+  "created_at_utc": "2026-11-12T06:38:06.573509+00:00",
+  "dataset": "data/Rest-Mex_2025_train_clean.csv",
+  "dataset_sha256": "646bf7a4c21cbf79d991be3ad00ec228f6d38f4bc34987f27c96cd34f2e840fb",
+  "rows": 208051,
+  "rows_in_csv": 208051,
+  "holdout_rows_excluded": 0,
+  "destinations": 40,
+  "regions": 19,
+  "types": [
+    "Attractive",
+    "Hotel",
+    "Restaurant"
+  ],
+  "vocabulary_size": 60000,
+  "profile_count": 160,
+  "evidence_count": 4702,
+  "semantic_available": true,
+  "semantic_model": "intfloat/multilingual-e5-base",
+  "python": "3.9.6",
+  "sklearn": "1.6.1",
+  "runtime_versions": {
+    "numpy": "2.0.2",
+    "scipy": "1.13.1",
+    "scikit-learn": "1.6.1",
+    "joblib": "1.5.3"
+  },
+  "seed": 2025,
+  "data_policy": "Solo se leyó la partición RestMex 2025 train indicada en dataset.",
+  "artifacts_sha256": {
+    "vectorizer.joblib": "f62445bf05847fde771571e01cdfd4b90c23daf734a7257b8dfa612d80ecf268",
+    "lexical_profiles.npz": "dc91bee39709a372427c827dcfc0e7e3937448bcda4ca5f3904df42bd16da032",
+    "evidence_matrix.npz": "7603021365ce3922faa5d05161d9db2b801c4794d1bb0f1905fe85de7a57c9f1",
+    "town_term_rates.npz": "d7d342cf044e905381824df1d3ccc8d126c7055bf6af64cd652d77daae66c366",
+    "bm25.npz": "14acae189658d8f792cbceef2cf602263993fcc57e6927afe5ecd3f408608a60",
+    "bm25.idf.npy": "1fca57c6ddfb38e7c11f526c44578a8caeedcb5648ef3a10f919053d8c6987c8",
+    "metadata.json": "f65926a09fb7f41bfeedfea8f36400a91f25005dddf925b1f1918b17a4feccd5",
+    "semantic_embeddings.npy": "507085dd7811d6e9d93eb101c4f69ef63da98c209c9a2893dfd5cc5763052b55",
+    "semantic_mapping.json": "d510246d002d22a81d686c10965612b7029ee6e900c5d5a40eee66df688922c5"
+  },
+  "notes": "2026-11-12: reconstrucción completa con --semantic. Los rankings léxicos coinciden exactamente con la versión anterior (fingerprint 44a8a277…). Los embeddings anteriores se habían generado con fix_mistral_regex=False mientras las consultas se codifican con True; ahora documentos y consultas usan la misma tokenización (re-codificar da diferencia 0.0)."
+}

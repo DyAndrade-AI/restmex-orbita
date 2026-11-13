@@ -1,0 +1,27 @@
+{
+  "target": "http://127.0.0.1:8765",
+  "requests": 120,
+  "mode_reported_by_responses": [
+    "léxico local"
+  ],
+  "health": {
+    "status": "ok",
+    "mode": "léxico",
+    "semantic": false,
+    "semantic_status": "desactivado por ORBITA_SEMANTIC=0",
+    "lexical_ready_s": 0.52,
+    "compat_warnings": [],
+    "destinations": 40
+  },
+  "cold_start_to_health_s": null,
+  "semantic_ready_s": null,
+  "semantic_outcome": "no solicitada",
+  "first_query_s": 0.319,
+  "latency_s": {
+    "p50": 0.298,
+    "p95": 0.418,
+    "max": 0.448
+  },
+  "target_p95_s": 3.0,
+  "p95_pass": true
+}

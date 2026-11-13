@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+.streamlit/secrets.toml
+tmp/
+artifacts/*.tmp
+
+
+# Pesados o de terceros: no se publican
+data/
+models/
+MaterialApoyo/
+artifacts/holdout/
+artifacts/holdout_semantic/
+web/node_modules/
+web/dist/
+web/.astro/
+eval/judgments.jsonl
+eval/labels/
+eval/pools.json

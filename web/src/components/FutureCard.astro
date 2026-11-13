@@ -1,0 +1,81 @@
+---
+interface Future {
+  role: string;
+  role_explanation: string;
+  name: string;
+  region: string;
+  affinity: number;
+  resilience: number;
+  distance_from_anchor: number;
+  dominant_facet: string;
+  counterfactual: {
+    facet: string;
+    priority_shift: number | null;
+  };
+  evidence?: {
+    Review: string;
+    Type: string;
+    Polarity: number;
+  };
+}
+
+interface Props {
+  future: Future;
+  index: number;
+}
+
+const { future, index } = Astro.props;
+const shift = future.counterfactual.priority_shift;
+let explanation = `Su fuerza principal está en ${future.dominant_facet}.`;
+if (future.role === "Ancla") {
+  explanation = `Es la coincidencia directa. Su eje dominante es ${future.dominant_facet}.`;
+} else if (shift === null) {
+  explanation = `Abre una ruta diferente a través de ${future.counterfactual.facet}.`;
+} else if (shift === 0) {
+  explanation = `Supera al Ancla si miramos ${future.counterfactual.facet} por separado.`;
+} else {
+  explanation = `Mover ${shift}% de atención hacia ${future.counterfactual.facet} abre este futuro.`;
+}
+---
+
+<article class:list={["future-card", { anchor: index === 0 }]} data-role={future.role}>
+  <div class="card-topline">
+    <span class="role-pill"><span class="role-dot"></span>{future.role}</span>
+    <span class="future-number">0{index + 1}</span>
+  </div>
+  <div class="card-heading">
+    <div>
+      <p class="region">{future.region}</p>
+      <h3>{future.name}</h3>
+    </div>
+    <div class="affinity-orb" style={`--score: ${future.affinity * 3.6}deg`}>
+      <span>{Math.round(future.affinity)}</span>
+    </div>
+  </div>
+  <p class="role-description">{future.role_explanation}</p>
+  <div class="signal-grid">
+    <div>
+      <span>Resiliencia</span>
+      <strong>{future.resilience.toFixed(1)}</strong>
+    </div>
+    <div>
+      <span>Distancia</span>
+      <strong>{future.distance_from_anchor.toFixed(1)}</strong>
+    </div>
+    <div>
+      <span>Eje dominante</span>
+      <strong>{future.dominant_facet}</strong>
+    </div>
+  </div>
+  <div class="counterfactual">
+    <span class="branch-icon">↗</span>
+    <p>{explanation}</p>
+  </div>
+  {future.evidence && (
+    <details>
+      <summary>Ver evidencia real</summary>
+      <p>“{future.evidence.Review.slice(0, 210)}{future.evidence.Review.length > 210 ? "…" : ""}”</p>
+      <small>{future.evidence.Type} · valoración {future.evidence.Polarity}/5</small>
+    </details>
+  )}
+</article>
