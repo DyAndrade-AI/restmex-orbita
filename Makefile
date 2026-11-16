@@ -1,6 +1,6 @@
 PYTHON ?= .venv/bin/python
 
-.PHONY: setup build build-semantic app web web-api docker-up docker-down docker-logs test evaluate evaluate-full evaluate-semantic evaluate-futures benchmark-api smoke-e2e experiments audit-multiverse demo
+.PHONY: setup build build-semantic app web web-api docker-up docker-down docker-logs test evaluate evaluate-full evaluate-semantic evaluate-futures validate-orbit web-metrics benchmark-api smoke-e2e experiments audit-multiverse demo
 
 # Python 3.9 de Command Line Tools: numpy 2.0.2 (versión de los artefactos) no tiene wheel para 3.13.
 BOOT_PYTHON ?= /usr/bin/python3
@@ -64,3 +64,10 @@ evaluate-futures:
 demo:
 	$(PYTHON) scripts/smoke_demo.py
 
+
+validate-orbit:
+	$(PYTHON) scripts/validate_orbit.py
+
+# Copia las cifras de artifacts/ que muestra la web (correr tras evaluate / validate-orbit / audit).
+web-metrics:
+	$(PYTHON) scripts/export_web_metrics.py

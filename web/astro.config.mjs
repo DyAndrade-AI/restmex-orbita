@@ -1,5 +1,7 @@
 import { defineConfig } from "astro/config";
 
+const api = process.env.ORBITA_API_URL ?? "http://127.0.0.1:8765";
+
 export default defineConfig({
   server: {
     host: "127.0.0.1",
@@ -9,8 +11,8 @@ export default defineConfig({
   vite: {
     server: {
       proxy: {
-        "/api": "http://127.0.0.1:8765",
-        "/health": "http://127.0.0.1:8765",
+        "/api": api,
+        "/health": api,
       },
     },
   },

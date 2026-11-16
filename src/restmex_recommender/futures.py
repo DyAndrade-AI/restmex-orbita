@@ -54,6 +54,46 @@ ROLE_DEFINITIONS = {
 }
 
 
+# Intenciones que no son un sustantivo concreto: sus sinónimos deben formar UN átomo (antes
+# "niños" y "familia" eran dos gustos que "competían" sin competir). Solo afecta a Órbita y
+# Strange Loop; el ranking 5 + 5 sigue usando CONCEPT_EXPANSIONS sin cambios.
+FACET_CONCEPTS = (
+    ("romántico", ("romantico", "romantica", "romanticos", "pareja", "aniversario", "enamorados",
+                   "novia", "novio"), "romantico pareja aniversario cena atardecer"),
+    ("familia", ("familia", "familiar", "familias", "ninos", "nino", "ninas", "hijos", "infantil"),
+     "familia familiar ninos juegos parque infantil"),
+    ("vida nocturna", ("nocturna", "nocturno", "bar", "bares", "antro", "antros", "fiesta",
+                       "fiestas", "noche"), "vida nocturna bar bares antro fiesta musica noche"),
+    ("descanso", ("tranquilo", "tranquila", "tranquilos", "tranquilas", "tranquilidad", "descansar",
+                  "descanso", "relajarse", "relajante", "relajacion", "desconectar",
+                  "desconectarme", "paz"), "tranquilo tranquilidad descanso relajarse paz silencio"),
+    ("vistas", ("fotografia", "fotos", "foto", "mirador", "miradores", "vistas", "panoramica"),
+     "fotografia fotos mirador vista vistas panoramica"),
+    ("aventura", ("aventura", "aventuras", "extrema", "extremo", "extremos", "tirolesa", "rappel",
+                  "cuatrimoto", "cuatrimotos", "escalada", "canopy"),
+     "aventura tirolesa rappel cuatrimoto escalada extremo"),
+    ("lago y río", ("lago", "lagos", "laguna", "lagunas", "lancha", "lanchas", "rio", "rios"),
+     "lago laguna lancha rio paseo agua"),
+    ("café", ("cafe", "cafetal", "cafetales"), "cafe cafetal cafetales finca"),
+    ("artesanía", ("artesania", "artesanias", "artesanal", "artesanales", "alfareria", "textiles"),
+     "artesania artesanias artesanal alfareria textiles"),
+)
+# Modificadores que el IDF trataba como gustos propios ("pequeños", "vida", "altura").
+FACET_FILLER = frozenset(
+    "algo lugar lugares vida pequenos pequenas actividades actividad altura nuestro nuestra "
+    "mucho mucha muy buen buena".split()
+)
+
+# Pesos de diseño de cada rol (un solo lugar para auditarlos; ver orbit_eval.role_sensitivity).
+ROLE_WEIGHTS = {
+    "Superviviente": {"relevance": 0.38, "robust": 0.42, "worst": 0.20},
+    "Portal": {"mix": 0.62, "distance": 0.58, "peak": 0.42},
+    "Especialista": {"relevance": 0.30, "specialization": 0.70},
+    "Comodín": {"relevance": 0.24, "robust": 0.30, "balance": 0.24, "distance": 0.22},
+    "diversidad": {"penalty": 0.18},
+}
+
+
 def _role_stability(matrix: np.ndarray, relevance: np.ndarray, selected: Sequence[int],
                     draws: int = 2_000, seed: int = 11) -> List[float]:
     """Comprobación de robustez con perturbaciones controladas de los pesos de faceta."""
@@ -86,6 +126,12 @@ def _extract_facets(engine: "Recommender", text: str, limit: int = 5) -> List[di
             }
         )
 
+    for label, triggers, expansion in FACET_CONCEPTS:
+        matches = tokens.intersection(triggers) - consumed
+        if matches:
+            consumed.update(matches)
+            facets.append({"label": label, "probe": expansion, "source": "concepto turístico"})
+
     candidates = []
     vocabulary = engine.vectorizer.vocabulary_
     idf = engine.vectorizer.idf_
@@ -94,6 +140,7 @@ def _extract_facets(engine: "Recommender", text: str, limit: int = 5) -> List[di
             token in consumed
             or token in SPANISH_STOP_WORDS
             or token in QUERY_FILLER
+            or token in FACET_FILLER
             or token not in vocabulary
         ):
             continue
@@ -150,11 +197,12 @@ def _pick(
     distances: np.ndarray,
     risk: float,
     eligible: Optional[np.ndarray] = None,
+    penalty: float = ROLE_WEIGHTS["diversidad"]["penalty"],
 ) -> int:
     score = role_score.copy()
     if selected:
         diversity = distances[:, selected].mean(axis=1)
-        score = (1.0 - 0.18 * risk) * score + 0.18 * risk * diversity
+        score = (1.0 - penalty * risk) * score + penalty * risk * diversity
         score[selected] = -np.inf
     if eligible is not None and (eligible & np.isfinite(score)).any():
         score[~eligible] = -np.inf  # si nadie es elegible se ignora el filtro en vez de repetir
@@ -182,6 +230,57 @@ def _counterfactual(
     }
 
 
+def constellation_inputs(engine: "Recommender", query: str, risk: float) -> dict:
+    """Todo lo que la selección de roles necesita, calculado una vez por consulta."""
+    scored = engine._score_query(query)
+    relevance = scored["scores"]
+    facets = _extract_facets(engine, scored["intent"].positive)
+    matrix = _facet_scores(engine, facets, scored["intent"].preferred_types)
+    robust, worst, volatility = _scenario_metrics(matrix)
+
+    profile_rows = [engine.profile_index[(town, "ALL")] for town in engine.towns]
+    profiles = engine.lexical_profiles[profile_rows]
+    similarities = (profiles @ profiles.T).toarray().astype(np.float32)
+    distances = np.clip(1.0 - similarities, 0.0, 1.0)
+    anchor = int(np.argmax(relevance))
+    threshold = float(np.quantile(relevance, 0.60 - 0.35 * risk))
+    # Frontera negativa = evidencia explícita de incumplimiento (explain.violation_mask), la
+    # misma regla que el ranking 5 + 5; ya no un cuantil fijo que excluía siempre 14 pueblos.
+    unsafe = scored["violations"]["mask"]
+    eligible = ~unsafe & (relevance >= threshold)
+    eligible[anchor] = True
+    return {
+        "scored": scored, "facets": facets, "matrix": matrix, "relevance": relevance,
+        "robust": robust, "worst": worst, "volatility": volatility, "distances": distances,
+        "anchor": anchor, "unsafe": unsafe, "eligible": eligible,
+        "distance_from_anchor": _scale(distances[:, anchor]),
+        "specialization": _scale(matrix.max(axis=0) - matrix.mean(axis=0)),
+        "balance": _scale(matrix.min(axis=0)),
+        "peak": matrix.max(axis=0),
+    }
+
+
+def select_roles(x: dict, risk: float, weights: Optional[dict] = None, count: int = 5) -> List[int]:
+    """Índices de destino por rol (Ancla primero) para unos pesos de rol dados."""
+    w = weights or ROLE_WEIGHTS
+    r, dist = x["relevance"], x["distance_from_anchor"]
+    sv, po, es, co = w["Superviviente"], w["Portal"], w["Especialista"], w["Comodín"]
+    role_scores = [
+        r,
+        sv["relevance"] * r + sv["robust"] * x["robust"] + sv["worst"] * x["worst"],
+        (1.0 - po["mix"] * risk) * r
+        + po["mix"] * risk * (po["distance"] * dist + po["peak"] * x["peak"]),
+        es["relevance"] * r + es["specialization"] * x["specialization"],
+        co["relevance"] * r + co["robust"] * x["robust"] + co["balance"] * x["balance"]
+        + co["distance"] * dist,
+    ]
+    selected = [x["anchor"]]
+    for role_idx in range(1, count):
+        selected.append(_pick(role_scores[role_idx], selected, x["distances"], risk,
+                              x["eligible"], w["diversidad"]["penalty"]))
+    return selected
+
+
 def build_future_constellation(
     engine: "Recommender", query: str, risk: float = 0.55, count: int = 5
 ) -> dict:
@@ -190,44 +289,11 @@ def build_future_constellation(
     if not 1 <= count <= len(ROLE_COPY):
         raise ValueError(f"La constelación admite entre 1 y {len(ROLE_COPY)} destinos.")
 
-    scored = engine._score_query(query)
-    intent = scored["intent"]
-    relevance = scored["scores"]
-    facets = _extract_facets(engine, intent.positive)
-    matrix = _facet_scores(engine, facets, intent.preferred_types)
-    robust, worst, volatility = _scenario_metrics(matrix)
-
-    profile_rows = [engine.profile_index[(town, "ALL")] for town in engine.towns]
-    profiles = engine.lexical_profiles[profile_rows]
-    similarities = (profiles @ profiles.T).toarray().astype(np.float32)
-    distances = np.clip(1.0 - similarities, 0.0, 1.0)
-
-    mean_facet = matrix.mean(axis=0)
-    specialization = _scale(matrix.max(axis=0) - mean_facet)
-    balance = _scale(matrix.min(axis=0))
-    anchor = int(np.argmax(relevance))
-    distance_from_anchor = _scale(distances[:, anchor])
-    threshold = float(np.quantile(relevance, 0.60 - 0.35 * risk))
-    plausible = relevance >= threshold
-    # Frontera negativa = evidencia explícita de incumplimiento (explain.violation_mask), la
-    # misma regla que el ranking 5 + 5; ya no un cuantil fijo que excluía siempre 14 pueblos.
-    unsafe = scored["violations"]["mask"]
-    respects_boundary = ~unsafe
-    respects_boundary[anchor] = True
-
-    role_scores = [
-        relevance,
-        0.38 * relevance + 0.42 * robust + 0.20 * worst,
-        (1.0 - 0.62 * risk) * relevance
-        + 0.62 * risk * (0.58 * distance_from_anchor + 0.42 * matrix.max(axis=0)),
-        0.30 * relevance + 0.70 * specialization,
-        0.24 * relevance + 0.30 * robust + 0.24 * balance + 0.22 * distance_from_anchor,
-    ]
-
-    selected = [anchor]
-    for role_idx in range(1, count):
-        eligible = respects_boundary & plausible
-        selected.append(_pick(role_scores[role_idx], selected, distances, risk, eligible))
+    x = constellation_inputs(engine, query, risk)
+    scored, facets, matrix, relevance = x["scored"], x["facets"], x["matrix"], x["relevance"]
+    intent, anchor, unsafe = scored["intent"], x["anchor"], x["unsafe"]
+    robust, volatility, distance_from_anchor = x["robust"], x["volatility"], x["distance_from_anchor"]
+    selected = select_roles(x, risk, count=count)
 
     results = []
     for role_idx, destination_idx in enumerate(selected):
@@ -434,32 +500,15 @@ def _speculative_trajectory(
     return trajectory
 
 
-def simulate_multiverse(
-    engine: "Recommender",
-    query: str,
-    risk: float = 0.55,
-    futures: int = 50_000,
-    choices: Optional[Sequence[dict]] = None,
-    seed: Optional[int] = None,
+def multiverse_core(
+    engine: "Recommender", query: str, risk: float, futures: int, seed: Optional[int] = None
 ) -> dict:
-    """Muestrea posibles ponderaciones del gusto y encuentra sus destinos ganadores.
-
-    ``seed`` solo se usa en auditorías de variabilidad; por defecto la semilla se deriva de la
-    consulta y el riesgo para que la misma pregunta dé siempre el mismo multiverso."""
-    if not 0.0 <= risk <= 1.0:
-        raise ValueError("El riesgo debe estar entre 0 y 1.")
-    if not 1_000 <= futures <= 200_000:
-        raise ValueError("La simulación admite entre 1,000 y 200,000 futuros.")
-    choices = list(choices or [])
-    if len(choices) > 4:
-        raise ValueError("Sólo se permiten cuatro decisiones de colapso por simulación.")
-
+    """Muestreo de Strange Loop sin decisiones: pesos, utilidades y ganador por futuro."""
     scored = engine._score_query(query)
     intent = scored["intent"]
     relevance = scored["scores"]
     facets = _extract_facets(engine, intent.positive)
     matrix = _facet_scores(engine, facets, intent.preferred_types)
-    facet_labels = [item["label"] for item in facets]
 
     seed_material = f"{intent.original}|{risk:.4f}|strange-loop-v1".encode("utf-8")
     if seed is None:
@@ -482,6 +531,38 @@ def simulate_multiverse(
     possible_scores[:, unsafe] = -1e6  # restricción dura con evidencia explícita
 
     winners = np.argmax(possible_scores, axis=1).astype(np.int16)
+    return {
+        "scored": scored, "facets": facets, "matrix": matrix, "relevance": relevance,
+        "weights": weights, "possible_scores": possible_scores, "winners": winners,
+        "unsafe": unsafe, "seed": seed,
+    }
+
+
+def simulate_multiverse(
+    engine: "Recommender",
+    query: str,
+    risk: float = 0.55,
+    futures: int = 50_000,
+    choices: Optional[Sequence[dict]] = None,
+    seed: Optional[int] = None,
+) -> dict:
+    """Muestrea posibles ponderaciones del gusto y encuentra sus destinos ganadores.
+
+    ``seed`` solo se usa en auditorías de variabilidad; por defecto la semilla se deriva de la
+    consulta y el riesgo para que la misma pregunta dé siempre el mismo multiverso."""
+    if not 0.0 <= risk <= 1.0:
+        raise ValueError("El riesgo debe estar entre 0 y 1.")
+    if not 1_000 <= futures <= 200_000:
+        raise ValueError("La simulación admite entre 1,000 y 200,000 futuros.")
+    choices = list(choices or [])
+    if len(choices) > 4:
+        raise ValueError("Sólo se permiten cuatro decisiones de colapso por simulación.")
+
+    core = multiverse_core(engine, query, risk, futures, seed)
+    scored, facets, matrix, relevance = core["scored"], core["facets"], core["matrix"], core["relevance"]
+    intent, weights, winners, unsafe = scored["intent"], core["weights"], core["winners"], core["unsafe"]
+    possible_scores, seed = core["possible_scores"], core["seed"]
+    facet_labels = [item["label"] for item in facets]
     active = np.ones(futures, dtype=bool)
     normalized_choices = []
     for choice in choices:

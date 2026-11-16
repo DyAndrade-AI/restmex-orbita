@@ -1,0 +1,50 @@
+[
+  {"id": "gancho", "phrases": [
+    "¿Alguna vez le pediste a una app un lugar para viajar…",
+    "y te recomendó exactamente lo mismo que a todos?",
+    "Una sola respuesta, para millones de personas distintas."
+  ]},
+  {"id": "marca", "phrases": [
+    "Por eso creamos Órbita.",
+    "Un recomendador de Pueblos Mágicos que no te da una respuesta: te muestra tus futuros."
+  ]},
+  {"id": "escribe", "phrases": [
+    "Tú solo escribes lo que se te antoja. Por ejemplo: arquitectura colonial, museos, mezcal y naturaleza, pero sin playa.",
+    "Órbita lee más de doscientas mil opiniones de viajeros reales, sobre cuarenta Pueblos Mágicos."
+  ]},
+  {"id": "compiten", "phrases": [
+    "Y entiende algo que casi nadie toma en cuenta: tus gustos compiten.",
+    "¿Qué pesa más hoy, los museos o el mezcal? A veces, ni tú lo sabes."
+  ]},
+  {"id": "futuros", "phrases": [
+    "Así que, en lugar de un solo destino, te da cinco caminos.",
+    "El más seguro: Taxco.",
+    "El que aguanta aunque cambies de opinión: Orizaba.",
+    "La sorpresa: Xilitla, un jardín surrealista en plena sierra.",
+    "El intenso, para fans de la naturaleza: Chiapa de Corzo.",
+    "Y el comodín: Palenque."
+  ]},
+  {"id": "mundos", "phrases": [
+    "Y aquí viene lo más loco.",
+    "Órbita imagina cincuenta mil versiones de ti, cada una con gustos un poquito distintos, y ve a dónde se iría cada una.",
+    "Taxco parecía el favorito… pero solo convence al cinco por ciento de tus versiones.",
+    "Orizaba, a casi una de cada tres."
+  ]},
+  {"id": "pregunta", "phrases": [
+    "Entonces te hace una sola pregunta: ¿museos, o mezcal?",
+    "Con tu respuesta, miles de futuros desaparecen, y tu viaje ideal se vuelve clarísimo."
+  ]},
+  {"id": "funciona", "phrases": [
+    "¿Y funciona? Lo pusimos a prueba.",
+    "Le escondimos seiscientas opiniones reales y tuvo que adivinar de qué pueblo eran: acertó cinco veces más que el azar.",
+    "Y con más de seis mil viajeros virtuales, encontró su destino ideal en nueve de cada diez casos."
+  ]},
+  {"id": "invita", "phrases": [
+    "Ahora queremos tu opinión.",
+    "Entra, califica algunos pueblos en dos minutos, y ayúdanos a hacerlo todavía mejor."
+  ]},
+  {"id": "cierre", "phrases": [
+    "Órbita. No te decimos a dónde ir…",
+    "te mostramos todos tus futuros."
+  ]}
+]

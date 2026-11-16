@@ -23,6 +23,7 @@ from .text import (
     QUERY_FILLER,
     SPANISH_STOP_WORDS,
     canonical_text,
+    display_label,
     expand_for_lexical,
     parse_query,
     phonetic_key,
@@ -71,6 +72,9 @@ class Recommender:
         self.evidence_matrix = sp.load_npz(self.artifact_dir / "evidence_matrix.npz").tocsr()
         bundle = json.loads((self.artifact_dir / "metadata.json").read_text(encoding="utf-8"))
         self.destinations = bundle["destinations"]
+        for item in self.destinations:
+            item["display_name"] = display_label(item["display_name"])
+            item["display_region"] = display_label(item["display_region"])
         self.profile_mapping = bundle["profile_mapping"]
         self.evidence = bundle["evidence"]
         self.towns = [item["town"] for item in self.destinations]

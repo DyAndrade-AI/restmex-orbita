@@ -1,0 +1,88 @@
+[
+  {"id": "intro", "phrases": [
+    "Casi todos los recomendadores te dan una sola respuesta: el mejor destino.",
+    "Pero tus gustos no son una sola cosa. Compiten entre sí, cambian, y a veces ni tú sabes cuál pesa más.",
+    "Por eso construimos Órbita."
+  ]},
+  {"id": "base", "phrases": [
+    "Órbita se apoya en doscientas ocho mil reseñas reales de cuarenta Pueblos Mágicos.",
+    "Un motor híbrido de cuatro señales, TF-IDF, evidencia, BM25 y un modelo de lenguaje, ordena los cuarenta pueblos según lo que pides.",
+    "Pero ordenar es solo el punto de partida. Lo nuevo viene después."
+  ]},
+  {"id": "atomos", "phrases": [
+    "Imagina que escribes: busco arquitectura colonial, museos, mezcal y naturaleza, sin playa.",
+    "Órbita no la trata como una sola frase. La rompe en átomos de gusto: arquitectura colonial, museos, mezcal y naturaleza.",
+    "Y mide, con las reseñas, qué tan fuerte es cada pueblo en cada átomo.",
+    "Taxco brilla en arquitectura, pero casi no aparece en lo demás. Orizaba destaca en museos, y además suma en arquitectura y naturaleza."
+  ]},
+  {"id": "olvido", "phrases": [
+    "Luego hace un experimento: ¿qué pasa si olvidas uno de tus gustos?",
+    "Quita cada átomo, uno por uno, y vuelve a ordenar. Sin arquitectura, gana Malinalco. Sin mezcal, gana Orizaba. Sin naturaleza, gana Cholula.",
+    "Así mide la resiliencia: qué pueblos se mantienen arriba aunque cambien tus prioridades. Orizaba resiste mucho mejor que Taxco."
+  ]},
+  {"id": "roles", "phrases": [
+    "Con esas medidas, Órbita arma una cartera de cinco futuros, cada uno con un papel distinto.",
+    "El Ancla, Taxco: la coincidencia más directa, la de mayor afinidad.",
+    "El Superviviente, Orizaba: el que mejor resiste cuando olvidas un gusto.",
+    "El Portal, Xilitla: se aleja de lo obvio, sin salirse de lo plausible.",
+    "El Especialista, Chiapa de Corzo: lleva un solo gusto, la naturaleza, al extremo.",
+    "Y el Comodín, Palenque: equilibra afinidad, resiliencia y sorpresa.",
+    "Además, cada futuro se penaliza si se parece demasiado a los anteriores. Así, los cinco son realmente distintos."
+  ]},
+  {"id": "riesgo", "phrases": [
+    "Y aquí está lo arriesgado: tú decides cuánto riesgo tomar.",
+    "Con riesgo bajo, el Portal es Cholula, cercano a lo que ya esperabas.",
+    "Con riesgo alto, el Portal salta a Xilitla, el jardín surrealista de la sierra. Más lejos, pero todavía dentro de tu intención."
+  ]},
+  {"id": "contra", "phrases": [
+    "Cada futuro trae una explicación contrafactual: cuánto tendrías que cambiar de opinión para que ese destino supere al Ancla.",
+    "Por ejemplo: si movieras solo el siete por ciento de tu atención hacia la naturaleza, Chiapa de Corzo le ganaría a Taxco.",
+    "Y si un pueblo rompe tu restricción, como Sayulita con su playa, Órbita lo dice claro: es imposible bajo tus reglas."
+  ]},
+  {"id": "estable", "phrases": [
+    "Órbita también mide qué tan estable es cada futuro, con dos mil perturbaciones de tus gustos.",
+    "El Superviviente sigue arriba en el cien por ciento de ellas. El Especialista, solo en el dieciocho.",
+    "Es frágil por diseño. Y Órbita te lo dice, en vez de esconderlo."
+  ]},
+  {"id": "loop1", "phrases": [
+    "Ahora, la parte más audaz: Strange Loop.",
+    "En lugar de adivinar cuánto te importa cada gusto, Órbita simula cincuenta mil versiones posibles de ti.",
+    "En cada versión, tus cuatro gustos pesan distinto, sorteados con una distribución de Dirichlet, más un poco de azar en la experiencia. Y se ve qué pueblo ganaría en ese futuro."
+  ]},
+  {"id": "loop2", "phrases": [
+    "El resultado es sorprendente.",
+    "Orizaba gana en el treinta y dos por ciento de los futuros. Malinalco, en el dieciséis. Cholula, en el trece.",
+    "¿Y Taxco, el Ancla? Solo gana en el cinco por ciento. Era la mejor respuesta para el promedio, pero no para la mayoría de las versiones de ti."
+  ]},
+  {"id": "pregunta", "phrases": [
+    "Entonces, Órbita te hace la pregunta que más información aporta: ¿conservarías museos, o mezcal?",
+    "Si eliges museos, sobreviven veinticinco mil futuros, y Orizaba sube al cincuenta y tres por ciento.",
+    "Si eliges mezcal, la balanza se inclina hacia Malinalco. Con cada respuesta, el multiverso colapsa, y la decisión se aclara."
+  ]},
+  {"id": "entropia", "phrases": [
+    "La incertidumbre se mide con entropía.",
+    "Con riesgo bajo es del cuarenta y tres por ciento. Con riesgo alto sube al sesenta y nueve: más futuros abiertos, más sorpresa."
+  ]},
+  {"id": "eval1", "phrases": [
+    "Ahora, ¿cómo sabemos que funciona? Con tres niveles de evaluación.",
+    "Nivel uno: cuarenta consultas de prueba, con destinos aceptables. El sistema logra ochenta y nueve por ciento de precisión en su top cinco, y acierta el primer lugar en el noventa y siete por ciento. Es el número que ves en la página.",
+    "Pero ojo: esas consultas las escribió alguien que ya había visto resultados. Por eso solo sirven para detectar errores, no como prueba definitiva.",
+    "Nivel dos, el más exigente: se apartan seiscientas reseñas, se reconstruye el índice sin ellas, se tapa el nombre del pueblo, y el sistema debe adivinar de dónde viene cada una.",
+    "Acierta en su top cinco el sesenta y seis por ciento de las veces. El azar, solo el doce y medio.",
+    "Nivel tres: un laboratorio de evaluación humana a ciegas, en la propia página. Las personas califican cada destino de cero a tres, sin saber qué sistema lo propuso, y se mide su acuerdo con el alfa de Krippendorff."
+  ]},
+  {"id": "eval2", "phrases": [
+    "Órbita y Strange Loop también se auditan. En diez consultas, los cinco futuros siempre son distintos y reproducibles, con resiliencia media del ochenta y ocho por ciento.",
+    "La simulación converge: con cincuenta mil futuros, el error es menor a un cuarto de punto porcentual, y el ganador es el mismo con diez semillas distintas.",
+    "Y todo está respaldado por cuarenta y ocho pruebas automáticas."
+  ]},
+  {"id": "audaz", "phrases": [
+    "¿Qué hace diferente a Órbita?",
+    "No da una respuesta: da una cartera de futuros. Mide la fragilidad en lugar de ocultarla. Te pregunta lo que más informa. Y explica qué tendría que cambiar.",
+    "Y es honesto con sus riesgos: todavía no hay juicios humanos, y los pesos de los roles son de diseño, no aprendidos. Por eso, el laboratorio ciego es el siguiente paso."
+  ]},
+  {"id": "cierre", "phrases": [
+    "Órbita. No te decimos a dónde ir…",
+    "te mostramos todos los futuros posibles."
+  ]}
+]

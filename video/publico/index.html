@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Órbita · video para el público</title>
+<style>
+:root{
+  --bg:#060A18; --card:rgba(255,255,255,.055); --line:rgba(255,255,255,.12);
+  --rosa:#FF2E88; --turq:#19E3C7; --oro:#FFB627; --lila:#8B7BFF; --azul:#4DA3FF;
+  --txt:#F3F5FF; --mut:#9AA3C7; --ease:cubic-bezier(.2,.85,.25,1);
+  --f1:#FFB627; --f2:#8B7BFF; --f3:#FF2E88; --f4:#19E3C7;
+}
+*{box-sizing:border-box;margin:0;padding:0;animation-play-state:paused!important}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--txt);
+  font-family:"Avenir Next","Avenir",-apple-system,"Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased}
+#bg{position:absolute;inset:0}
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden}
+.abs{position:absolute}
+.center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.grad{background:linear-gradient(90deg,var(--turq),var(--lila) 45%,var(--rosa));-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-oro{background:linear-gradient(90deg,var(--oro),var(--rosa));-webkit-background-clip:text;background-clip:text;color:transparent}
+.h1{font-size:76px;font-weight:700;letter-spacing:-1.5px;line-height:1.08}
+.h2{font-size:58px;font-weight:700;letter-spacing:-1px;line-height:1.1}
+.h3{font-size:36px;font-weight:600}
+.lead{font-size:32px;color:var(--mut);font-weight:500;line-height:1.35}
+.card{background:var(--card);border:1px solid var(--line);border-radius:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06)}
+.chip{white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:12px;padding:14px 26px;border-radius:999px;font-size:30px;font-weight:600;
+  background:rgba(255,255,255,.07);border:1.5px solid var(--line)}
+.chip.no{background:rgba(255,46,136,.12);border-color:rgba(255,46,136,.6);color:#FFC2DD}
+.tag{font-size:21px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:var(--mut)}
+.big{font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+
+.fu{animation:fu .9s var(--ease) both}
+@keyframes fu{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.fd{animation:fd .9s var(--ease) both}
+@keyframes fd{from{opacity:0;transform:translateY(-40px)}to{opacity:1;transform:none}}
+.pop{animation:pop .8s cubic-bezier(.3,1.6,.4,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+.sl{animation:sl .9s var(--ease) both}
+@keyframes sl{from{opacity:0;transform:translateX(-80px)}to{opacity:1;transform:none}}
+.sr{animation:sr .9s var(--ease) both}
+@keyframes sr{from{opacity:0;transform:translateX(80px)}to{opacity:1;transform:none}}
+.zoom{animation:zoom 1.4s var(--ease) both}
+@keyframes zoom{from{opacity:0;transform:scale(1.5);filter:blur(20px)}to{opacity:1;transform:none;filter:none}}
+.blur{animation:blurin 1.1s var(--ease) both}
+@keyframes blurin{from{opacity:0;filter:blur(18px)}to{opacity:1;filter:none}}
+.growx{transform-origin:left center;animation:growx 1.2s var(--ease) both}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.growy{transform-origin:center bottom;animation:growy 1.6s var(--ease) both}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.draw{animation:draw 1.6s ease-in-out both}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.drawmap{animation:draw 3s ease-in-out both}
+.hide{animation:hide .6s ease both}
+@keyframes hide{from{opacity:1}to{opacity:0;transform:scale(.94);filter:blur(10px)}}
+.dim{animation:dim .8s ease both}
+@keyframes dim{from{opacity:1}to{opacity:.22}}
+.ring{animation:ring 2.2s var(--ease) both}
+@keyframes ring{from{stroke-dashoffset:1}to{stroke-dashoffset:var(--off)}}
+.stamp{animation:stamp .7s cubic-bezier(.3,1.6,.4,1) both}
+@keyframes stamp{from{opacity:0;transform:scale(2.2) rotate(-8deg)}to{opacity:1;transform:rotate(-8deg)}}
+.hl{animation:hl .8s var(--ease) both}
+@keyframes hl{from{opacity:0;transform:scaleX(.96)}to{opacity:1;transform:none}}
+.town circle{transform-box:fill-box;transform-origin:center}
+
+#chapter{position:absolute;left:80px;top:56px;font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:16px}
+#chapter i{width:12px;height:12px;border-radius:50%;background:var(--rosa);box-shadow:0 0 20px var(--rosa)}
+#brand{position:absolute;right:80px;top:50px;font-size:30px;font-weight:800;letter-spacing:.5px}
+#progress{position:absolute;left:0;top:0;height:5px;background:linear-gradient(90deg,var(--turq),var(--lila),var(--rosa));box-shadow:0 0 18px var(--lila)}
+#cap{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);max-width:1560px;width:max-content;padding:15px 34px;border-radius:18px;
+  background:rgba(4,7,20,.75);border:1px solid rgba(255,255,255,.08);font-size:31px;font-weight:500;line-height:1.35;text-align:center;color:#fff}
+
+.search{width:1420px;height:104px;border-radius:999px;display:flex;align-items:center;gap:26px;padding:0 46px;font-size:34px;font-weight:500;white-space:nowrap}
+.caret{display:inline-block;width:3px;height:40px;background:var(--turq);vertical-align:middle;margin-left:4px}
+.map path.mx{fill:rgba(139,123,255,.06);stroke-width:2.5;stroke-dasharray:1;stroke-linejoin:round}
+
+.hm{display:grid;grid-template-columns:300px repeat(4,250px);gap:8px}
+.hm .hd{font-size:22px;font-weight:700;text-align:center;padding-bottom:6px;letter-spacing:1px}
+.hm .nm{font-size:27px;font-weight:600;display:flex;align-items:center;justify-content:flex-end;padding-right:18px}
+.hm .c{height:48px;border-radius:12px;display:grid;place-items:center;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+
+.lo{width:390px;padding:30px 30px;display:flex;flex-direction:column;gap:16px}
+.lo .x{font-size:28px;font-weight:700;text-decoration:line-through;text-decoration-thickness:3px;text-decoration-color:var(--rosa);color:var(--mut)}
+.lo .w{font-size:44px;font-weight:800}
+.role{display:flex;gap:24px;align-items:center;padding:16px 26px;border-radius:22px;margin-bottom:12px}
+.role .dot{width:22px;height:22px;border-radius:50%;flex:none}
+.role h5{font-size:30px;font-weight:700}
+.role p{font-size:22px;color:var(--mut);margin-top:3px}
+.role .town{margin-left:auto;text-align:right;font-size:28px;font-weight:700;white-space:nowrap}
+.role .town small{display:block;font-size:19px;color:var(--mut);font-weight:600}
+.planet{position:absolute;width:0;height:0}
+.planet .ball{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%}
+.planet .lbl{position:absolute;left:-150px;width:300px;top:38px;text-align:center;font-size:21px;font-weight:700;white-space:nowrap}
+.meter{height:20px;border-radius:10px;background:rgba(255,255,255,.08);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:10px}
+.tile{padding:34px 40px;display:flex;gap:30px;align-items:center}
+.tile .big{font-size:70px;min-width:230px;text-align:center}
+.tile h4{font-size:32px;font-weight:700;margin-bottom:8px}
+.tile p{font-size:23px;color:var(--mut);line-height:1.4}
+.lv{width:540px;height:600px;padding:38px 40px;display:flex;flex-direction:column;gap:16px;position:relative}
+.lv h4{font-size:34px;font-weight:700}
+.lv p{font-size:23px;color:var(--mut);line-height:1.4}
+.li{display:flex;gap:20px;align-items:flex-start;font-size:36px;font-weight:600;margin-bottom:40px;line-height:1.3}
+.li b{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:24px}
+
+.person{width:230px;padding:26px 18px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.person .face{font-size:84px;line-height:1}
+.person .res{font-size:21px;font-weight:700;padding:10px 14px;border-radius:14px;background:rgba(255,182,39,.14);color:#FFD27A;white-space:nowrap}
+.bigstamp{font-size:92px;font-weight:900;letter-spacing:2px;color:var(--rosa);border:10px solid var(--rosa);border-radius:26px;padding:10px 46px;background:rgba(6,10,24,.75);box-shadow:0 0 80px rgba(255,46,136,.45)}
+.sway{animation:sway 1.6s ease-in-out infinite alternate both}
+@keyframes sway{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+.float{animation:float 2.4s ease-in-out infinite alternate both}
+@keyframes float{from{transform:translateY(-10px)}to{transform:translateY(10px)}}
+.pick{width:560px;height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;font-size:64px;font-weight:800}
+.pick .em{font-size:110px;line-height:1}
+.glowon{animation:glowon .7s var(--ease) both}
+@keyframes glowon{from{box-shadow:0 0 0 0 rgba(25,227,199,0);border-color:var(--line)}to{box-shadow:0 0 90px 10px rgba(25,227,199,.45);border-color:var(--turq)}}
+.fr{display:flex;flex-direction:column;gap:14px}
+.frole{display:flex;align-items:center;gap:22px;padding:18px 28px;border-radius:22px}
+.frole .dot{width:24px;height:24px;border-radius:50%;flex:none}
+.frole .k{font-size:24px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:2px}
+.frole .v{font-size:40px;font-weight:800;margin-left:auto;white-space:nowrap}
+.ppl{display:flex;gap:18px}
+.ppl span{font-size:70px;line-height:1;filter:grayscale(1);opacity:.35}
+.ppl span.on{animation:on .5s cubic-bezier(.3,1.6,.4,1) both}
+@keyframes on{from{filter:grayscale(1);opacity:.35;transform:scale(1)}50%{transform:scale(1.35)}to{filter:none;opacity:1;transform:scale(1)}}
+.labbtn{width:250px;height:150px;border-radius:24px;display:grid;place-items:center;align-content:center;gap:6px;font-size:40px;font-weight:800}
+.labbtn small{font-size:20px;font-weight:600;opacity:.75}
+#cursor{position:absolute;width:56px;height:56px;pointer-events:none;filter:drop-shadow(0 6px 12px rgba(0,0,0,.5))}
+</style>
+</head>
+<body>
+<canvas id="bg" width="1920" height="1080"></canvas>
+
+<!-- 1 · GANCHO -->
+<section class="scene" data-id="gancho">
+  <div class="abs" style="left:0;right:0;top:150px;text-align:center"><div class="h1"><span class="tw" data-p="0" data-cps="24" data-text="¿Le pediste a una app un lugar para viajar…"></span></div></div>
+  <div class="abs dim" data-p="2" data-o="0.3" style="left:0;right:0;top:360px;display:flex;justify-content:center;gap:26px">
+    <div class="card person pop" data-p="1" data-o="0.0"><div class="face">👩</div><div class="res">📍 El mejor destino</div></div>
+    <div class="card person pop" data-p="1" data-o="0.25"><div class="face">🧔</div><div class="res">📍 El mejor destino</div></div>
+    <div class="card person pop" data-p="1" data-o="0.5"><div class="face">👵</div><div class="res">📍 El mejor destino</div></div>
+    <div class="card person pop" data-p="1" data-o="0.75"><div class="face">🧑‍🎓</div><div class="res">📍 El mejor destino</div></div>
+    <div class="card person pop" data-p="1" data-o="1.0"><div class="face">👨‍👧</div><div class="res">📍 El mejor destino</div></div>
+    <div class="card person pop" data-p="1" data-o="1.25"><div class="face">🧕</div><div class="res">📍 El mejor destino</div></div>
+  </div>
+  <div class="abs" style="left:0;right:0;top:430px;display:flex;justify-content:center"><div class="bigstamp stamp" data-p="2" data-o="0.2">UNA SOLA RESPUESTA</div></div>
+  <div class="abs fu" data-p="2" data-o="1.2" style="left:0;right:0;top:720px;text-align:center;font-size:46px;font-weight:700">…para <span class="grad-oro">millones</span> de personas distintas.</div>
+</section>
+
+<!-- 2 · MARCA -->
+<section class="scene" data-id="marca">
+  <canvas id="marcacv" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div class="center" style="gap:24px">
+    <div class="tag fu" data-p="0" data-o="0.3" style="color:var(--turq)">Recomendador de Pueblos Mágicos</div>
+    <div class="grad zoom" data-p="0" style="font-size:230px;font-weight:800;letter-spacing:-6px;line-height:1.05">Órbita</div>
+    <div class="h2 blur" data-p="1" data-o="1.6" style="font-weight:600">No una respuesta: <span class="grad-oro">tus futuros.</span></div>
+  </div>
+</section>
+
+<!-- 3 · ESCRIBE -->
+<section class="scene" data-id="escribe">
+  <div class="abs fd" data-p="0" style="left:250px;top:150px">
+    <div class="search card"><span style="font-size:40px">🔎</span><span class="tw" data-p="0" data-o="2.4" data-cps="15" data-caret="1" data-text="Arquitectura colonial, museos, mezcal y naturaleza, sin playa"></span></div>
+  </div>
+  <div class="abs" style="left:120px;top:300px;transform:scale(.78);transform-origin:left top"><div id="map1"></div></div>
+  <div class="abs" style="left:1060px;top:420px;width:780px">
+    <div class="fu" data-p="1"><div class="grad-oro big" style="font-size:132px">+<span class="count" data-p="1" data-to="208051" data-dur="2.6">0</span></div>
+      <div class="h3" style="font-size:44px;margin-top:10px">opiniones de viajeros reales</div></div>
+    <div class="fu" data-p="1" data-o="2.4" style="margin-top:40px;font-size:44px;font-weight:700"><span class="grad">40</span> Pueblos Mágicos</div>
+  </div>
+</section>
+
+<!-- 4 · COMPITEN -->
+<section class="scene" data-id="compiten">
+  <div class="abs hide" data-p="1" data-o="-0.2" style="inset:0">
+    <div class="abs" style="left:0;right:0;top:300px;display:flex;justify-content:center;gap:20px">
+      <span class="chip pop" data-p="0" data-o="0.3" style="font-size:40px;border-color:var(--f1);color:var(--f1)">🏛 arquitectura</span>
+      <span class="chip pop" data-p="0" data-o="0.6" style="font-size:40px;border-color:var(--f2);color:var(--f2)">🖼 museos</span>
+      <span class="chip pop" data-p="0" data-o="0.9" style="font-size:40px;border-color:var(--f3);color:var(--f3)">🥃 mezcal</span>
+      <span class="chip pop" data-p="0" data-o="1.2" style="font-size:40px;border-color:var(--f4);color:var(--f4)">🌿 naturaleza</span>
+    </div>
+    <div class="abs zoom" data-p="0" data-o="2.6" style="left:0;right:0;top:500px;text-align:center"><div style="font-size:120px;font-weight:800;letter-spacing:-3px">Tus gustos <span class="grad">compiten</span>.</div></div>
+  </div>
+  <div class="abs fu" data-p="1" style="left:0;right:0;top:170px;text-align:center"><div class="h2">¿Qué pesa más <span class="grad-oro">hoy</span>?</div></div>
+  <div class="abs" style="left:360px;top:330px;width:1200px;height:520px">
+    <div class="abs fu" data-p="1" data-o="0.2" style="left:0;top:0;width:1200px;height:420px">
+      <div class="abs sway" data-p="1" style="left:0;top:0;width:1200px;height:420px;transform-origin:600px 300px">
+        <div class="abs" style="left:80px;right:80px;top:292px;height:16px;border-radius:8px;background:linear-gradient(90deg,var(--f2),var(--f3))"></div>
+        <div class="abs card" style="left:40px;top:70px;width:340px;height:220px;display:grid;place-items:center;align-content:center;gap:8px;font-size:52px;font-weight:800;color:var(--f2)"><span style="font-size:96px">🖼</span>Museos</div>
+        <div class="abs card" style="right:40px;top:70px;width:340px;height:220px;display:grid;place-items:center;align-content:center;gap:8px;font-size:52px;font-weight:800;color:var(--f3)"><span style="font-size:96px">🥃</span>Mezcal</div>
+      </div>
+      <div class="abs" style="left:560px;top:300px;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:110px solid rgba(255,255,255,.18);transform:translateX(-0px)"></div>
+    </div>
+    <div class="abs fu" data-p="1" data-o="2.6" style="left:0;right:0;top:450px;text-align:center;font-size:42px;font-weight:600;color:var(--mut)">A veces, ni tú lo sabes. 🤷</div>
+  </div>
+</section>
+
+<!-- 5 · FUTUROS -->
+<section class="scene" data-id="futuros">
+  <div class="abs fu" data-p="0" style="left:0;right:0;top:120px;text-align:center"><div class="h2">En lugar de un destino… <span class="grad">cinco caminos</span>.</div></div>
+  <div class="abs" style="left:90px;top:250px;width:1000px;height:780px">
+    <canvas id="orbitcv" class="abs" width="1000" height="780" style="left:0;top:0"></canvas>
+    <div id="planets" class="abs" style="left:0;top:0"></div>
+  </div>
+  <div class="abs fr" style="left:1080px;top:300px;width:760px">
+    <div class="frole card sr" data-p="1"><span class="dot" style="background:#FFB627"></span><span class="k">El más seguro</span><span class="v">Taxco</span></div>
+    <div class="frole card sr" data-p="2"><span class="dot" style="background:#19E3C7"></span><span class="k">El que aguanta</span><span class="v">Orizaba</span></div>
+    <div class="frole card sr" data-p="3"><span class="dot" style="background:#8B7BFF"></span><span class="k">La sorpresa</span><span class="v">Xilitla</span></div>
+    <div class="frole card sr" data-p="4"><span class="dot" style="background:#FF2E88"></span><span class="k">El intenso</span><span class="v">Chiapa de Corzo</span></div>
+    <div class="frole card sr" data-p="5"><span class="dot" style="background:#4DA3FF"></span><span class="k">El comodín</span><span class="v">Palenque</span></div>
+  </div>
+</section>
+
+<!-- 6 · MUNDOS -->
+<section class="scene" data-id="mundos">
+  <div class="abs hide" data-p="1" data-o="-0.2" style="inset:0">
+    <div class="center"><div class="zoom" data-p="0" style="font-size:150px;font-weight:900;letter-spacing:-4px">Lo más <span class="grad-oro">loco</span> 🤯</div></div>
+  </div>
+  <canvas id="loopcv" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div class="abs fu" data-p="1" data-o="0.2" style="left:110px;top:150px">
+    <div class="big grad" style="font-size:96px"><span class="count" data-p="1" data-o="0.2" data-to="50000" data-dur="5">0</span></div>
+    <div class="h3" style="font-size:38px">versiones de ti</div>
+  </div>
+  <div class="abs card pop" data-p="2" data-o="1.2" style="left:110px;top:760px;padding:22px 30px;font-size:30px;font-weight:700;width:560px">Taxco, el favorito… <span style="color:var(--oro)">solo 5%</span> 😮</div>
+  <div class="abs card pop" data-p="3" style="left:110px;top:880px;padding:22px 30px;font-size:30px;font-weight:700;width:560px">Orizaba: <span style="color:var(--lila)">casi 1 de cada 3</span> 🏆</div>
+</section>
+
+<!-- 7 · PREGUNTA -->
+<section class="scene" data-id="pregunta">
+  <div class="abs fu" data-p="0" style="left:0;right:0;top:130px;text-align:center"><div class="h2">Una sola pregunta:</div></div>
+  <div class="abs" style="left:0;right:0;top:270px;display:flex;justify-content:center;align-items:center;gap:60px">
+    <div class="card pick pop" data-p="0" data-o="1.5"><span class="em">🖼</span>Museos<div class="abs card glowon" data-p="1" data-o="0.4" style="inset:-1px;border-radius:28px;background:transparent;border-width:4px"></div></div>
+    <div style="font-size:54px;font-weight:800;color:var(--mut);letter-spacing:2px" class="pop" data-p="0" data-o="2.0">VS</div>
+    <div class="card pick pop" data-p="0" data-o="2.4"><span class="em">🥃</span>Mezcal<div class="abs dim" data-p="1" data-o="0.4" style="inset:0;border-radius:28px;background:rgba(6,10,24,.0)"></div></div>
+  </div>
+  <div class="abs fu" data-p="1" data-o="0.8" style="left:260px;top:660px;width:1400px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:36px;font-weight:700"><span>Futuros que siguen abiertos</span><span class="big" style="font-size:56px" id="fut">50,000</span></div>
+    <div class="meter" style="height:26px;margin-top:14px"><i id="futbar" style="width:100%;background:linear-gradient(90deg,var(--turq),var(--lila))"></i></div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:36px;font-weight:700;margin-top:34px"><span>Orizaba, tu viaje ideal</span><span class="big" style="font-size:56px;color:var(--lila)" id="ori">32%</span></div>
+    <div class="meter" style="height:26px;margin-top:14px"><i id="oribar" style="width:32%;background:var(--lila)"></i></div>
+  </div>
+</section>
+
+<!-- 8 · FUNCIONA -->
+<section class="scene" data-id="funciona">
+  <div class="abs fu" data-p="0" style="left:0;right:0;top:120px;text-align:center"><div class="h1">¿Funciona? <span class="grad">Lo probamos.</span></div></div>
+  <div class="abs card pop" data-p="1" style="left:110px;top:290px;width:820px;height:620px;padding:46px 50px;display:flex;flex-direction:column;gap:22px">
+    <div style="font-size:30px;font-weight:700;color:var(--mut)">🙈 600 opiniones escondidas</div>
+    <div style="font-size:40px;font-weight:700">¿De qué pueblo es cada una?</div>
+    <div class="grad-oro big" style="font-size:170px;margin-top:6px">×5</div>
+    <div style="font-size:34px;font-weight:700">más aciertos que el azar</div>
+    <div style="display:grid;grid-template-columns:150px 1fr 110px;gap:14px 18px;align-items:center;font-size:26px;font-weight:700;margin-top:auto">
+      <span>Órbita</span><div class="meter" style="height:28px"><i class="growx" data-p="1" data-o="2" style="width:66%;background:linear-gradient(90deg,var(--turq),var(--lila))"></i></div><span>66%</span>
+      <span style="color:var(--mut)">Al azar</span><div class="meter" style="height:28px"><i class="growx" data-p="1" data-o="2.4" style="width:12.5%;background:#9AA3C7"></i></div><span style="color:var(--mut)">12.5%</span>
+    </div>
+  </div>
+  <div class="abs card pop" data-p="2" style="left:990px;top:290px;width:820px;height:620px;padding:46px 50px;display:flex;flex-direction:column;gap:22px">
+    <div style="font-size:30px;font-weight:700;color:var(--mut)">🧪 +6,000 viajeros virtuales</div>
+    <div style="font-size:40px;font-weight:700">¿Encuentra su destino ideal?</div>
+    <div class="grad big" style="font-size:170px;margin-top:6px">9 de 10</div>
+    <div class="ppl" style="margin-top:auto;flex-wrap:wrap;gap:12px 14px">
+      <span class="on" data-p="2" data-o="1.0">🧳</span><span class="on" data-p="2" data-o="1.2">🧳</span><span class="on" data-p="2" data-o="1.4">🧳</span><span class="on" data-p="2" data-o="1.6">🧳</span><span class="on" data-p="2" data-o="1.8">🧳</span>
+      <span class="on" data-p="2" data-o="2.0">🧳</span><span class="on" data-p="2" data-o="2.2">🧳</span><span class="on" data-p="2" data-o="2.4">🧳</span><span class="on" data-p="2" data-o="2.6">🧳</span><span>🧳</span>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · INVITA -->
+<section class="scene" data-id="invita">
+  <div class="abs fu" data-p="0" style="left:0;right:0;top:120px;text-align:center"><div class="h1">Ahora queremos <span class="grad-oro">tu opinión</span> 💬</div></div>
+  <div class="abs card fu" data-p="1" style="left:310px;top:290px;width:1300px;height:560px;padding:44px 56px;background:#FFFDF8;color:#1b2a2e;border-color:#e5dccb">
+    <div style="font-size:22px;letter-spacing:3px;font-weight:700;color:#a2621a">UN VIAJERO ESCRIBIÓ:</div>
+    <div style="font-size:40px;font-weight:800;margin-top:10px">“Cenotes para nadar y comida yucateca”</div>
+    <div style="margin-top:30px;font-size:22px;color:#7a8481;font-family:Menlo,monospace;letter-spacing:2px">QUINTANA ROO</div>
+    <div style="font-size:64px;font-weight:800;letter-spacing:-2px">Bacalar</div>
+    <div style="font-size:30px;font-weight:800;margin:20px 0 18px">¿Qué tan bien encaja?</div>
+    <div style="display:flex;gap:18px">
+      <div class="labbtn" style="background:#fbe5df;color:#8b2f1c">Nada<small>No tiene que ver</small></div>
+      <div class="labbtn" style="background:#fbefd9;color:#85580f">Poco<small>Algo, pero flojo</small></div>
+      <div class="labbtn" style="background:#e3f2ec;color:#1d6150">Sí<small>Encaja bien</small></div>
+      <div class="labbtn" id="perfecto" style="background:#d4ecf7;color:#13506d;border:4px solid transparent">Perfecto<small>Justo lo que pide</small></div>
+    </div>
+  </div>
+  <svg id="cursor" viewBox="0 0 24 24" style="left:1500px;top:900px;opacity:0"><path d="M4 2l15 9-6.5 1.5L16 20l-3 1.5-3.5-7.5L4 18z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg>
+  <div class="abs fu" data-p="1" data-o="4.5" style="left:0;right:0;top:900px;text-align:center;font-size:40px;font-weight:700">⏱ 2 minutos · <span class="grad">Ayúdanos a evaluar Órbita</span></div>
+</section>
+
+<!-- 10 · CIERRE -->
+<section class="scene" data-id="cierre">
+  <canvas id="closecv" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div class="center" style="gap:26px;padding-bottom:40px">
+    <div class="grad zoom" data-p="0" style="font-size:210px;font-weight:800;letter-spacing:-6px;line-height:1.05">Órbita</div>
+    <div class="h2 blur" data-p="0" data-o="0.9" style="font-weight:600">No te decimos a dónde ir…</div>
+    <div class="h2 blur" data-p="1"><span class="grad-oro">te mostramos todos tus futuros.</span></div>
+  </div>
+</section>
+
+<div id="brand" class="grad">Órbita</div>
+<div id="progress"></div>
+<div id="cap"></div>
+
+<script>
+const TL = /*TIMELINE*/null;
+const SC = Object.fromEntries(TL.scenes.map(s=>[s.id,s]));
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ease=x=>1-Math.pow(1-clamp(x),3);
+const easeIO=x=>(x=clamp(x),x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2);
+const lerp=(a,b,u)=>a+(b-a)*u;
+function rng(seed){let s=seed>>>0||1;return()=>(s=(s*1664525+1013904223)>>>0)/4294967296}
+function hash(a,b){let h=(a*374761393+b*668265263)>>>0;h=Math.imul(h^(h>>>13),1274126177)>>>0;return (h^(h>>>16))>>>0}
+const P=(id,i)=>SC[id].phrases[i].start;
+
+
+const FC=["#FFB627","#8B7BFF","#FF2E88","#19E3C7"];
+const GEO={"Ajijic":[20.30,-103.26],"Atlixco":[18.91,-98.43],"Bacalar":[18.68,-88.39],"Bernal":[20.74,-99.94],"Chiapa de Corzo":[16.71,-93.01],
+"Cholula":[19.06,-98.30],"Coatepec":[19.45,-96.96],"Creel":[27.75,-107.63],"Cuatro Cienegas":[26.99,-102.07],"Cuetzalan":[20.02,-97.52],
+"Dolores Hidalgo":[21.16,-100.93],"Huasca de Ocampo":[20.20,-98.58],"Isla Mujeres":[21.23,-86.73],"Ixtapan de la Sal":[18.84,-99.68],
+"Izamal":[20.93,-89.02],"Loreto":[26.01,-111.34],"Malinalco":[18.95,-99.49],"Mazunte":[15.67,-96.55],"Metepec":[19.25,-99.60],
+"Orizaba":[18.85,-97.10],"Palenque":[17.51,-91.98],"Parras":[25.44,-102.18],"Patzcuaro":[19.51,-101.61],"Real de Catorce":[23.69,-100.89],
+"San Cristobal":[16.74,-92.64],"Sayulita":[20.87,-105.44],"Tapalpa":[19.94,-103.76],"Taxco":[18.56,-99.60],"Teotihuacan":[19.69,-98.87],
+"Tepotzotlan":[19.71,-99.22],"Tepoztlan":[18.99,-99.10],"Tequila":[20.88,-103.84],"Tequisquiapan":[20.52,-99.89],"Tlaquepaque":[20.64,-103.31],
+"Todos Santos":[23.45,-110.22],"Tulum":[20.21,-87.47],"Valladolid":[20.69,-88.20],"Valle de Bravo":[19.19,-100.13],"Xilitla":[21.39,-98.99],"Zacatlan":[19.93,-97.96]};
+const MX=[[-117.1,32.5],[-114.7,32.7],[-111,31.3],[-108.2,31.3],[-108.2,31.8],[-106.5,31.8],[-104.5,29.6],[-103,29],[-102.4,29.8],[-101,29.8],
+[-100.3,28.3],[-99.5,27.5],[-99.1,26.4],[-97.2,25.9],[-97.4,24.5],[-97.7,22],[-97.2,20.6],[-96.1,19.2],[-95,18.6],[-94.4,18.15],[-92.7,18.6],
+[-91.4,18.7],[-90.7,19.4],[-90.4,21],[-89.6,21.3],[-88,21.5],[-86.8,21.4],[-87.4,20.2],[-87.6,19],[-88.3,18.5],[-89.1,17.8],[-90.98,17.8],
+[-90.98,17.25],[-91.4,17.25],[-90.4,16.1],[-91.7,16.07],[-92.2,15.25],[-92.2,14.5],[-93.4,15.6],[-94.7,16.2],[-96.5,15.65],[-98,16.2],
+[-99.7,16.7],[-101.5,17.6],[-103.5,18.3],[-104.8,19.3],[-105.7,20.4],[-105.3,21.5],[-105.8,22.6],[-106.9,23.8],[-108.5,25.3],[-109.4,26.5],
+[-110.6,27.9],[-111.6,28.9],[-112.8,30.2],[-114.8,31.8],[-114.6,30.3],[-113.2,28.9],[-112.3,27.1],[-111.3,25.9],[-110.6,24.2],[-109.4,23.2],
+[-110.3,23.4],[-112.1,24.8],[-112.2,26],[-114.1,27.6],[-114,28.4],[-115.7,29.9],[-116.7,31.6]];
+const K=38.5, proj=([lat,lon])=>[(lon+117.5)*0.92*K,(33-lat)*K];
+{const d="M"+MX.map(([lo,la])=>proj([la,lo]).map(v=>v.toFixed(1)).join(",")).join("L")+"Z"; const r=rng(7); let dots="";
+ for(const n in GEO){const [x,y]=proj(GEO[n]);dots+=`<g class="town"><circle class="pop" data-p="1" data-o="${(0.3+r()*2.6).toFixed(2)}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7" fill="#FFB627"/></g>`;}
+ document.getElementById("map1").innerHTML=`<svg class="map" width="1130" height="720" viewBox="-10 -10 1130 720" style="overflow:visible">
+  <defs><linearGradient id="mxg" x1="0" x2="1"><stop offset="0" stop-color="#19E3C7"/><stop offset=".5" stop-color="#8B7BFF"/><stop offset="1" stop-color="#FF2E88"/></linearGradient></defs>
+  <path class="mx drawmap" data-p="1" pathLength="1" d="${d}" style="stroke:url(#mxg)"/>${dots}</svg>`;}
+
+
+// planetas: mismos cinco futuros reales del ejemplo, con nombres cotidianos
+const ROLES=[["El más seguro","Taxco","#FFB627",170],["El que aguanta","Orizaba","#19E3C7",215],["La sorpresa","Xilitla","#8B7BFF",260],["El intenso","Chiapa de Corzo","#FF2E88",305],["El comodín","Palenque","#4DA3FF",350]];
+const pl=document.getElementById("planets");
+const planets=ROLES.map(([r,t,c,rad],i)=>{const el=document.createElement("div");el.className="planet";
+  el.innerHTML=`<div class="ball pop" data-p="${i+1}" style="background:radial-gradient(circle at 35% 30%,#fff,${c} 45%,${c}55 100%);box-shadow:0 0 40px ${c}"></div>
+   <div class="lbl fu" data-p="${i+1}" data-o="0.2" style="color:${c}">${t}</div>`;
+  pl.appendChild(el);return {el,rad,a0:i*1.2566+0.5};});
+
+document.querySelectorAll(".scene").forEach(sec=>{const sc=SC[sec.dataset.id]; sec._sc=sc;
+  sec.querySelectorAll("[data-p]").forEach(el=>{const p=+el.dataset.p,o=+(el.dataset.o||0);
+    el._t=sc.phrases[Math.min(p,sc.phrases.length-1)].start+o; el.style.animationDelay=el._t+"s";});});
+const scenes=[...document.querySelectorAll(".scene")], counters=[...document.querySelectorAll(".count")], typers=[...document.querySelectorAll(".tw")];
+const fmt=new Intl.NumberFormat("en-US"); let anims=null;
+// ---------- fondo ----------
+const bg=document.getElementById("bg").getContext("2d");
+const R0=rng(42), STARS=[...Array(260)].map(()=>[R0()*1920,R0()*1080,R0()*1.6+0.3,R0()*6.28,R0()*0.8+0.3]);
+function drawBG(t){bg.fillStyle="#060A18";bg.fillRect(0,0,1920,1080);bg.globalCompositeOperation="lighter";
+  [["25,227,199",.15,0.07,0],["139,123,255",.2,0.05,2],["255,46,136",.13,0.06,4]].forEach(([c,a,s,ph])=>{const x=960+700*Math.sin(t*s+ph),y=540+380*Math.cos(t*s*1.3+ph*1.7);
+    const g=bg.createRadialGradient(x,y,0,x,y,900);g.addColorStop(0,`rgba(${c},${a})`);g.addColorStop(1,`rgba(${c},0)`);bg.fillStyle=g;bg.fillRect(0,0,1920,1080);});
+  for(const [x,y,r,ph,sp] of STARS){bg.fillStyle=`rgba(220,230,255,${0.25+0.35*(0.5+0.5*Math.sin(t*sp*2+ph))})`;bg.beginPath();bg.arc(x,(y-t*8*sp+10800)%1080,r,0,6.283);bg.fill();}
+  bg.globalCompositeOperation="source-over";const v=bg.createRadialGradient(960,540,400,960,540,1200);v.addColorStop(0,"rgba(0,0,0,0)");v.addColorStop(1,"rgba(0,0,0,.55)");bg.fillStyle=v;bg.fillRect(0,0,1920,1080);}
+
+// ---------- anillos orbitales (intro y cierre) ----------
+function rings(ctx,t,cx,cy,alpha){
+  ctx.save();ctx.globalAlpha=alpha;
+  [[520,140,-0.18,"#19E3C7",0.35],[640,190,0.12,"#8B7BFF",-0.25],[760,240,-0.05,"#FF2E88",0.18]].forEach(([rx,ry,rot,c,sp],i)=>{
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(rot);ctx.strokeStyle=c+"55";ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,0,rx,ry,0,0,6.283);ctx.stroke();
+    for(let k=0;k<2;k++){const a=t*sp+k*3.14+i,x=rx*Math.cos(a),y=ry*Math.sin(a);
+      const g=ctx.createRadialGradient(x,y,0,x,y,26);g.addColorStop(0,"#fff");g.addColorStop(.3,c);g.addColorStop(1,c+"00");ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,26,0,6.283);ctx.fill();}
+    ctx.restore();});
+  ctx.restore();}
+const ic=document.getElementById("marcacv").getContext("2d");
+const cc=document.getElementById("closecv").getContext("2d");
+function drawClose(t){cc.clearRect(0,0,1920,1080);rings(cc,t,960,470,ease((t-SC.cierre.start)/1.2)*0.8);}
+
+
+function drawMarca(t){const s=SC.marca;ic.clearRect(0,0,1920,1080);rings(ic,t,960,520,ease((t-s.phrases[0].start)/1.2)*0.9);}
+
+const oc=document.getElementById("orbitcv").getContext("2d");
+function drawOrbit(t){const sc=SC.futuros,lt=t-sc.start;oc.clearRect(0,0,1000,780);const cx=500,cy=360;
+  planets.forEach((p,i)=>{const u=ease((t-sc.phrases[i+1].start+0.6)/1.2);oc.strokeStyle=`rgba(255,255,255,${0.04+0.1*u})`;oc.lineWidth=1.5;oc.setLineDash([6,10]);
+    oc.beginPath();oc.ellipse(cx,cy,p.rad,p.rad*0.7,0,0,6.283);oc.stroke();});oc.setLineDash([]);
+  const pulse=1+0.06*Math.sin(lt*2.2),g=oc.createRadialGradient(cx,cy,0,cx,cy,85*pulse);g.addColorStop(0,"rgba(255,255,255,.95)");g.addColorStop(.25,"rgba(139,123,255,.8)");g.addColorStop(1,"rgba(139,123,255,0)");
+  oc.fillStyle=g;oc.beginPath();oc.arc(cx,cy,85*pulse,0,6.283);oc.fill();oc.fillStyle="#0a0f25";oc.font="800 26px Avenir Next";oc.textAlign="center";oc.fillText("TÚ",cx,cy+9);
+  planets.forEach(p=>{const a=p.a0+lt*0.14;p.el.style.transform=`translate(${cx+p.rad*Math.cos(a)}px,${cy+p.rad*0.7*Math.sin(a)}px)`;});}
+// ---------- multiverso: participación real de explore_multiverse (ρ = 0.55) ----------
+const lc=document.getElementById("loopcv").getContext("2d");
+const BASINS=[["Orizaba",31.83,1000,320,140,"#8B7BFF"],["Malinalco",16.2,1000,690,100,"#19E3C7"],["Cholula",13.2,1450,220,90,"#ffd27a"],
+  ["Huasca",10.44,1450,450,80,"#7bf0df"],["Taxco",5.13,1450,680,56,"#FFB627"],["Xilitla",5.28,1690,320,56,"#FF2E88"],["Otros",17.92,1690,560,62,"#9AA3C7"]];
+const NP=2600,R1=rng(99),PARTS=[],BCOUNT=BASINS.map(()=>0);
+{let cum=0;const cuts=BASINS.map(b=>(cum+=b[1]));const tot=cum;
+ for(let i=0;i<NP;i++){const u=(i+0.5)/NP*tot,b=cuts.findIndex(c=>u<c),B=BASINS[b],ang=R1()*6.283,rr=Math.sqrt(R1())*B[4]*0.8;
+  BCOUNT[b]++;PARTS.push({b,tx:B[2]+rr*Math.cos(ang),ty:B[3]+rr*Math.sin(ang)*0.9,cx:450+R1()*700,cy:120+R1()*840,d:2.0+R1()*1.6,ph:R1()*6.28,s:0.8+R1()*1.6});}
+ for(let i=NP-1;i>0;i--){const j=Math.floor(R1()*(i+1));[PARTS[i],PARTS[j]]=[PARTS[j],PARTS[i]];} PARTS.forEach((p,i)=>p.e=i/NP);}
+function drawLoop(t){const sc=SC.mundos;lc.clearRect(0,0,1920,1080);const t0=sc.phrases[1].start+0.4,span=7.5,ox=420,oy=500;const arrived=BASINS.map(()=>0);
+  const g=lc.createRadialGradient(ox,oy,0,ox,oy,80);g.addColorStop(0,"rgba(255,255,255,.9)");g.addColorStop(1,"rgba(139,123,255,0)");lc.fillStyle=g;lc.beginPath();lc.arc(ox,oy,80,0,6.283);lc.fill();
+  const ba=clamp((t-t0-1)/1.5),tw=sc.phrases[2].start;
+  BASINS.forEach(([n,sh,x,y,r,c])=>{let rr=r;if(n==="Taxco"){const k=clamp((t-tw)/0.6);rr=r*(1+0.25*k*(0.5+0.5*Math.sin(t*6)));}
+    const gg=lc.createRadialGradient(x,y,0,x,y,rr*1.6);gg.addColorStop(0,c+"33");gg.addColorStop(1,c+"00");lc.globalAlpha=ba;lc.fillStyle=gg;lc.beginPath();lc.arc(x,y,rr*1.6,0,6.283);lc.fill();
+    lc.strokeStyle=c+"99";lc.lineWidth=n==="Taxco"&&t>tw?4:2;lc.beginPath();lc.arc(x,y,rr,0,6.283);lc.stroke();lc.globalAlpha=1;});
+  lc.globalCompositeOperation="lighter";
+  for(const p of PARTS){const st=t0+p.e*span,u=(t-st)/p.d;if(u<0)continue;const B=BASINS[p.b];
+    const pos=v=>{const w=easeIO(v),a=(1-w)*(1-w),b=2*(1-w)*w,c=w*w;return [a*ox+b*p.cx+c*p.tx,a*oy+b*p.cy+c*p.ty];};
+    if(u>=1){arrived[p.b]++;const j=t-st-p.d;lc.fillStyle=B[5]+"aa";lc.beginPath();lc.arc(p.tx+4*Math.cos(j*p.s+p.ph),p.ty+4*Math.sin(j*p.s*1.3+p.ph),1.8,0,6.283);lc.fill();}
+    else{const [x,y]=pos(u),[px,py]=pos(Math.max(0,u-0.07));lc.strokeStyle=B[5]+"cc";lc.lineWidth=1.6;lc.beginPath();lc.moveTo(px,py);lc.lineTo(x,y);lc.stroke();}}
+  lc.globalCompositeOperation="source-over";
+  BASINS.forEach(([n,sh,x,y,r,c],i)=>{if(!ba)return;lc.globalAlpha=ba;const big=r>=100,lx=x+r+(big?28:18);
+    lc.fillStyle="#fff";lc.font=`700 ${big?42:24}px Avenir Next`;lc.textAlign="left";lc.fillText(n,lx,y-(big?8:4));
+    lc.fillStyle=c;lc.font=`800 ${big?60:30}px Avenir Next`;lc.fillText((sh*arrived[i]/BCOUNT[i]).toFixed(1)+"%",lx,y+(big?56:28));lc.globalAlpha=1;});}
+
+
+window.seek=function(t){
+  if(!anims)anims=document.getAnimations(); for(const a of anims)a.currentTime=t*1000;
+  drawBG(t); let cur=null;
+  for(const sec of scenes){const {start,end}=sec._sc,fin=clamp((t-start+0.25)/0.6),fout=clamp((end+0.25-t)/0.6),op=Math.min(fin,fout);
+    sec.style.opacity=op;sec.style.visibility=op>0?"visible":"hidden";
+    if(op>0){const s=t<start+0.35?lerp(1.04,1,ease(fin)):lerp(0.97,1,ease(fout));sec.style.transform=`scale(${s})`;sec.style.filter=op<1?`blur(${(1-op)*8}px)`:"none";}
+    if(t>=start&&t<end)cur=sec._sc;}
+  for(const c of counters){const u=ease((t-c._t)/(+(c.dataset.dur||1.6))),v=+c.dataset.to*u;c.textContent=fmt.format(Math.round(v));}
+  for(const w of typers){const txt=w.dataset.text,n=Math.floor(Math.max(0,(t-w._t)*(+w.dataset.cps))),full=n>=txt.length;
+    const caret=(w.dataset.caret&&(!full||Math.floor(t*2)%2===0))?'<span class="caret"></span>':"";w.innerHTML=txt.slice(0,n)+caret;}
+  const vis=id=>t>SC[id].start-1&&t<SC[id].end+1;
+  if(vis("marca"))drawMarca(t); if(vis("cierre"))drawClose(t); if(vis("futuros"))drawOrbit(t); if(vis("mundos"))drawLoop(t);
+  if(vis("pregunta")){const u=easeIO((t-SC.pregunta.phrases[1].start-1.2)/2.2);
+    // datos reales de explore_multiverse: elegir museos deja 25,198 futuros y Orizaba sube de 31.8 % a 53.5 %
+    const f=Math.round(lerp(50000,25198,u)),o=lerp(31.8,53.5,u);
+    document.getElementById("fut").textContent=fmt.format(f);document.getElementById("futbar").style.width=(f/500)+"%";
+    document.getElementById("ori").textContent=Math.round(o)+"%";document.getElementById("oribar").style.width=o+"%";}
+  if(vis("invita")){const p1=SC.invita.phrases[1].start,cu=document.getElementById("cursor"),u=easeIO((t-p1-0.8)/1.4);
+    const x=lerp(1500,1340,u),y=lerp(960,700,u),click=t>p1+2.4;cu.style.opacity=clamp((t-p1-0.4)/0.3);
+    const pr=clamp(1-Math.abs(t-p1-2.5)/0.15);cu.style.transform=`translate(${x-1500}px,${y-900}px) scale(${1-0.15*pr})`;
+    const b=document.getElementById("perfecto");b.style.borderColor=click?"#13506d":"transparent";b.style.transform=`scale(${click?1+0.06*clamp(1-(t-p1-2.4)/0.3):1})`;}
+  const id=cur?cur.id:"";
+  document.getElementById("brand").style.opacity=(id==="marca"||id==="cierre"||id==="gancho")?0:0.85;
+  document.getElementById("progress").style.width=(t/TL.total*100)+"%";
+  const cap=document.getElementById("cap");let ph=null;if(cur)for(const p of cur.phrases)if(t>=p.start-0.1&&t<p.start+p.dur+0.3)ph=p;
+  cap.textContent=ph?ph.text:"";cap.style.opacity=ph?Math.min(1,(t-ph.start+0.1)/0.25,(ph.start+ph.dur+0.3-t)/0.25):0;
+};
+seek(+(new URLSearchParams(location.search).get("t")||0));
+</script>
+</body>
+</html>

@@ -1,10 +1,25 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import m from "../data/metrics.json";
+
+const pct = (v: number, d = 0) => `${(v * 100).toFixed(d)}%`;
+const su = m.simulated_users;
+const roles = Object.entries(m.role_sensitivity.role_unchanged_pct);
+// Capítulos = inicio real de cada escena en la línea de tiempo de la narración (segundos).
+const chapters: [number, string][] = [
+  [0, "¿Por qué Órbita?"], [16.8, "La base: 208 mil reseñas"], [39.4, "Átomos de gusto"],
+  [71.8, "Simular el olvido"], [98, "Los 5 futuros"], [142.3, "Tú eliges el riesgo"],
+  [162.3, "Contrafactuales"], [188.3, "Fragilidad honesta"], [207.7, "Strange Loop"],
+  [231.2, "50,000 versiones de ti"], [252.6, "La pregunta de sacrificio"], [277.8, "Entropía"],
+  [291.1, "Tres niveles de evaluación"], [357.2, "Auditoría"], [385, "Innovación y riesgos"],
+  [411.1, "Cierre"],
+];
+const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 ---
 
 <BaseLayout
-  title="Órbita — 5 destinos más y 5 menos afines"
-  description="Recomendador local de Pueblos Mágicos: los 5 destinos más afines y los 5 menos afines a tu consulta, con evidencia de 208,051 reseñas y evaluación automática."
+  title="Órbita — no una respuesta: todos tus futuros"
+  description="Órbita recomienda Pueblos Mágicos con 208,051 reseñas: cinco futuros con roles distintos, 50,000 versiones simuladas de tus gustos y evaluación abierta."
 >
   <header class="site-header">
     <a class="brand" href="#top" aria-label="Órbita, inicio">
@@ -12,11 +27,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <span>ÓRBITA</span>
     </a>
     <nav aria-label="Navegación principal">
-      <a href="#recomendar">Recomendar 5 + 5</a>
-      <a href="#laboratorio">Laboratorio</a>
+      <a href="#video">Video</a>
+      <a href="#recomendar">5 + 5</a>
+      <a href="#laboratorio">Órbita</a>
       <a href="#evaluacion">Evaluación</a>
-      <a href="#metodo">Cómo funciona</a>
-      <span class="status"><i></i> Motor local</span>
+      <a href="#califica" class="nav-cta">Ayúdanos a evaluar</a>
     </nav>
   </header>
 
@@ -24,12 +39,21 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <section class="hero shell">
       <div class="hero-copy">
         <p class="eyebrow">SISTEMA DE RECOMENDACIÓN · REST-MEX 2025</p>
-        <h1>Describe tu viaje.<br /><em>Te damos 5 sí y 5 no.</em></h1>
+        <h1>No te damos una respuesta.<br /><em>Te mostramos tus futuros.</em></h1>
         <p class="hero-lede">
-          Los 5 Pueblos Mágicos más afines a lo que escribes y los 5 menos afines, cada uno con
-          evidencia de las reseñas del train. Después, el laboratorio explora futuros alternativos.
+          Órbita rompe tu viaje ideal en gustos, simula 50,000 versiones de ti y te entrega cinco
+          futuros con papeles distintos, con la evidencia de {m.corpus.reviews.toLocaleString("es-MX")} reseñas reales.
         </p>
-        <a class="text-link" href="#recomendar">Ver los 5 más y 5 menos afines <span>↓</span></a>
+        <div class="hero-actions">
+          <a class="hero-play" href="#video"><span aria-hidden="true">▶</span> Ver cómo funciona <small>2 min</small></a>
+          <a class="text-link" href="#laboratorio">Probar Órbita <span>↓</span></a>
+        </div>
+        <dl class="hero-stats">
+          <div><dt>Reseñas</dt><dd>{m.corpus.reviews.toLocaleString("es-MX")}</dd></div>
+          <div><dt>Pueblos Mágicos</dt><dd>{m.corpus.towns}</dd></div>
+          <div><dt>Futuros simulados</dt><dd>50,000</dd></div>
+          <div><dt>Pruebas automáticas</dt><dd>{m.tests}</dd></div>
+        </dl>
       </div>
 
       <div class="orbit-visual" aria-label="Cinco futuros orbitando alrededor de tu intención">
@@ -48,6 +72,36 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         </div>
         <div class="coordinate coord-a">19.4326° N</div>
         <div class="coordinate coord-b">40 DESTINOS</div>
+      </div>
+    </section>
+
+    <section class="video-section" id="video">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">EN 2 MINUTOS</p>
+            <h2>Qué es Órbita y por qué es diferente.</h2>
+          </div>
+          <p>Para todo público. Si quieres el detalle técnico, cambia a la versión de 7 minutos con capítulos.</p>
+        </div>
+        <div class="video-tabs" role="tablist" aria-label="Versión del video">
+          <button type="button" role="tab" aria-selected="true" data-src="/media/orbita-2min.mp4" data-poster="/media/orbita-2min-poster.jpg">2 min · para todos</button>
+          <button type="button" role="tab" aria-selected="false" data-src="/media/orbita.mp4" data-poster="/media/orbita-poster.jpg">7 min · técnica, con capítulos</button>
+        </div>
+        <div class="video-layout short" id="video-layout">
+          <div class="video-frame">
+            <video id="explainer" controls preload="metadata" playsinline poster="/media/orbita-2min-poster.jpg"
+              aria-label="Video explicativo de Órbita, con subtítulos integrados">
+              <source src="/media/orbita-2min.mp4" type="video/mp4" />
+              Tu navegador no reproduce video. <a href="/media/orbita-2min.mp4">Descárgalo aquí</a>.
+            </video>
+          </div>
+          <ol class="chapters" id="chapters" aria-label="Capítulos de la versión técnica">
+            {chapters.map(([t, title], i) => (
+              <li><button type="button" data-t={t} data-end={chapters[i + 1]?.[0] ?? 1e9}><span>{clock(t)}</span>{title}</button></li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
 
@@ -83,7 +137,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <div class="shell">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">LABORATORIO DE POSIBILIDADES</p>
+            <p class="eyebrow">ÓRBITA + STRANGE LOOP</p>
             <h2>Describe tu viaje imposible.</h2>
           </div>
           <p>El motor lo separa en gustos, límites y futuros alternativos.</p>
@@ -218,37 +272,98 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <div class="shell">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">EVALUACIÓN AUTOMÁTICA</p>
-            <h2>Evalúa el sistema en minutos.</h2>
+            <p class="eyebrow">EVALUACIÓN</p>
+            <h2>¿Cómo sabemos que funciona?</h2>
           </div>
-          <p>Un clic corre el banco de consultas, referencias, casos adversariales y determinismo.</p>
-        </div>
-        <div class="eval-panel" id="eval-panel">
-          <div class="eval-actions">
-            <button type="button" class="submit-button" id="eval-run"><span>Ejecutar evaluación</span><b>▶</b></button>
-            <button type="button" class="ghost-button" id="eval-last">Ver último reporte completo</button>
-          </div>
-          <div id="eval-output" aria-live="polite"></div>
+          <p>Cuatro pruebas, de la más fácil de pasar a la más exigente. Mostramos también lo que todavía no está probado.</p>
         </div>
 
-        <div class="blind-panel" id="lab-panel">
-          <h3>Laboratorio de evaluación humana ciega</h3>
-          <p>Cada consulta muestra un conjunto de destinos (unión de los extremos de varios sistemas y algunos de la zona media) en orden aleatorio, sin puntuaciones, posiciones ni sistema. Califica de 0 a 3, marca la restricción y si la evidencia no alcanza. Los juicios se guardan en el registro local persistente (<code>eval/judgments.jsonl</code> en desarrollo; volumen <code>orbita-labels</code> en Docker).</p>
-          <div class="blind-form">
-            <label for="lab-evaluator">Evaluador</label>
-            <input id="lab-evaluator" type="text" maxlength="60" autocomplete="off" placeholder="Iniciales o seudónimo" />
-            <label for="lab-split">Partición</label>
-            <select id="lab-split">
-              <option value="dev">dev (desarrollo, aprendizaje activo)</option>
-              <option value="calibration">calibration (ajuste de pesos)</option>
-              <option value="test">test (evaluación final, orden aleatorio)</option>
-            </select>
-            <button type="button" class="submit-button" id="lab-load"><span>Ver cola</span><b>→</b></button>
+        <div class="levels">
+          <article class="level">
+            <span class="level-n">Nivel 1 · Regresión</span>
+            <strong class="level-big">{pct(m.gold.precision_at_5)}</strong>
+            <h3>Precisión en el top 5</h3>
+            <p>{m.gold.queries} consultas de prueba con destinos aceptables; acierta el primer lugar en el {pct(m.gold.hit_at_1, 1)}.</p>
+            <p class="level-warn">Sesgada: las consultas las escribió alguien que ya había visto resultados. Sirve para detectar errores, no como prueba final.</p>
+          </article>
+          <article class="level">
+            <span class="level-n">Nivel 2 · Sin fuga de datos</span>
+            <strong class="level-big">{pct(m.holdout.hit_at_5, 1)}</strong>
+            <h3>Adivina el pueblo de una reseña oculta</h3>
+            <p>{m.holdout.reviews} reseñas fuera del índice y con el nombre tapado. El azar y la popularidad logran {pct(m.holdout.random_hit_at_5, 1)}: <b>×{(m.holdout.hit_at_5 / m.holdout.random_hit_at_5).toFixed(1)}</b>.</p>
+            <div class="bar-compare" aria-hidden="true">
+              <i style={`width:${m.holdout.hit_at_5 * 100}%`}><span>Órbita</span></i>
+              <i class="muted" style={`width:${m.holdout.random_hit_at_5 * 100}%`}><span>Azar</span></i>
+            </div>
+          </article>
+          <article class="level">
+            <span class="level-n">Nivel 3 · Usuarios simulados</span>
+            <strong class="level-big">{pct(su.loop_hit_at_1[3], 0)}</strong>
+            <h3>Strange Loop encuentra tu destino ideal</h3>
+            <p>Con gustos ocultos en {su.queries} consultas: el top 1 clásico acierta {pct(su.anchor_hit_at_1)}, Strange Loop {pct(su.loop_hit_at_1[0])} y, tras 3 preguntas, {pct(su.loop_hit_at_1[3])}.</p>
+            <ol class="steps-chart" aria-label="Acierto según número de preguntas">
+              <li style={`--v:${su.anchor_hit_at_1}`}><b>{pct(su.anchor_hit_at_1)}</b><span>Top 1</span></li>
+              {su.loop_hit_at_1.map((v, i) => <li class="hot" style={`--v:${v}`}><b>{pct(v)}</b><span>{i === 0 ? "Loop" : `+${i}P`}</span></li>)}
+            </ol>
+          </article>
+          <article class="level level-open">
+            <span class="level-n">Nivel 4 · Personas reales</span>
+            <strong class="level-big" id="human-count">Abierto</strong>
+            <h3>Laboratorio ciego</h3>
+            <p>La prueba decisiva: personas califican de 0 a 3 sin saber qué sistema propuso cada pueblo, y medimos su acuerdo con el alfa de Krippendorff.</p>
+            <a class="level-cta" href="#califica">Participa, toma 2 minutos →</a>
+          </article>
+        </div>
+
+        <div class="robust-grid">
+          <div class="robust">
+            <h3>¿Los roles dependen de pesos elegidos a mano?</h3>
+            <p>Movimos <b>a la vez</b> los 13 pesos de diseño ±{pct(m.role_sensitivity.spread)}, 200 veces por consulta. La cartera se mantiene en un {pct(m.role_sensitivity.portfolio_jaccard_mean)} (Jaccard medio).</p>
+            <ul class="role-bars">
+              {roles.map(([role, v]) => <li><span>{role}</span><i style={`--v:${(v as number) / 100}`}></i><b>{(v as number).toFixed(0)}%</b></li>)}
+            </ul>
           </div>
-          <p id="lab-status" role="status"></p>
-          <div id="lab-queue"></div>
+          <div class="robust">
+            <h3>Auditoría de Órbita y Strange Loop</h3>
+            <ul class="checks">
+              <li><b>{m.orbit_audit.all_contracts_pass ? "✓" : "✗"}</b> Cinco futuros distintos y reproducibles en {m.orbit_audit.queries} consultas</li>
+              <li><b>{m.orbit_audit.mean_resilience.toFixed(0)}%</b> resiliencia media al olvidar un gusto</li>
+              <li><b>{pct(m.monte_carlo.seed_agreement_min)}</b> mismo ganador con 10 semillas distintas</li>
+              <li><b>{m.tests}</b> pruebas automáticas pasan</li>
+              <li><b>{pct(m.holdout.bottom_error_rate, 1)}</b> de las veces el pueblo correcto cae en el bottom 5 (azar: 12.5%)</li>
+            </ul>
+          </div>
+        </div>
+
+        <details class="eval-live">
+          <summary>Correr la evaluación automática en vivo</summary>
+          <div class="eval-panel" id="eval-panel">
+            <div class="eval-actions">
+              <button type="button" class="submit-button" id="eval-run"><span>Ejecutar evaluación</span><b>▶</b></button>
+              <button type="button" class="ghost-button" id="eval-last">Ver último reporte completo</button>
+            </div>
+            <div id="eval-output" aria-live="polite"></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="califica-section" id="califica">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">LABORATORIO CIEGO</p>
+            <h2>Ayúdanos a evaluar Órbita.</h2>
+          </div>
+          <p>Tu opinión es la única prueba que un algoritmo no puede hacer por sí mismo.</p>
+        </div>
+        <div class="lab-shell" id="lab-panel">
+          <p class="lab-counter" id="lab-counter" role="status">Cargando…</p>
           <div id="lab-stage"></div>
-          <div id="lab-report" aria-live="polite"></div>
+          <details class="lab-team">
+            <summary>Resultados del laboratorio (equipo)</summary>
+            <div id="lab-report" aria-live="polite"></div>
+          </details>
         </div>
       </div>
     </section>
@@ -273,7 +388,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <footer>
     <div class="shell footer-inner">
       <a class="brand" href="#top"><span class="brand-mark"><i></i></span><span>ÓRBITA</span></a>
-      <p>40 Pueblos Mágicos · 208,051 reseñas · funcionamiento local</p>
+      <p>40 Pueblos Mágicos · 208,051 reseñas · Rest-Mex 2025</p>
       <span>EXPERIMENTO 2026</span>
     </div>
   </footer>
@@ -292,7 +407,27 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     import { renderEvaluation } from "../scripts/evaluator";
     import { setupLab } from "../scripts/lab";
 
-    const API_URL = "";
+    import { API as API_URL } from "../scripts/api";
+
+    const video = document.querySelector<HTMLVideoElement>("#explainer")!;
+    const videoLayout = document.querySelector<HTMLElement>("#video-layout")!;
+    document.querySelectorAll<HTMLButtonElement>(".video-tabs button").forEach((tab, _, tabs) =>
+      tab.addEventListener("click", () => {
+        if (tab.getAttribute("aria-selected") === "true") return;
+        tabs.forEach((b) => b.setAttribute("aria-selected", String(b === tab)));
+        video.poster = tab.dataset.poster!;
+        video.src = tab.dataset.src!;
+        videoLayout.classList.toggle("short", tab.dataset.src!.includes("2min"));
+      }));
+    const chapterButtons = [...document.querySelectorAll<HTMLButtonElement>("#chapters button")];
+    chapterButtons.forEach((button) => button.addEventListener("click", () => {
+      video.currentTime = Number(button.dataset.t);
+      video.play().catch(() => {});
+    }));
+    video.addEventListener("timeupdate", () => {
+      const t = video.currentTime;
+      chapterButtons.forEach((b) => b.classList.toggle("active", t >= Number(b.dataset.t) && t < Number(b.dataset.end)));
+    });
     const form = document.querySelector<HTMLFormElement>("#query-form")!;
     const query = document.querySelector<HTMLTextAreaElement>("#query")!;
     const risk = document.querySelector<HTMLInputElement>("#risk")!;
@@ -339,7 +474,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         const response = await fetch(`${API_URL}/health`);
         if (!response.ok) throw new Error();
         const health = await response.json();
-        apiStatus.textContent = `MOTOR ${String(health.mode).toUpperCase()} / LOCAL`;
+        apiStatus.textContent = `MOTOR ${String(health.mode).toUpperCase()} / EN LÍNEA`;
         apiStatus.title = `Semántica: ${health.semantic_status}`;
         apiStatus.classList.add("online");
       } catch {
@@ -598,7 +733,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       evalOutput.innerHTML = `<p class="eval-meta">${run ? "Ejecutando el banco de consultas…" : "Cargando reporte…"}</p>`;
       try {
         const report = run ? await postJson<any>("/api/evaluation/run", {}) : await (async () => {
-          const response = await fetch("/api/evaluation");
+          const response = await fetch(`${API_URL}/api/evaluation`);
           const data = await response.json();
           if (!response.ok) throw new Error(data.error);
           return data;

@@ -179,8 +179,16 @@ del reporte aparecen vacías hasta que participen evaluadores.
 `_extract_facets` convierte la parte positiva de la consulta en hasta 5 facetas:
 
 - conceptos turísticos con expansión controlada (playa, cenote, vino, bosque…);
-- las palabras de la consulta más raras del corpus (mayor idf), sin relleno como “quiero” o
-  “viaje”.
+- **intenciones abstractas agrupadas** (`FACET_CONCEPTS`: romántico, familia, vida nocturna,
+  descanso, vistas, aventura, lago y río, café, artesanía). Antes, “niños pequeños, actividades
+  para la familia” producía cuatro átomos (*pequeños, actividades, niños, familia*) que
+  “competían” sin competir y abrían futuros artificiales; ahora es un solo átomo *familia*. Solo
+  afecta a Órbita y Strange Loop: el ranking 5 + 5 no cambia (sus métricas siguen idénticas);
+- las palabras de la consulta más raras del corpus (mayor idf), sin relleno como “quiero”,
+  “viaje”, “vida”, “pequeños” o “altura”.
+
+Las pruebas `tests/test_orbit_eval.py` fijan estos casos y verifican que los sustantivos
+concretos (“museos”, “mezcal”) siguen saliendo del idf.
 
 Cada faceta $f$ tiene una fila $M[f,d] = 0.68\,\tilde s_{lex} + 0.32\,\tilde s_{evi}$ calculada
 con la sonda léxica de la faceta.
@@ -271,6 +279,52 @@ entre sí no tiene significado y no se informa.
 **Trayectorias de tres viajes:** exploración especulativa, sin capacidad predictiva psicológica
 (lo dice la API en `disclaimer`).
 
+## 8 bis. Validación sin humanos: usuarios simulados y sensibilidad de roles
+
+`make validate-orbit` → `artifacts/orbit_validation.json` (65 consultas: banco + auditoría + el
+ejemplo del video; modo léxico; 100 usuarios por consulta).
+
+**Usuarios simulados para Strange Loop.** Cada usuario tiene un peso de gustos oculto $w^*$; su
+destino ideal es $\arg\max_d 0.16\,r(d) + 0.84\,w^{*\top}M[\cdot,d]$. Responde con honestidad
+(“conservo la faceta con mayor $w^*$”) y medimos si el destino más frecuente del multiverso
+restante es su ideal. Dos poblaciones: *prior* (el $w^*$ sale del mismo Dirichlet que el modelo:
+caso optimista) y *concentrada* ($\alpha=0.35$: gustos dominados por una faceta, el modelo está
+mal especificado). Se promedia por consulta; IC95 bootstrap sobre consultas.
+
+| Acierto del destino ideal (Hit@1) | Prior | Concentrada |
+|---|---|---|
+| Ancla (top 1 clásico) | 65.0 % | 53.9 % |
+| Strange Loop, 0 preguntas | 84.9 % | 63.6 % |
+| + 1 pregunta informativa / al azar | 88.9 % / 87.2 % | 68.3 % / 66.5 % |
+| + 3 preguntas informativas / al azar | **91.8 %** / 90.7 % | **73.2 %** / 70.7 % |
+| Mejora con 3 preguntas vs 0 (IC95) | +6.9 pp [4.0, 10.1] | +9.6 pp [5.8, 13.7] |
+| Informativa − azar con 3 preguntas (IC95) | +1.1 pp [0.3, 2.0] | +2.5 pp [1.2, 4.0] |
+
+Lectura: (1) agregar sobre posibles pesos acierta más que el ranking promedio, incluso con la
+población mal especificada; (2) cada pregunta aporta, y la de máxima información aporta más que
+una al azar, con IC que excluye 0. En 40 de 61 consultas preguntar no cambia nada porque todas
+las facetas apuntan al mismo pueblo (p. ej. “vino, viñedos, bodegas”): eso es correcto, no hay
+nada que desempatar. **Límite:** el usuario simulado usa la misma utilidad que el modelo; esto
+prueba coherencia interna y eficiencia de las preguntas, no satisfacción real. Eso lo mide el
+laboratorio humano (§5).
+
+**Sensibilidad de los pesos de rol.** Los 13 coeficientes de `ROLE_WEIGHTS` se multiplican a la vez
+por factores $U(0.5, 1.5)$ (200 sorteos por consulta):
+
+| Rol | Conserva el mismo destino |
+|---|---|
+| Ancla | 100 % (no tiene pesos) |
+| Superviviente | 92.8 % |
+| Especialista | 88.4 % |
+| Portal | 86.3 % |
+| Comodín | 79.2 % |
+
+La cartera completa coincide en Jaccard medio 0.92 y es idéntica en el 76.6 % de los sorteos.
+Moviendo un solo coeficiente ±50 %, ningún rol cambia en más del 7 % de las consultas (el más
+sensible es la mezcla del Portal). Conclusión: los pesos son de diseño, pero las decisiones no
+dependen de su valor exacto; el Comodín, que por definición equilibra cuatro criterios, es el
+más sensible, como cabe esperar.
+
 ## 9. Reproducibilidad
 
 ```bash
@@ -280,6 +334,7 @@ make test                 # 48 pruebas
 make evaluate-semantic    # seed + holdout + ablación + adversarial → docs/evaluation_report.md
 python scripts/experiments.py          # comparación de señales → docs/experimentos_hybrid.md
 python scripts/audit_multiverse.py     # convergencia, semillas, riesgo
+python scripts/validate_orbit.py       # usuarios simulados + sensibilidad de roles (~90 s)
 make benchmark-api && make smoke-e2e
 ```
 
@@ -292,6 +347,8 @@ make benchmark-api && make smoke-e2e
 - El bottom 5 casi nunca contiene al destino correcto (1.5 % frente a 12.5 % al azar).
 - Las restricciones se respetan en el top 5 del seed.
 - Strange Loop es reproducible: hay convergencia medida, la IG es consistente y el colapso es real.
+- Con usuarios simulados, Strange Loop acierta el destino ideal más que el top 1 clásico (84.9 %
+  frente a 65.0 %) y 3 preguntas informativas suben a 91.8 %, mejor que preguntas al azar (§8 bis).
 
 **Limitaciones abiertas:**
 
@@ -304,6 +361,8 @@ make benchmark-api && make smoke-e2e
    con humanos. Deben ajustarse en la partición calibration.
 5. El contrafactual ignora E5 y las penalizaciones.
 6. Los pesos de los roles de Órbita y los parámetros Dirichlet/Gumbel son de diseño, no estimados.
+   Mitigado: la cartera es robusta a ±50 % en todos los pesos a la vez (§8 bis), pero no están
+   aprendidos de preferencias reales.
 7. No se probaron lematización, cross-encoders ni modelos E5 más grandes. Con 40 destinos y sin
    juicios humanos no había forma de demostrar una mejora; quedan como siguientes experimentos.
 8. La corrección ortográfica puede corregir mal palabras raras; las correcciones se muestran

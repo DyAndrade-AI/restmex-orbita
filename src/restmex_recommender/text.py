@@ -73,6 +73,22 @@ CONCEPT_EXPANSIONS = {
 }
 
 
+# Nombres para mostrar: el corpus trae los identificadores sin acentos ni espacios
+# ("TodosSantos", "QuintanaRoo"). Solo cambia lo que se ve; los identificadores no se tocan.
+DISPLAY_NAMES = {
+    "Cuatro Cienegas": "Cuatro Ciénegas", "Patzcuaro": "Pátzcuaro", "Teotihuacan": "Teotihuacán",
+    "Tepotzotlan": "Tepotzotlán", "Tepoztlan": "Tepoztlán", "TodosSantos": "Todos Santos",
+    "Zacatlan": "Zacatlán", "San Cristobal de las Casas": "San Cristóbal de las Casas",
+    "QuintanaRoo": "Quintana Roo", "Baja CaliforniaSur": "Baja California Sur",
+    "Queretaro": "Querétaro", "Michoacan": "Michoacán", "Yucatan": "Yucatán",
+    "Estado de Mexico": "Estado de México", "San Luis Potosi": "San Luis Potosí",
+}
+
+
+def display_label(value: str) -> str:
+    return DISPLAY_NAMES.get(value, value)
+
+
 # Locuciones con "sin" que no expresan exclusión ("sin duda la mejor playa" pide playa).
 NON_EXCLUDING_SIN = (
     "duda", "dudas", "dudarlo", "dudado", "embargo", "palabras", "problema", "problemas",

@@ -1,0 +1,101 @@
+{
+  "generated_from": "artifacts/*.json vía scripts/export_web_metrics.py",
+  "corpus": {
+    "reviews": 208051,
+    "towns": 40
+  },
+  "gold": {
+    "queries": 40,
+    "wide_queries": 11,
+    "precision_at_5": 0.8909,
+    "hit_at_1": 0.975,
+    "ndcg_at_5": 0.8847,
+    "mode": "híbrido"
+  },
+  "holdout": {
+    "reviews": 600,
+    "hit_at_5": 0.6617,
+    "hit_at_1": 0.425,
+    "mrr": 0.5412,
+    "random_hit_at_5": 0.125,
+    "popularity_hit_at_5": 0.125,
+    "bottom_error_rate": 0.015
+  },
+  "simulated_users": {
+    "queries": 61,
+    "anchor_hit_at_1": 0.6498,
+    "loop_hit_at_1": [
+      0.8489,
+      0.8893,
+      0.9026,
+      0.9179
+    ],
+    "random_hit_at_1": [
+      0.8489,
+      0.8715,
+      0.8925,
+      0.9067
+    ],
+    "gain_3q": {
+      "informativa_menos_azar": 0.0111,
+      "ci95": [
+        0.0034,
+        0.0203
+      ],
+      "mejora_vs_sin_preguntas": 0.069,
+      "ci95_mejora": [
+        0.04,
+        0.1011
+      ]
+    },
+    "concentrated": {
+      "anchor_hit_at_1": 0.5392,
+      "loop_hit_at_1": [
+        0.6362,
+        0.683,
+        0.7007,
+        0.7318
+      ],
+      "random_hit_at_1": [
+        0.6362,
+        0.6652,
+        0.6859,
+        0.707
+      ],
+      "gain_3q": {
+        "informativa_menos_azar": 0.0248,
+        "ci95": [
+          0.0115,
+          0.0397
+        ],
+        "mejora_vs_sin_preguntas": 0.0956,
+        "ci95_mejora": [
+          0.0575,
+          0.1369
+        ]
+      }
+    }
+  },
+  "role_sensitivity": {
+    "spread": 0.5,
+    "role_unchanged_pct": {
+      "Ancla": 100.0,
+      "Superviviente": 92.8,
+      "Portal": 86.3,
+      "Especialista": 88.4,
+      "Comodín": 79.2
+    },
+    "portfolio_jaccard_mean": 0.9204,
+    "portfolio_identical_pct": 76.6
+  },
+  "orbit_audit": {
+    "queries": 10,
+    "all_contracts_pass": true,
+    "mean_resilience": 89.99
+  },
+  "monte_carlo": {
+    "max_diff_pp_at_50k": 0.443,
+    "seed_agreement_min": 1.0
+  },
+  "tests": 57
+}

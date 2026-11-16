@@ -1,0 +1,2919 @@
+{
+  "protocol": "Validación de las dos piezas audaces sin juicios humanos.\n\n1. Usuarios simulados para Strange Loop: cada usuario tiene un peso de gustos oculto w*; su destino\n   ideal es argmax 0.16·r + 0.84·w*·M (la misma utilidad del modelo, sin ruido). Responde con\n   honestidad a las preguntas de sacrificio y medimos cuánto acierta el modo del multiverso tras\n   0..T preguntas, comparando la pregunta de máxima información contra una pregunta al azar.\n   Dos poblaciones: \"prior\" (w* sale del mismo Dirichlet que el modelo, caso optimista) y\n   \"concentrada\" (gustos dominados por una faceta, α = 0.35: el modelo está mal especificado).\n2. Sensibilidad de los pesos de rol: cada coeficiente de ROLE_WEIGHTS se multiplica por un factor en\n   [1 − s, 1 + s] y se mide con qué frecuencia cada rol conserva el mismo destino.\n",
+  "mode": "léxico (sin E5, igual que audit_multiverse)",
+  "strange_loop": {
+    "prior": {
+      "queries": 61,
+      "informativa": {
+        "hit_at_1": [
+          0.8489,
+          0.8893,
+          0.9026,
+          0.9179
+        ],
+        "hit_at_5": [
+          0.9997,
+          0.9997,
+          0.9997,
+          0.9997
+        ],
+        "entropy": [
+          0.1993,
+          0.1849,
+          0.1767,
+          0.1726
+        ]
+      },
+      "azar": {
+        "hit_at_1": [
+          0.8489,
+          0.8715,
+          0.8925,
+          0.9067
+        ],
+        "hit_at_5": [
+          0.9997,
+          0.9997,
+          0.9998,
+          0.9997
+        ],
+        "entropy": [
+          0.1993,
+          0.1904,
+          0.183,
+          0.1778
+        ]
+      },
+      "anchor_hit_at_1": 0.6498,
+      "hit_at_1_gain": {
+        "1": {
+          "informativa_menos_azar": 0.0179,
+          "ci95": [
+            0.0046,
+            0.0336
+          ],
+          "mejora_vs_sin_preguntas": 0.0405,
+          "ci95_mejora": [
+            0.0182,
+            0.0661
+          ]
+        },
+        "2": {
+          "informativa_menos_azar": 0.0102,
+          "ci95": [
+            0.001,
+            0.0203
+          ],
+          "mejora_vs_sin_preguntas": 0.0538,
+          "ci95_mejora": [
+            0.0269,
+            0.0851
+          ]
+        },
+        "3": {
+          "informativa_menos_azar": 0.0111,
+          "ci95": [
+            0.0034,
+            0.0203
+          ],
+          "mejora_vs_sin_preguntas": 0.069,
+          "ci95_mejora": [
+            0.04,
+            0.1011
+          ]
+        }
+      },
+      "skipped_single_facet": 4
+    },
+    "concentrada": {
+      "queries": 61,
+      "informativa": {
+        "hit_at_1": [
+          0.6362,
+          0.683,
+          0.7007,
+          0.7318
+        ],
+        "hit_at_5": [
+          0.9662,
+          0.9638,
+          0.9731,
+          0.9787
+        ],
+        "entropy": [
+          0.1993,
+          0.1853,
+          0.1771,
+          0.1733
+        ]
+      },
+      "azar": {
+        "hit_at_1": [
+          0.6362,
+          0.6652,
+          0.6859,
+          0.707
+        ],
+        "hit_at_5": [
+          0.9662,
+          0.967,
+          0.9718,
+          0.9772
+        ],
+        "entropy": [
+          0.1993,
+          0.1901,
+          0.1824,
+          0.1776
+        ]
+      },
+      "anchor_hit_at_1": 0.5392,
+      "hit_at_1_gain": {
+        "1": {
+          "informativa_menos_azar": 0.0177,
+          "ci95": [
+            0.0079,
+            0.0295
+          ],
+          "mejora_vs_sin_preguntas": 0.0467,
+          "ci95_mejora": [
+            0.0198,
+            0.0767
+          ]
+        },
+        "2": {
+          "informativa_menos_azar": 0.0148,
+          "ci95": [
+            0.0021,
+            0.0287
+          ],
+          "mejora_vs_sin_preguntas": 0.0644,
+          "ci95_mejora": [
+            0.0321,
+            0.1008
+          ]
+        },
+        "3": {
+          "informativa_menos_azar": 0.0248,
+          "ci95": [
+            0.0115,
+            0.0397
+          ],
+          "mejora_vs_sin_preguntas": 0.0956,
+          "ci95_mejora": [
+            0.0575,
+            0.1369
+          ]
+        }
+      },
+      "skipped_single_facet": 4
+    }
+  },
+  "per_query": {
+    "prior": [
+      {
+        "query": "Quiero playas tranquilas, agua turquesa y snorkel",
+        "facets": [
+          "snorkel",
+          "descanso",
+          "turquesa",
+          "playas",
+          "agua"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Busco pirámides, arqueología e historia prehispánica",
+        "facets": [
+          "arqueologia",
+          "prehispanica",
+          "piramides",
+          "historia"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Me interesan viñedos, vino y recorridos por bodegas",
+        "facets": [
+          "vino",
+          "bodegas",
+          "vinedos",
+          "recorridos"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Quiero bosque, montaña, cabañas y senderismo",
+        "facets": [
+          "bosque / montana / senderismo",
+          "cabanas"
+        ],
+        "anchor_hit_at_1": 0.89,
+        "informativa": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ],
+        "azar": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ]
+      },
+      {
+        "query": "Busco cenotes para nadar y naturaleza",
+        "facets": [
+          "cenotes",
+          "naturaleza",
+          "nadar"
+        ],
+        "anchor_hit_at_1": 0.34,
+        "informativa": [
+          0.45,
+          0.53,
+          0.87,
+          0.87
+        ],
+        "azar": [
+          0.45,
+          0.58,
+          0.71,
+          0.87
+        ]
+      },
+      {
+        "query": "Quiero gastronomía mexicana, mercados y restaurantes tradicionales",
+        "facets": [
+          "gastronomia",
+          "mercados",
+          "tradicionales",
+          "mexicana",
+          "restaurantes"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Deseo arquitectura colonial, iglesias y calles históricas",
+        "facets": [
+          "arquitectura / colonial",
+          "historicas",
+          "iglesias",
+          "calles"
+        ],
+        "anchor_hit_at_1": 0.2,
+        "informativa": [
+          0.62,
+          0.63,
+          0.66,
+          0.74
+        ],
+        "azar": [
+          0.62,
+          0.64,
+          0.77,
+          0.74
+        ]
+      },
+      {
+        "query": "Quiero cascadas, vegetación y aventura al aire libre",
+        "facets": [
+          "cascadas",
+          "aventura",
+          "vegetacion",
+          "libre",
+          "aire"
+        ],
+        "anchor_hit_at_1": 0.86,
+        "informativa": [
+          0.86,
+          0.86,
+          0.86,
+          0.85
+        ],
+        "azar": [
+          0.86,
+          0.86,
+          0.86,
+          0.88
+        ]
+      },
+      {
+        "query": "Busco un viaje relajante con spa y aguas termales",
+        "facets": [
+          "spa / termales",
+          "descanso",
+          "aguas"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Quiero desierto y paisajes naturales, sin playa",
+        "facets": [
+          "desierto",
+          "naturales",
+          "paisajes"
+        ],
+        "anchor_hit_at_1": 0.43,
+        "informativa": [
+          0.56,
+          0.93,
+          0.93,
+          0.93
+        ],
+        "azar": [
+          0.56,
+          0.86,
+          0.89,
+          0.93
+        ]
+      },
+      {
+        "query": "Quiero visitar destilerías y conocer el proceso del tequila",
+        "facets": [
+          "destilerias",
+          "proceso",
+          "tequila",
+          "visitar"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Pueblo cafetalero con niebla, café de altura y clima fresco",
+        "facets": [
+          "café",
+          "niebla",
+          "clima",
+          "fresco"
+        ],
+        "anchor_hit_at_1": 0.7,
+        "informativa": [
+          0.7,
+          0.69,
+          0.82,
+          0.82
+        ],
+        "azar": [
+          0.7,
+          0.69,
+          0.7,
+          0.7
+        ]
+      },
+      {
+        "query": "Comprar joyería de plata y recorrer calles empedradas en cerro",
+        "facets": [
+          "empedradas",
+          "joyeria",
+          "plata",
+          "cerro",
+          "calles"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Laguna de siete colores para navegar en kayak",
+        "facets": [
+          "lago y río",
+          "navegar",
+          "siete",
+          "kayak",
+          "colores"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Aprender surf, ambiente relajado y tacos frente al mar",
+        "facets": [
+          "mar / surf",
+          "aprender",
+          "relajado",
+          "frente",
+          "tacos"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          0.98,
+          0.98,
+          0.98,
+          0.98
+        ],
+        "azar": [
+          0.98,
+          0.98,
+          0.98,
+          0.98
+        ]
+      },
+      {
+        "query": "Ver tortugas, atardeceres en la punta y ambiente bohemio",
+        "facets": [
+          "bohemio",
+          "atardeceres",
+          "punta",
+          "tortugas",
+          "ver"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Paseo en lancha por un cañón con cocodrilos",
+        "facets": [
+          "lago y río",
+          "cocodrilos",
+          "canon",
+          "paseo"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Caminar junto al lago, malecón tranquilo y comida con vista al agua",
+        "facets": [
+          "comida",
+          "descanso",
+          "lago y río",
+          "malecon",
+          "junto"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Jardín surrealista con esculturas en la selva y pozas",
+        "facets": [
+          "surrealista",
+          "pozas",
+          "esculturas",
+          "selva",
+          "jardin"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Artesanías de barro, mariachi y tiendas de arte popular",
+        "facets": [
+          "artesanía",
+          "barro",
+          "mariachi",
+          "popular",
+          "arte"
+        ],
+        "anchor_hit_at_1": 0.92,
+        "informativa": [
+          0.92,
+          0.92,
+          0.92,
+          0.92
+        ],
+        "azar": [
+          0.92,
+          0.92,
+          0.92,
+          0.92
+        ]
+      },
+      {
+        "query": "Subir en teleférico y visitar museos en la ciudad",
+        "facets": [
+          "museos",
+          "teleferico",
+          "subir",
+          "ciudad",
+          "visitar"
+        ],
+        "anchor_hit_at_1": 0.95,
+        "informativa": [
+          0.95,
+          0.95,
+          0.95,
+          0.95
+        ],
+        "azar": [
+          0.95,
+          0.95,
+          0.95,
+          0.95
+        ]
+      },
+      {
+        "query": "Escalar un monolito enorme y comer gorditas",
+        "facets": [
+          "monolito",
+          "gorditas",
+          "escalar",
+          "enorme",
+          "comer"
+        ],
+        "anchor_hit_at_1": 0.91,
+        "informativa": [
+          0.91,
+          0.91,
+          0.91,
+          0.91
+        ],
+        "azar": [
+          0.91,
+          0.91,
+          0.91,
+          0.91
+        ]
+      },
+      {
+        "query": "Formaciones de prismas basálticos, haciendas y tirolesa",
+        "facets": [
+          "aventura",
+          "haciendas",
+          "basalticos",
+          "prismas",
+          "formaciones"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Pueblo minero fantasma, túnel y paseo a caballo por el desierto",
+        "facets": [
+          "desierto",
+          "minero",
+          "fantasma",
+          "tunel",
+          "caballo"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Barrancas profundas, tren y cultura rarámuri",
+        "facets": [
+          "raramuri",
+          "barrancas",
+          "profundas",
+          "tren",
+          "cultura"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Misión antigua, malecón y paseo en barco por el mar de Cortés",
+        "facets": [
+          "mar",
+          "malecon",
+          "mision",
+          "barco",
+          "cortes"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Ruinas mayas escondidas en la selva con monos",
+        "facets": [
+          "escondidas",
+          "monos",
+          "selva",
+          "mayas",
+          "ruinas"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Mirador sobre la barranca, fábrica de relojes y sidra",
+        "facets": [
+          "vistas",
+          "sidra",
+          "relojes",
+          "barranca",
+          "fabrica"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Ciudad amarilla con un gran convento franciscano",
+        "facets": [
+          "franciscano",
+          "amarilla",
+          "convento",
+          "ciudad",
+          "gran"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Historia de la independencia de México y nieves de sabores raros",
+        "facets": [
+          "raros",
+          "independencia",
+          "nieves",
+          "sabores",
+          "historia"
+        ],
+        "anchor_hit_at_1": 0.99,
+        "informativa": [
+          0.99,
+          0.99,
+          0.99,
+          0.99
+        ],
+        "azar": [
+          0.99,
+          0.99,
+          0.99,
+          0.99
+        ]
+      },
+      {
+        "query": "Vacaciones familiares con niños, albercas y toboganes",
+        "facets": [
+          "familia",
+          "toboganes",
+          "familiares",
+          "albercas"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Museo del virreinato y arte religioso barroco",
+        "facets": [
+          "virreinato",
+          "religioso",
+          "barroco",
+          "arte",
+          "museo"
+        ],
+        "anchor_hit_at_1": 0.86,
+        "informativa": [
+          0.86,
+          0.86,
+          0.86,
+          0.9
+        ],
+        "azar": [
+          0.86,
+          0.86,
+          0.86,
+          0.88
+        ]
+      },
+      {
+        "query": "Un sitio caluroso junto al Caribe para descansar frente al mar",
+        "facets": [
+          "mar",
+          "descanso",
+          "caluroso",
+          "caribe",
+          "junto"
+        ],
+        "anchor_hit_at_1": 0.99,
+        "informativa": [
+          0.99,
+          0.99,
+          0.99,
+          0.99
+        ],
+        "azar": [
+          0.99,
+          0.99,
+          0.99,
+          0.99
+        ]
+      },
+      {
+        "query": "Escapada a un lugar frío para tomar chocolate junto a la chimenea",
+        "facets": [
+          "chimenea",
+          "escapada",
+          "chocolate",
+          "frio",
+          "junto"
+        ],
+        "anchor_hit_at_1": 0.89,
+        "informativa": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ],
+        "azar": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ]
+      },
+      {
+        "query": "Naturaleza y aventura en la sierra, sin playa ni mar",
+        "facets": [
+          "aventura",
+          "sierra",
+          "naturaleza"
+        ],
+        "anchor_hit_at_1": 0.07,
+        "informativa": [
+          0.56,
+          0.82,
+          0.82,
+          0.82
+        ],
+        "azar": [
+          0.56,
+          0.69,
+          0.81,
+          0.82
+        ]
+      },
+      {
+        "query": "Cenotes y comida yucateca, sin Tulum",
+        "facets": [
+          "cenotes",
+          "comida",
+          "yucateca"
+        ],
+        "anchor_hit_at_1": 0.23,
+        "informativa": [
+          0.77,
+          0.77,
+          0.77,
+          0.83
+        ],
+        "azar": [
+          0.77,
+          0.77,
+          0.79,
+          0.83
+        ]
+      },
+      {
+        "query": "Clima templado, viveros de flores y vista al volcán",
+        "facets": [
+          "templado",
+          "volcan",
+          "flores",
+          "clima",
+          "vista"
+        ],
+        "anchor_hit_at_1": 0.7,
+        "informativa": [
+          0.7,
+          0.7,
+          0.7,
+          0.82
+        ],
+        "azar": [
+          0.7,
+          0.7,
+          0.7,
+          0.73
+        ]
+      },
+      {
+        "query": "Retiro místico con temazcal, energía y cerro sagrado",
+        "facets": [
+          "sagrado",
+          "retiro",
+          "mistico",
+          "temazcal",
+          "cerro"
+        ],
+        "anchor_hit_at_1": 0.02,
+        "informativa": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ],
+        "azar": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ]
+      },
+      {
+        "query": "Dunas de yeso blanco y pozas de agua azul",
+        "facets": [
+          "yeso",
+          "dunas",
+          "pozas",
+          "blanco",
+          "azul"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Quiero arquitectura colonial, gastronomía tradicional y actividades culturales, pero sin playa",
+        "facets": [
+          "arquitectura / colonial",
+          "gastronomia",
+          "culturales",
+          "tradicional"
+        ],
+        "anchor_hit_at_1": 0.09,
+        "informativa": [
+          0.66,
+          0.66,
+          0.66,
+          0.76
+        ],
+        "azar": [
+          0.66,
+          0.66,
+          0.7,
+          0.73
+        ]
+      },
+      {
+        "query": "Montaña y bosque, pero cerca del mar",
+        "facets": [
+          "mar",
+          "bosque / montana",
+          "cerca"
+        ],
+        "anchor_hit_at_1": 0.01,
+        "informativa": [
+          0.57,
+          0.9,
+          0.9,
+          0.9
+        ],
+        "azar": [
+          0.57,
+          0.67,
+          0.82,
+          0.9
+        ]
+      },
+      {
+        "query": "Viaje romántico con hotel boutique y buena cocina",
+        "facets": [
+          "romántico",
+          "boutique",
+          "cocina",
+          "hotel"
+        ],
+        "anchor_hit_at_1": 0.89,
+        "informativa": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ],
+        "azar": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ]
+      },
+      {
+        "query": "Ecoturismo, observación de aves y selva, sin hoteles grandes",
+        "facets": [
+          "ecoturismo",
+          "observacion",
+          "aves",
+          "selva"
+        ],
+        "anchor_hit_at_1": 0.47,
+        "informativa": [
+          0.47,
+          0.59,
+          0.79,
+          0.83
+        ],
+        "azar": [
+          0.47,
+          0.7,
+          0.73,
+          0.78
+        ]
+      },
+      {
+        "query": "Comida callejera, tacos y mezcal",
+        "facets": [
+          "comida",
+          "callejera",
+          "mezcal",
+          "tacos"
+        ],
+        "anchor_hit_at_1": 0.04,
+        "informativa": [
+          0.67,
+          0.67,
+          0.67,
+          0.76
+        ],
+        "azar": [
+          0.67,
+          0.67,
+          0.67,
+          0.75
+        ]
+      },
+      {
+        "query": "Mochilero con presupuesto bajo, hostales y playa",
+        "facets": [
+          "playa",
+          "mochilero",
+          "hostales",
+          "presupuesto",
+          "bajo"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          0.99,
+          0.99,
+          0.99,
+          0.99
+        ],
+        "azar": [
+          0.99,
+          0.99,
+          0.99,
+          0.99
+        ]
+      },
+      {
+        "query": "Arte, galerías y vida bohemia",
+        "facets": [
+          "bohemia",
+          "galerias",
+          "arte"
+        ],
+        "anchor_hit_at_1": 0.7,
+        "informativa": [
+          0.7,
+          0.78,
+          0.86,
+          0.86
+        ],
+        "azar": [
+          0.7,
+          0.73,
+          0.81,
+          0.86
+        ]
+      },
+      {
+        "query": "Lugar para ir con mis abuelos, poco caminar y buena comida",
+        "facets": [
+          "comida",
+          "abuelos",
+          "caminar"
+        ],
+        "anchor_hit_at_1": 0.13,
+        "informativa": [
+          0.49,
+          0.73,
+          0.66,
+          0.66
+        ],
+        "azar": [
+          0.49,
+          0.59,
+          0.66,
+          0.66
+        ]
+      },
+      {
+        "query": "Deportes extremos: rappel, tirolesa y cuatrimotos",
+        "facets": [
+          "aventura",
+          "deportes"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Fiestas tradicionales, danzas y cultura indígena",
+        "facets": [
+          "vida nocturna",
+          "danzas",
+          "indigena",
+          "tradicionales",
+          "cultura"
+        ],
+        "anchor_hit_at_1": 0.57,
+        "informativa": [
+          0.57,
+          0.69,
+          0.7,
+          0.73
+        ],
+        "azar": [
+          0.57,
+          0.59,
+          0.66,
+          0.7
+        ]
+      },
+      {
+        "query": "Fotografía de paisajes al amanecer y miradores",
+        "facets": [
+          "vistas",
+          "amanecer",
+          "paisajes"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          0.48,
+          0.72,
+          0.68,
+          0.76
+        ],
+        "azar": [
+          0.48,
+          0.6,
+          0.7,
+          0.76
+        ]
+      },
+      {
+        "query": "Buceo en arrecifes, sin multitudes",
+        "facets": [
+          "buceo",
+          "arrecifes"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Clima cálido en invierno, pero sin playa",
+        "facets": [
+          "invierno",
+          "clima",
+          "calido"
+        ],
+        "anchor_hit_at_1": 0.79,
+        "informativa": [
+          0.79,
+          0.79,
+          0.82,
+          0.89
+        ],
+        "azar": [
+          0.79,
+          0.79,
+          0.8,
+          0.89
+        ]
+      },
+      {
+        "query": "Iglesias barrocas y museos, sin ruinas arqueológicas",
+        "facets": [
+          "iglesias",
+          "museos"
+        ],
+        "anchor_hit_at_1": 0.89,
+        "informativa": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ],
+        "azar": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ]
+      },
+      {
+        "query": "Nadar en ríos, pozas y cascadas de agua fría",
+        "facets": [
+          "cascadas",
+          "lago y río",
+          "pozas",
+          "fria",
+          "nadar"
+        ],
+        "anchor_hit_at_1": 0.09,
+        "informativa": [
+          0.9,
+          0.9,
+          0.9,
+          0.9
+        ],
+        "azar": [
+          0.9,
+          0.9,
+          0.9,
+          0.9
+        ]
+      },
+      {
+        "query": "Escapada de fin de semana con buena comida y caminatas",
+        "facets": [
+          "comida",
+          "caminatas",
+          "escapada",
+          "fin",
+          "semana"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Esquiar en nieve y patinar sobre hielo",
+        "facets": [
+          "nieve",
+          "hielo"
+        ],
+        "anchor_hit_at_1": 0.84,
+        "informativa": [
+          0.84,
+          0.84,
+          0.84,
+          0.84
+        ],
+        "azar": [
+          0.84,
+          0.84,
+          0.84,
+          0.84
+        ]
+      },
+      {
+        "query": "Quiero bosque, cabañas, gastronomía y aventura",
+        "facets": [
+          "bosque",
+          "gastronomia",
+          "aventura",
+          "cabanas"
+        ],
+        "anchor_hit_at_1": 0.03,
+        "informativa": [
+          0.87,
+          0.87,
+          0.87,
+          0.87
+        ],
+        "azar": [
+          0.87,
+          0.87,
+          0.87,
+          0.86
+        ]
+      },
+      {
+        "query": "Playas tranquilas, agua turquesa, snorkel y comida de mar",
+        "facets": [
+          "mar / snorkel",
+          "comida",
+          "descanso",
+          "turquesa",
+          "playas"
+        ],
+        "anchor_hit_at_1": 0.98,
+        "informativa": [
+          0.98,
+          0.98,
+          0.98,
+          0.98
+        ],
+        "azar": [
+          0.98,
+          0.98,
+          0.98,
+          0.98
+        ]
+      },
+      {
+        "query": "Cenotes, comida yucateca, historia y tranquilidad",
+        "facets": [
+          "cenotes",
+          "comida",
+          "descanso",
+          "yucateca",
+          "historia"
+        ],
+        "anchor_hit_at_1": 0.44,
+        "informativa": [
+          0.44,
+          0.87,
+          0.87,
+          0.87
+        ],
+        "azar": [
+          0.44,
+          0.6,
+          0.71,
+          0.69
+        ]
+      },
+      {
+        "query": "Desierto, silencio, paisajes naturales y vino",
+        "facets": [
+          "vino",
+          "desierto",
+          "silencio",
+          "naturales",
+          "paisajes"
+        ],
+        "anchor_hit_at_1": 0.71,
+        "informativa": [
+          0.71,
+          0.71,
+          0.71,
+          0.8
+        ],
+        "azar": [
+          0.71,
+          0.71,
+          0.71,
+          0.77
+        ]
+      },
+      {
+        "query": "Busco arquitectura colonial, museos, mezcal y naturaleza, sin playa",
+        "facets": [
+          "arquitectura / colonial",
+          "museos",
+          "mezcal",
+          "naturaleza"
+        ],
+        "anchor_hit_at_1": 0.02,
+        "informativa": [
+          0.38,
+          0.58,
+          0.68,
+          0.82
+        ],
+        "azar": [
+          0.38,
+          0.43,
+          0.61,
+          0.68
+        ]
+      }
+    ],
+    "concentrada": [
+      {
+        "query": "Quiero playas tranquilas, agua turquesa y snorkel",
+        "facets": [
+          "snorkel",
+          "descanso",
+          "turquesa",
+          "playas",
+          "agua"
+        ],
+        "anchor_hit_at_1": 0.07,
+        "informativa": [
+          0.9,
+          0.9,
+          0.9,
+          0.9
+        ],
+        "azar": [
+          0.9,
+          0.9,
+          0.9,
+          0.9
+        ]
+      },
+      {
+        "query": "Busco pirámides, arqueología e historia prehispánica",
+        "facets": [
+          "arqueologia",
+          "prehispanica",
+          "piramides",
+          "historia"
+        ],
+        "anchor_hit_at_1": 0.77,
+        "informativa": [
+          0.77,
+          0.77,
+          0.77,
+          0.77
+        ],
+        "azar": [
+          0.77,
+          0.77,
+          0.77,
+          0.77
+        ]
+      },
+      {
+        "query": "Me interesan viñedos, vino y recorridos por bodegas",
+        "facets": [
+          "vino",
+          "bodegas",
+          "vinedos",
+          "recorridos"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Quiero bosque, montaña, cabañas y senderismo",
+        "facets": [
+          "bosque / montana / senderismo",
+          "cabanas"
+        ],
+        "anchor_hit_at_1": 0.48,
+        "informativa": [
+          0.48,
+          0.48,
+          0.48,
+          0.48
+        ],
+        "azar": [
+          0.48,
+          0.48,
+          0.48,
+          0.48
+        ]
+      },
+      {
+        "query": "Busco cenotes para nadar y naturaleza",
+        "facets": [
+          "cenotes",
+          "naturaleza",
+          "nadar"
+        ],
+        "anchor_hit_at_1": 0.35,
+        "informativa": [
+          0.3,
+          0.69,
+          0.99,
+          0.99
+        ],
+        "azar": [
+          0.3,
+          0.61,
+          0.78,
+          0.99
+        ]
+      },
+      {
+        "query": "Quiero gastronomía mexicana, mercados y restaurantes tradicionales",
+        "facets": [
+          "gastronomia",
+          "mercados",
+          "tradicionales",
+          "mexicana",
+          "restaurantes"
+        ],
+        "anchor_hit_at_1": 0.61,
+        "informativa": [
+          0.61,
+          0.61,
+          0.61,
+          0.61
+        ],
+        "azar": [
+          0.61,
+          0.61,
+          0.61,
+          0.61
+        ]
+      },
+      {
+        "query": "Deseo arquitectura colonial, iglesias y calles históricas",
+        "facets": [
+          "arquitectura / colonial",
+          "historicas",
+          "iglesias",
+          "calles"
+        ],
+        "anchor_hit_at_1": 0.2,
+        "informativa": [
+          0.35,
+          0.45,
+          0.48,
+          0.68
+        ],
+        "azar": [
+          0.35,
+          0.42,
+          0.4,
+          0.52
+        ]
+      },
+      {
+        "query": "Quiero cascadas, vegetación y aventura al aire libre",
+        "facets": [
+          "cascadas",
+          "aventura",
+          "vegetacion",
+          "libre",
+          "aire"
+        ],
+        "anchor_hit_at_1": 0.5,
+        "informativa": [
+          0.5,
+          0.5,
+          0.5,
+          0.71
+        ],
+        "azar": [
+          0.5,
+          0.5,
+          0.5,
+          0.51
+        ]
+      },
+      {
+        "query": "Busco un viaje relajante con spa y aguas termales",
+        "facets": [
+          "spa / termales",
+          "descanso",
+          "aguas"
+        ],
+        "anchor_hit_at_1": 0.84,
+        "informativa": [
+          0.84,
+          0.84,
+          0.84,
+          0.84
+        ],
+        "azar": [
+          0.84,
+          0.84,
+          0.84,
+          0.84
+        ]
+      },
+      {
+        "query": "Quiero desierto y paisajes naturales, sin playa",
+        "facets": [
+          "desierto",
+          "naturales",
+          "paisajes"
+        ],
+        "anchor_hit_at_1": 0.41,
+        "informativa": [
+          0.38,
+          0.68,
+          0.7,
+          0.7
+        ],
+        "azar": [
+          0.38,
+          0.58,
+          0.68,
+          0.7
+        ]
+      },
+      {
+        "query": "Quiero visitar destilerías y conocer el proceso del tequila",
+        "facets": [
+          "destilerias",
+          "proceso",
+          "tequila",
+          "visitar"
+        ],
+        "anchor_hit_at_1": 0.91,
+        "informativa": [
+          0.91,
+          0.91,
+          0.91,
+          0.91
+        ],
+        "azar": [
+          0.91,
+          0.91,
+          0.91,
+          0.91
+        ]
+      },
+      {
+        "query": "Pueblo cafetalero con niebla, café de altura y clima fresco",
+        "facets": [
+          "café",
+          "niebla",
+          "clima",
+          "fresco"
+        ],
+        "anchor_hit_at_1": 0.47,
+        "informativa": [
+          0.47,
+          0.68,
+          0.7,
+          0.7
+        ],
+        "azar": [
+          0.47,
+          0.58,
+          0.61,
+          0.68
+        ]
+      },
+      {
+        "query": "Comprar joyería de plata y recorrer calles empedradas en cerro",
+        "facets": [
+          "empedradas",
+          "joyeria",
+          "plata",
+          "cerro",
+          "calles"
+        ],
+        "anchor_hit_at_1": 0.82,
+        "informativa": [
+          0.82,
+          0.82,
+          0.82,
+          0.82
+        ],
+        "azar": [
+          0.82,
+          0.82,
+          0.82,
+          0.82
+        ]
+      },
+      {
+        "query": "Laguna de siete colores para navegar en kayak",
+        "facets": [
+          "lago y río",
+          "navegar",
+          "siete",
+          "kayak",
+          "colores"
+        ],
+        "anchor_hit_at_1": 0.98,
+        "informativa": [
+          0.98,
+          0.98,
+          0.98,
+          0.98
+        ],
+        "azar": [
+          0.98,
+          0.98,
+          0.98,
+          0.98
+        ]
+      },
+      {
+        "query": "Aprender surf, ambiente relajado y tacos frente al mar",
+        "facets": [
+          "mar / surf",
+          "aprender",
+          "relajado",
+          "frente",
+          "tacos"
+        ],
+        "anchor_hit_at_1": 0.02,
+        "informativa": [
+          0.7,
+          0.7,
+          0.7,
+          0.7
+        ],
+        "azar": [
+          0.7,
+          0.7,
+          0.7,
+          0.7
+        ]
+      },
+      {
+        "query": "Ver tortugas, atardeceres en la punta y ambiente bohemio",
+        "facets": [
+          "bohemio",
+          "atardeceres",
+          "punta",
+          "tortugas",
+          "ver"
+        ],
+        "anchor_hit_at_1": 0.92,
+        "informativa": [
+          0.92,
+          0.92,
+          0.92,
+          0.92
+        ],
+        "azar": [
+          0.92,
+          0.92,
+          0.92,
+          0.92
+        ]
+      },
+      {
+        "query": "Paseo en lancha por un cañón con cocodrilos",
+        "facets": [
+          "lago y río",
+          "cocodrilos",
+          "canon",
+          "paseo"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Caminar junto al lago, malecón tranquilo y comida con vista al agua",
+        "facets": [
+          "comida",
+          "descanso",
+          "lago y río",
+          "malecon",
+          "junto"
+        ],
+        "anchor_hit_at_1": 0.69,
+        "informativa": [
+          0.69,
+          0.69,
+          0.69,
+          0.69
+        ],
+        "azar": [
+          0.69,
+          0.69,
+          0.69,
+          0.69
+        ]
+      },
+      {
+        "query": "Jardín surrealista con esculturas en la selva y pozas",
+        "facets": [
+          "surrealista",
+          "pozas",
+          "esculturas",
+          "selva",
+          "jardin"
+        ],
+        "anchor_hit_at_1": 0.94,
+        "informativa": [
+          0.94,
+          0.94,
+          0.94,
+          0.94
+        ],
+        "azar": [
+          0.94,
+          0.94,
+          0.94,
+          0.94
+        ]
+      },
+      {
+        "query": "Artesanías de barro, mariachi y tiendas de arte popular",
+        "facets": [
+          "artesanía",
+          "barro",
+          "mariachi",
+          "popular",
+          "arte"
+        ],
+        "anchor_hit_at_1": 0.44,
+        "informativa": [
+          0.44,
+          0.44,
+          0.44,
+          0.44
+        ],
+        "azar": [
+          0.44,
+          0.44,
+          0.44,
+          0.44
+        ]
+      },
+      {
+        "query": "Subir en teleférico y visitar museos en la ciudad",
+        "facets": [
+          "museos",
+          "teleferico",
+          "subir",
+          "ciudad",
+          "visitar"
+        ],
+        "anchor_hit_at_1": 0.86,
+        "informativa": [
+          0.86,
+          0.86,
+          0.86,
+          0.86
+        ],
+        "azar": [
+          0.86,
+          0.86,
+          0.86,
+          0.86
+        ]
+      },
+      {
+        "query": "Escalar un monolito enorme y comer gorditas",
+        "facets": [
+          "monolito",
+          "gorditas",
+          "escalar",
+          "enorme",
+          "comer"
+        ],
+        "anchor_hit_at_1": 0.62,
+        "informativa": [
+          0.62,
+          0.62,
+          0.62,
+          0.62
+        ],
+        "azar": [
+          0.62,
+          0.62,
+          0.62,
+          0.62
+        ]
+      },
+      {
+        "query": "Formaciones de prismas basálticos, haciendas y tirolesa",
+        "facets": [
+          "aventura",
+          "haciendas",
+          "basalticos",
+          "prismas",
+          "formaciones"
+        ],
+        "anchor_hit_at_1": 0.98,
+        "informativa": [
+          0.98,
+          0.98,
+          0.98,
+          0.98
+        ],
+        "azar": [
+          0.98,
+          0.98,
+          0.98,
+          0.98
+        ]
+      },
+      {
+        "query": "Pueblo minero fantasma, túnel y paseo a caballo por el desierto",
+        "facets": [
+          "desierto",
+          "minero",
+          "fantasma",
+          "tunel",
+          "caballo"
+        ],
+        "anchor_hit_at_1": 0.89,
+        "informativa": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ],
+        "azar": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ]
+      },
+      {
+        "query": "Barrancas profundas, tren y cultura rarámuri",
+        "facets": [
+          "raramuri",
+          "barrancas",
+          "profundas",
+          "tren",
+          "cultura"
+        ],
+        "anchor_hit_at_1": 0.87,
+        "informativa": [
+          0.87,
+          0.87,
+          0.87,
+          0.87
+        ],
+        "azar": [
+          0.87,
+          0.87,
+          0.87,
+          0.87
+        ]
+      },
+      {
+        "query": "Misión antigua, malecón y paseo en barco por el mar de Cortés",
+        "facets": [
+          "mar",
+          "malecon",
+          "mision",
+          "barco",
+          "cortes"
+        ],
+        "anchor_hit_at_1": 0.68,
+        "informativa": [
+          0.68,
+          0.68,
+          0.68,
+          0.68
+        ],
+        "azar": [
+          0.68,
+          0.68,
+          0.68,
+          0.68
+        ]
+      },
+      {
+        "query": "Ruinas mayas escondidas en la selva con monos",
+        "facets": [
+          "escondidas",
+          "monos",
+          "selva",
+          "mayas",
+          "ruinas"
+        ],
+        "anchor_hit_at_1": 0.86,
+        "informativa": [
+          0.86,
+          0.86,
+          0.86,
+          0.86
+        ],
+        "azar": [
+          0.86,
+          0.86,
+          0.86,
+          0.86
+        ]
+      },
+      {
+        "query": "Mirador sobre la barranca, fábrica de relojes y sidra",
+        "facets": [
+          "vistas",
+          "sidra",
+          "relojes",
+          "barranca",
+          "fabrica"
+        ],
+        "anchor_hit_at_1": 0.9,
+        "informativa": [
+          0.9,
+          0.9,
+          0.9,
+          0.9
+        ],
+        "azar": [
+          0.9,
+          0.9,
+          0.9,
+          0.9
+        ]
+      },
+      {
+        "query": "Ciudad amarilla con un gran convento franciscano",
+        "facets": [
+          "franciscano",
+          "amarilla",
+          "convento",
+          "ciudad",
+          "gran"
+        ],
+        "anchor_hit_at_1": 0.97,
+        "informativa": [
+          0.97,
+          0.97,
+          0.97,
+          0.97
+        ],
+        "azar": [
+          0.97,
+          0.97,
+          0.97,
+          0.97
+        ]
+      },
+      {
+        "query": "Historia de la independencia de México y nieves de sabores raros",
+        "facets": [
+          "raros",
+          "independencia",
+          "nieves",
+          "sabores",
+          "historia"
+        ],
+        "anchor_hit_at_1": 0.83,
+        "informativa": [
+          0.83,
+          0.83,
+          0.83,
+          0.83
+        ],
+        "azar": [
+          0.83,
+          0.83,
+          0.83,
+          0.83
+        ]
+      },
+      {
+        "query": "Vacaciones familiares con niños, albercas y toboganes",
+        "facets": [
+          "familia",
+          "toboganes",
+          "familiares",
+          "albercas"
+        ],
+        "anchor_hit_at_1": 1.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Museo del virreinato y arte religioso barroco",
+        "facets": [
+          "virreinato",
+          "religioso",
+          "barroco",
+          "arte",
+          "museo"
+        ],
+        "anchor_hit_at_1": 0.62,
+        "informativa": [
+          0.62,
+          0.62,
+          0.62,
+          0.76
+        ],
+        "azar": [
+          0.62,
+          0.62,
+          0.62,
+          0.62
+        ]
+      },
+      {
+        "query": "Un sitio caluroso junto al Caribe para descansar frente al mar",
+        "facets": [
+          "mar",
+          "descanso",
+          "caluroso",
+          "caribe",
+          "junto"
+        ],
+        "anchor_hit_at_1": 0.64,
+        "informativa": [
+          0.64,
+          0.64,
+          0.64,
+          0.64
+        ],
+        "azar": [
+          0.64,
+          0.64,
+          0.64,
+          0.64
+        ]
+      },
+      {
+        "query": "Escapada a un lugar frío para tomar chocolate junto a la chimenea",
+        "facets": [
+          "chimenea",
+          "escapada",
+          "chocolate",
+          "frio",
+          "junto"
+        ],
+        "anchor_hit_at_1": 0.45,
+        "informativa": [
+          0.45,
+          0.45,
+          0.45,
+          0.45
+        ],
+        "azar": [
+          0.45,
+          0.45,
+          0.45,
+          0.45
+        ]
+      },
+      {
+        "query": "Naturaleza y aventura en la sierra, sin playa ni mar",
+        "facets": [
+          "aventura",
+          "sierra",
+          "naturaleza"
+        ],
+        "anchor_hit_at_1": 0.27,
+        "informativa": [
+          0.35,
+          0.39,
+          0.39,
+          0.39
+        ],
+        "azar": [
+          0.35,
+          0.37,
+          0.37,
+          0.39
+        ]
+      },
+      {
+        "query": "Cenotes y comida yucateca, sin Tulum",
+        "facets": [
+          "cenotes",
+          "comida",
+          "yucateca"
+        ],
+        "anchor_hit_at_1": 0.27,
+        "informativa": [
+          0.73,
+          0.73,
+          0.73,
+          0.82
+        ],
+        "azar": [
+          0.73,
+          0.73,
+          0.78,
+          0.82
+        ]
+      },
+      {
+        "query": "Clima templado, viveros de flores y vista al volcán",
+        "facets": [
+          "templado",
+          "volcan",
+          "flores",
+          "clima",
+          "vista"
+        ],
+        "anchor_hit_at_1": 0.55,
+        "informativa": [
+          0.55,
+          0.55,
+          0.55,
+          0.74
+        ],
+        "azar": [
+          0.55,
+          0.55,
+          0.56,
+          0.58
+        ]
+      },
+      {
+        "query": "Retiro místico con temazcal, energía y cerro sagrado",
+        "facets": [
+          "sagrado",
+          "retiro",
+          "mistico",
+          "temazcal",
+          "cerro"
+        ],
+        "anchor_hit_at_1": 0.16,
+        "informativa": [
+          0.56,
+          0.56,
+          0.56,
+          0.56
+        ],
+        "azar": [
+          0.56,
+          0.56,
+          0.56,
+          0.56
+        ]
+      },
+      {
+        "query": "Dunas de yeso blanco y pozas de agua azul",
+        "facets": [
+          "yeso",
+          "dunas",
+          "pozas",
+          "blanco",
+          "azul"
+        ],
+        "anchor_hit_at_1": 0.97,
+        "informativa": [
+          0.97,
+          0.97,
+          0.97,
+          0.97
+        ],
+        "azar": [
+          0.97,
+          0.97,
+          0.97,
+          0.97
+        ]
+      },
+      {
+        "query": "Quiero arquitectura colonial, gastronomía tradicional y actividades culturales, pero sin playa",
+        "facets": [
+          "arquitectura / colonial",
+          "gastronomia",
+          "culturales",
+          "tradicional"
+        ],
+        "anchor_hit_at_1": 0.25,
+        "informativa": [
+          0.11,
+          0.11,
+          0.11,
+          0.32
+        ],
+        "azar": [
+          0.11,
+          0.11,
+          0.14,
+          0.23
+        ]
+      },
+      {
+        "query": "Montaña y bosque, pero cerca del mar",
+        "facets": [
+          "mar",
+          "bosque / montana",
+          "cerca"
+        ],
+        "anchor_hit_at_1": 0.23,
+        "informativa": [
+          0.21,
+          0.69,
+          0.69,
+          0.69
+        ],
+        "azar": [
+          0.21,
+          0.58,
+          0.58,
+          0.69
+        ]
+      },
+      {
+        "query": "Viaje romántico con hotel boutique y buena cocina",
+        "facets": [
+          "romántico",
+          "boutique",
+          "cocina",
+          "hotel"
+        ],
+        "anchor_hit_at_1": 0.54,
+        "informativa": [
+          0.54,
+          0.54,
+          0.54,
+          0.54
+        ],
+        "azar": [
+          0.54,
+          0.54,
+          0.54,
+          0.54
+        ]
+      },
+      {
+        "query": "Ecoturismo, observación de aves y selva, sin hoteles grandes",
+        "facets": [
+          "ecoturismo",
+          "observacion",
+          "aves",
+          "selva"
+        ],
+        "anchor_hit_at_1": 0.39,
+        "informativa": [
+          0.39,
+          0.34,
+          0.54,
+          0.75
+        ],
+        "azar": [
+          0.39,
+          0.36,
+          0.45,
+          0.56
+        ]
+      },
+      {
+        "query": "Comida callejera, tacos y mezcal",
+        "facets": [
+          "comida",
+          "callejera",
+          "mezcal",
+          "tacos"
+        ],
+        "anchor_hit_at_1": 0.16,
+        "informativa": [
+          0.36,
+          0.36,
+          0.36,
+          0.59
+        ],
+        "azar": [
+          0.36,
+          0.36,
+          0.4,
+          0.53
+        ]
+      },
+      {
+        "query": "Mochilero con presupuesto bajo, hostales y playa",
+        "facets": [
+          "playa",
+          "mochilero",
+          "hostales",
+          "presupuesto",
+          "bajo"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          0.59,
+          0.59,
+          0.59,
+          0.59
+        ],
+        "azar": [
+          0.59,
+          0.59,
+          0.59,
+          0.59
+        ]
+      },
+      {
+        "query": "Arte, galerías y vida bohemia",
+        "facets": [
+          "bohemia",
+          "galerias",
+          "arte"
+        ],
+        "anchor_hit_at_1": 0.39,
+        "informativa": [
+          0.39,
+          0.81,
+          0.78,
+          0.78
+        ],
+        "azar": [
+          0.39,
+          0.61,
+          0.72,
+          0.78
+        ]
+      },
+      {
+        "query": "Lugar para ir con mis abuelos, poco caminar y buena comida",
+        "facets": [
+          "comida",
+          "abuelos",
+          "caminar"
+        ],
+        "anchor_hit_at_1": 0.22,
+        "informativa": [
+          0.44,
+          0.44,
+          0.6,
+          0.6
+        ],
+        "azar": [
+          0.44,
+          0.44,
+          0.57,
+          0.6
+        ]
+      },
+      {
+        "query": "Deportes extremos: rappel, tirolesa y cuatrimotos",
+        "facets": [
+          "aventura",
+          "deportes"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "azar": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "query": "Fiestas tradicionales, danzas y cultura indígena",
+        "facets": [
+          "vida nocturna",
+          "danzas",
+          "indigena",
+          "tradicionales",
+          "cultura"
+        ],
+        "anchor_hit_at_1": 0.24,
+        "informativa": [
+          0.24,
+          0.48,
+          0.43,
+          0.63
+        ],
+        "azar": [
+          0.24,
+          0.41,
+          0.41,
+          0.45
+        ]
+      },
+      {
+        "query": "Fotografía de paisajes al amanecer y miradores",
+        "facets": [
+          "vistas",
+          "amanecer",
+          "paisajes"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          0.13,
+          0.41,
+          0.4,
+          0.57
+        ],
+        "azar": [
+          0.13,
+          0.33,
+          0.54,
+          0.57
+        ]
+      },
+      {
+        "query": "Buceo en arrecifes, sin multitudes",
+        "facets": [
+          "buceo",
+          "arrecifes"
+        ],
+        "anchor_hit_at_1": 0.0,
+        "informativa": [
+          0.79,
+          0.79,
+          0.79,
+          0.79
+        ],
+        "azar": [
+          0.79,
+          0.79,
+          0.79,
+          0.79
+        ]
+      },
+      {
+        "query": "Clima cálido en invierno, pero sin playa",
+        "facets": [
+          "invierno",
+          "clima",
+          "calido"
+        ],
+        "anchor_hit_at_1": 0.41,
+        "informativa": [
+          0.41,
+          0.41,
+          0.78,
+          0.67
+        ],
+        "azar": [
+          0.41,
+          0.41,
+          0.59,
+          0.67
+        ]
+      },
+      {
+        "query": "Iglesias barrocas y museos, sin ruinas arqueológicas",
+        "facets": [
+          "iglesias",
+          "museos"
+        ],
+        "anchor_hit_at_1": 0.58,
+        "informativa": [
+          0.58,
+          0.58,
+          0.58,
+          0.58
+        ],
+        "azar": [
+          0.58,
+          0.58,
+          0.58,
+          0.58
+        ]
+      },
+      {
+        "query": "Nadar en ríos, pozas y cascadas de agua fría",
+        "facets": [
+          "cascadas",
+          "lago y río",
+          "pozas",
+          "fria",
+          "nadar"
+        ],
+        "anchor_hit_at_1": 0.27,
+        "informativa": [
+          0.51,
+          0.51,
+          0.51,
+          0.51
+        ],
+        "azar": [
+          0.51,
+          0.51,
+          0.51,
+          0.51
+        ]
+      },
+      {
+        "query": "Escapada de fin de semana con buena comida y caminatas",
+        "facets": [
+          "comida",
+          "caminatas",
+          "escapada",
+          "fin",
+          "semana"
+        ],
+        "anchor_hit_at_1": 0.89,
+        "informativa": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ],
+        "azar": [
+          0.89,
+          0.89,
+          0.89,
+          0.89
+        ]
+      },
+      {
+        "query": "Esquiar en nieve y patinar sobre hielo",
+        "facets": [
+          "nieve",
+          "hielo"
+        ],
+        "anchor_hit_at_1": 0.55,
+        "informativa": [
+          0.55,
+          0.55,
+          0.55,
+          0.55
+        ],
+        "azar": [
+          0.55,
+          0.55,
+          0.55,
+          0.55
+        ]
+      },
+      {
+        "query": "Quiero bosque, cabañas, gastronomía y aventura",
+        "facets": [
+          "bosque",
+          "gastronomia",
+          "aventura",
+          "cabanas"
+        ],
+        "anchor_hit_at_1": 0.03,
+        "informativa": [
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ],
+        "azar": [
+          0.4,
+          0.4,
+          0.4,
+          0.41
+        ]
+      },
+      {
+        "query": "Playas tranquilas, agua turquesa, snorkel y comida de mar",
+        "facets": [
+          "mar / snorkel",
+          "comida",
+          "descanso",
+          "turquesa",
+          "playas"
+        ],
+        "anchor_hit_at_1": 0.8,
+        "informativa": [
+          0.8,
+          0.8,
+          0.8,
+          0.8
+        ],
+        "azar": [
+          0.8,
+          0.8,
+          0.8,
+          0.8
+        ]
+      },
+      {
+        "query": "Cenotes, comida yucateca, historia y tranquilidad",
+        "facets": [
+          "cenotes",
+          "comida",
+          "descanso",
+          "yucateca",
+          "historia"
+        ],
+        "anchor_hit_at_1": 0.49,
+        "informativa": [
+          0.49,
+          0.68,
+          0.68,
+          0.71
+        ],
+        "azar": [
+          0.49,
+          0.5,
+          0.56,
+          0.57
+        ]
+      },
+      {
+        "query": "Desierto, silencio, paisajes naturales y vino",
+        "facets": [
+          "vino",
+          "desierto",
+          "silencio",
+          "naturales",
+          "paisajes"
+        ],
+        "anchor_hit_at_1": 0.44,
+        "informativa": [
+          0.44,
+          0.44,
+          0.44,
+          0.53
+        ],
+        "azar": [
+          0.44,
+          0.44,
+          0.45,
+          0.46
+        ]
+      },
+      {
+        "query": "Busco arquitectura colonial, museos, mezcal y naturaleza, sin playa",
+        "facets": [
+          "arquitectura / colonial",
+          "museos",
+          "mezcal",
+          "naturaleza"
+        ],
+        "anchor_hit_at_1": 0.2,
+        "informativa": [
+          0.22,
+          0.47,
+          0.54,
+          0.58
+        ],
+        "azar": [
+          0.22,
+          0.34,
+          0.4,
+          0.47
+        ]
+      }
+    ]
+  },
+  "role_sensitivity": {
+    "queries": 65,
+    "risk": 0.55,
+    "spread": 0.5,
+    "draws_per_query": 200,
+    "role_unchanged_pct": {
+      "Ancla": 100.0,
+      "Superviviente": 92.8,
+      "Portal": 86.3,
+      "Especialista": 88.4,
+      "Comodín": 79.2
+    },
+    "portfolio_jaccard_mean": 0.9204,
+    "portfolio_identical_pct": 76.6,
+    "one_at_a_time_unchanged_pct": {
+      "Portal.mix": 93.1,
+      "Superviviente.relevance": 93.8,
+      "Portal.peak": 95.6,
+      "Superviviente.worst": 95.8,
+      "Portal.distance": 96.9,
+      "Especialista.relevance": 96.9,
+      "Especialista.specialization": 97.1,
+      "diversidad.penalty": 97.3,
+      "Superviviente.robust": 97.9,
+      "Comodín.relevance": 97.9,
+      "Comodín.robust": 97.9,
+      "Comodín.balance": 97.9,
+      "Comodín.distance": 98.7
+    }
+  },
+  "duration_s": 83.6
+}

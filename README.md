@@ -13,7 +13,7 @@ dataset ni el modelo E5.
 git clone https://github.com/DyAndrade-AI/restmex-orbita.git
 cd restmex-orbita
 docker compose up --build -d
-# abre http://localhost:4321  → Evaluación → Laboratorio para evaluar
+# abre http://localhost:4321  → “Ayúdanos a evaluar”
 ```
 
 Para reconstruir el índice o correr el holdout necesitas el CSV de Rest-Mex 2025 (no se incluye por
@@ -34,6 +34,35 @@ cartera de cinco futuros deliberadamente distintos:
 El control de riesgo modifica cuánto puede alejarse el Portal. Para cada alternativa se resuelve un
 contrafactual: qué porcentaje de atención tendría que trasladarse hacia una faceta para que esa
 opción supere al Ancla. El proceso es determinista y sigue usando exclusivamente el train local.
+
+## Validación sin humanos (usuarios simulados y sensibilidad)
+
+`make validate-orbit` (≈90 s) responde las dos dudas obvias sobre lo experimental:
+
+- **¿Sirven las preguntas de Strange Loop?** Usuarios simulados con gustos ocultos: el top 1
+  clásico acierta su destino ideal el 65 %, Strange Loop sin preguntas el 85 % y con 3 preguntas
+  el 92 %; la pregunta de máxima información supera a una al azar (IC95 excluye 0), también con
+  gustos fuera del prior del modelo.
+- **¿Dependen los roles de pesos elegidos a mano?** Con los 13 pesos perturbados ±50 % a la vez, la
+  cartera de cinco futuros se conserva en un 92 % (Jaccard medio).
+
+Detalle y límites en [docs/metodologia.md §8 bis](docs/metodologia.md). Después,
+`make web-metrics` copia las cifras a `web/src/data/metrics.json`, que es lo que muestra la web.
+
+## Web: video, evaluación y laboratorio ciego
+
+- Dos videos: **2 min para todo público** (`web/public/media/orbita-2min.mp4`, el principal) y la
+  versión **técnica de 7 min** con capítulos clicables (`orbita.mp4`). Fuentes en `video/`
+  (`video/publico/` para el corto); se regeneran con `say` + Chrome headless + ffmpeg.
+- La sección **Evaluación** muestra los cuatro niveles (regresión, holdout, usuarios simulados,
+  personas reales) con sus límites.
+- **Ayúdanos a evaluar** es el laboratorio ciego paso a paso: alias → consulta → un pueblo a la vez
+  con cuatro botones grandes (o teclas 0–3) → revisión → enviar. El protocolo no cambia (pool
+  completo, orden aleatorio por evaluador, escala 0–3, restricción); el conjunto por defecto es
+  `test` y los demás quedan en “Opciones del equipo”.
+- Despliegue estático (p. ej. Netlify): la web se construye desde `web/` y la API de Python va
+  aparte; define `PUBLIC_API_URL=https://tu-api…` al construir y `ORBITA_CORS_ORIGIN` en la API.
+  Los juicios se guardan en `ORBITA_LAB` (necesita disco persistente).
 
 ## Documentación para la defensa
 

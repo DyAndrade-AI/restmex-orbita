@@ -1,3 +1,4 @@
+import { api } from "./api";
 // Vista principal: 5 destinos más afines y 5 menos afines, con verificación contra el corpus.
 
 export const escapeHtml = (value: unknown) => String(value ?? "")
@@ -130,7 +131,7 @@ export function renderClassic(data: RecommendResult): string {
 }
 
 export async function postJson<T>(url: string, body: unknown): Promise<T> {
-  const response = await fetch(url, {
+  const response = await fetch(api(url), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
