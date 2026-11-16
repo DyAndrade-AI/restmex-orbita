@@ -60,9 +60,9 @@ Detalle y límites en [docs/metodologia.md §8 bis](docs/metodologia.md). Despu�
   con cuatro botones grandes (o teclas 0–3) → revisión → enviar. El protocolo no cambia (pool
   completo, orden aleatorio por evaluador, escala 0–3, restricción); el conjunto por defecto es
   `test` y los demás quedan en “Opciones del equipo”.
-- Despliegue estático (p. ej. Netlify): la web se construye desde `web/` y la API de Python va
-  aparte; define `PUBLIC_API_URL=https://tu-api…` al construir y `ORBITA_CORS_ORIGIN` en la API.
-  Los juicios se guardan en `ORBITA_LAB` (necesita disco persistente).
+- Producción: web en Netlify, API en Hugging Face Spaces y juicios en Supabase. Paso a paso en
+  [docs/despliegue.md](docs/despliegue.md). Sin `SUPABASE_URL`/`SUPABASE_KEY`, la API guarda los
+  juicios en `ORBITA_LAB/judgments.jsonl` como siempre.
 
 ## Documentación para la defensa
 

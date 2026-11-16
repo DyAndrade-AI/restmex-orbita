@@ -20,6 +20,7 @@ import csv
 import hashlib
 import io
 import json
+import os
 import random
 import threading
 from collections import defaultdict
@@ -116,13 +117,86 @@ def build_pool(engine: Recommender, item: dict, middle: int = 3) -> dict:
     }
 
 
+class FileStore:
+    """Juicios en un JSONL local (desarrollo y Docker con volumen)."""
+
+    def __init__(self, path: Path):
+        self.path = Path(path)
+
+    def load(self) -> List[dict]:
+        if not self.path.exists():
+            return []
+        return [json.loads(line) for line in self.path.read_text(encoding="utf-8").splitlines()
+                if line.strip()]
+
+    def append(self, records: Sequence[dict]) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with self.path.open("a", encoding="utf-8") as stream:
+            for record in records:
+                stream.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+class SupabaseStore:
+    """Juicios en Supabase (tabla lab_judgments con una columna jsonb ``record``).
+
+    Para servidores sin disco persistente (Hugging Face Spaces). La clave es secreta y vive solo
+    en la API; el navegador nunca habla con Supabase. Se lee todo al arrancar y después se
+    mantiene en memoria: la API es un único proceso, así que la caché no se desincroniza."""
+
+    TABLE = "lab_judgments"
+
+    def __init__(self, url: str, key: str, timeout: float = 15.0):
+        self.endpoint = f"{url.rstrip('/')}/rest/v1/{self.TABLE}"
+        self.headers = {"apikey": key, "Content-Type": "application/json"}
+        if key.startswith("eyJ"):  # claves JWT antiguas (service_role) también van como Bearer
+            self.headers["Authorization"] = f"Bearer {key}"
+        self.timeout = timeout
+        self._cache: Optional[List[dict]] = None
+
+    def _request(self, method: str, url: str, body: Optional[bytes] = None, extra: Optional[dict] = None):
+        import urllib.request
+
+        request = urllib.request.Request(url, data=body, method=method,
+                                         headers={**self.headers, **(extra or {})})
+        with urllib.request.urlopen(request, timeout=self.timeout) as response:
+            return response.read()
+
+    def load(self) -> List[dict]:
+        if self._cache is None:
+            rows: List[dict] = []
+            page = 1000  # límite por defecto de PostgREST
+            while True:
+                url = f"{self.endpoint}?select=record&order=id.asc&limit={page}&offset={len(rows)}"
+                batch = json.loads(self._request("GET", url))
+                rows += [row["record"] for row in batch]
+                if len(batch) < page:
+                    break
+            self._cache = rows
+        return list(self._cache)
+
+    def append(self, records: Sequence[dict]) -> None:
+        body = json.dumps([{"record": r} for r in records], ensure_ascii=False).encode("utf-8")
+        # Si Supabase falla, la excepción sube y la API responde error: el evaluador ve que no se
+        # guardó en lugar de perder sus juicios en silencio.
+        self._request("POST", self.endpoint, body, {"Prefer": "return=minimal"})
+        if self._cache is not None:
+            self._cache.extend(records)
+
+
+def store_from_env(root: Path):
+    url, key = os.environ.get("SUPABASE_URL", ""), os.environ.get("SUPABASE_KEY", "")
+    if url and key:
+        return SupabaseStore(url, key)
+    return FileStore(Path(root) / "judgments.jsonl")
+
+
 class Lab:
     def __init__(self, engine: Recommender, root: Path):
         self.engine = engine
         self.root = Path(root)
         self.bank_path = self.root / "query_bank.json"
         self.pools_path = self.root / "pools.json"
-        self.judgments_path = self.root / "judgments.jsonl"
+        self.store = store_from_env(self.root)
         self.bank = load_bank(self.bank_path)
         self.by_id = {q["id"]: q for q in self.bank}
         self.pools = (
@@ -230,10 +304,7 @@ class Lab:
 
     # -- juicios
     def judgments(self) -> List[dict]:
-        if not self.judgments_path.exists():
-            return []
-        rows = [json.loads(line) for line in
-                self.judgments_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        rows = self.store.load()
         latest: Dict[tuple, dict] = {}
         for row in rows:  # el último juicio de cada (evaluador, consulta, destino) prevalece
             latest[(row["evaluator"], row["query_id"], row["town"])] = row
@@ -283,10 +354,7 @@ class Lab:
         if seen != pool:
             raise ValueError("Juzga todos los destinos del pool antes de guardar.")
         with _LOCK:
-            self.root.mkdir(parents=True, exist_ok=True)
-            with self.judgments_path.open("a", encoding="utf-8") as stream:
-                for record in records:
-                    stream.write(json.dumps(record, ensure_ascii=False) + "\n")
+            self.store.append(records)
         return len(records)
 
     def export(self, fmt: str = "json") -> str:
