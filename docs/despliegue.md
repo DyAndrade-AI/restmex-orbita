@@ -41,6 +41,9 @@ El Space gratuito se duerme tras 48 h sin visitas; la primera petición lo despi
 
 ## 2 bis. Railway (la que está en producción: API + web)
 
+URL pública: <https://web-production-d1f6e806.up.railway.app> (la API directa también responde en
+<https://restmex-orbita-production.up.railway.app>).
+
 Toda la infraestructura está en `.railway/railway.ts` (Infrastructure as Code de Railway):
 
 - **`restmex-orbita`**: la API léxica (`docker/api.Dockerfile`, sin torch). Railway inyecta `PORT`
