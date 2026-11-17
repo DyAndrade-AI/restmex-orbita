@@ -5,7 +5,7 @@ import { defineRailway, github, project, service, volume } from "railway/iac";
 export const partial = "restmex-orbita";
 export default defineRailway(() => {
   // Juicios del laboratorio y pools congelados: sobreviven a cada deploy.
-  const labels = volume("orbita-labels", { sizeMB: 1024 });
+  const labels = volume("orbita-labels", { sizeMB: 500 });
 
   const restmexOrbita = service("restmex-orbita", {
     source: github("DyAndrade-AI/restmex-orbita", { branch: "main", checkSuites: false }),
