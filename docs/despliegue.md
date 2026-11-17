@@ -39,6 +39,20 @@ La clave de Supabase solo la conoce la API: el navegador nunca habla con Supabas
 Para actualizar la API tras un push a `main`: *Settings → Factory rebuild*.
 El Space gratuito se duerme tras 48 h sin visitas; la primera petición lo despierta (~1–2 min).
 
+## 2 bis. Railway (alternativa a Hugging Face, la que está en producción)
+
+La API léxica (`docker/api.Dockerfile`, sin torch) corre en Railway; `railway.json` fija el
+Dockerfile y el healthcheck `/health`. Railway inyecta `PORT` y la API lo respeta.
+
+1. Railway → *New project → Deploy from GitHub repo* → `restmex-orbita` (auto-deploy en cada push
+   a `main`).
+2. **Variables**: `SUPABASE_URL`, `SUPABASE_KEY` y `ORBITA_CORS_ORIGIN` (URL de Netlify).
+3. *Settings → Networking → Generate domain*. Comprueba `https://<dominio>/health` → `"mode": "léxico"`.
+4. En Netlify cambia `PUBLIC_API_URL` a ese dominio y vuelve a desplegar.
+
+No se duerme como el Space gratuito. El modo léxico empata con el híbrido en el holdout
+(docs/experimentos_hybrid.md), así que no hace falta E5 en producción.
+
 ## 3. Netlify (≈3 min)
 
 1. *Add new site → Import an existing project → GitHub* → `restmex-orbita`. La configuración sale

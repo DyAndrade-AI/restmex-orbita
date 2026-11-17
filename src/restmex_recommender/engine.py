@@ -30,13 +30,16 @@ from .text import (
 )
 
 # Pesos de las señales. Se exponen para ablaciones reproducibles en la evaluación.
-# Híbrido elegido en calibración del holdout (docs/experimentos_hybrid.md): supera al anterior
-# (0.38/0.17/0.45) en prueba con ΔMRR +0.051, IC95 [+0.022, +0.080]; empata con el léxico.
-HYBRID_WEIGHTS = {"lexical": 0.40, "evidence": 0.20, "bm25": 0.30, "semantic": 0.10}
-PREVIOUS_HYBRID_WEIGHTS = {"lexical": 0.38, "evidence": 0.17, "semantic": 0.45}
-# Léxico: el ajuste (0.50/0.20/0.30 bm25) no mejora el MRR (criterio primario, IC95 incluye 0)
-# aunque sí el Hit@5; se conserva hasta confirmarlo con juicios humanos (docs/metodologia.md §4).
-LEXICAL_WEIGHTS = {"lexical": 0.68, "evidence": 0.32, "semantic": 0.0}
+# Híbrido elegido en calibración del holdout con la señal de cobertura (docs/experimentos_hybrid.md):
+# MRR de prueba 0.572, empatado con el léxico (0.575); E5 ya no aporta mejora medible.
+HYBRID_WEIGHTS = {"evidence": 0.20, "bm25": 0.30, "semantic": 0.10, "coverage": 0.40}
+PREVIOUS_HYBRID_WEIGHTS = {"lexical": 0.40, "evidence": 0.20, "bm25": 0.30, "semantic": 0.10}
+# Léxico con cobertura de facetas, elegido en la mitad de calibración del holdout
+# (docs/experimentos_lexical.md); el anterior era 0.68·tfidf + 0.32·evidencia.
+LEXICAL_WEIGHTS = {"lexical": 0.30, "evidence": 0.20, "coverage": 0.50, "semantic": 0.0}
+PREVIOUS_LEXICAL_WEIGHTS = {"lexical": 0.68, "evidence": 0.32, "semantic": 0.0}
+# Suavizado del lift r(d, G) / (mediana(G) + ε) en la señal de cobertura.
+COVERAGE_EPS = 1e-3
 # Fuerza del prior bayesiano para la calidad: equivale a 200 reseñas con la media global.
 QUALITY_PRIOR_REVIEWS = 200
 
@@ -209,6 +212,20 @@ class Recommender:
                 if local.max() > 0:
                     best_indices[i] = int(indices[int(np.argmax(local))])
         return scores, best_indices
+
+    def coverage_scores(self, text: str) -> np.ndarray:
+        """Cuánto habla cada pueblo de CADA faceta de la consulta, más que el pueblo típico.
+
+        Por faceta G: log(1 + r(d, G) / (mediana_d r(d, G) + ε)); se promedia con peso idf, así
+        un término raro ("termales") pesa más que uno genérico ("tranquilo")."""
+        groups = [g for g in explain.term_groups(self, text, expand_concepts=True) if g["known"]]
+        if not groups or self.term_rates is None:
+            return np.zeros(len(self.towns), dtype=np.float32)
+        rates = explain.group_rates(self, groups)
+        lift = np.log1p(rates / (np.median(rates, axis=0) + COVERAGE_EPS))
+        vocab, idf = self.vectorizer.vocabulary_, self.vectorizer.idf_
+        weight = np.array([max(idf[vocab[t]] for t in g["terms"]) for g in groups])
+        return (lift @ weight / weight.sum()).astype(np.float32)
 
     def bm25_scores(self, text: str) -> np.ndarray:
         """BM25 por pueblo (opcional): solo si existe artifacts/bm25.npz (ver experiments.py)."""
@@ -453,6 +470,10 @@ class Recommender:
             "bm25": (
                 _scale(self.bm25_scores(lexical_text))
                 if (w.get("bm25", 0) > 0 or all_signals) else zeros
+            ),
+            "coverage": (
+                _scale(self.coverage_scores(lexical_text))
+                if (w.get("coverage", 0) > 0 or all_signals) else zeros
             ),
         }
         combined = sum(w.get(name, 0) * values for name, values in signals.items())

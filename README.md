@@ -40,7 +40,7 @@ opción supere al Ancla. El proceso es determinista y sigue usando exclusivament
 `make validate-orbit` (≈90 s) responde las dos dudas obvias sobre lo experimental:
 
 - **¿Sirven las preguntas de Strange Loop?** Usuarios simulados con gustos ocultos: el top 1
-  clásico acierta su destino ideal el 65 %, Strange Loop sin preguntas el 85 % y con 3 preguntas
+  clásico acierta su destino ideal el 72 %, Strange Loop sin preguntas el 85 % y con 3 preguntas
   el 92 %; la pregunta de máxima información supera a una al azar (IC95 excluye 0), también con
   gustos fuera del prior del modelo.
 - **¿Dependen los roles de pesos elegidos a mano?** Con los 13 pesos perturbados ±50 % a la vez, la

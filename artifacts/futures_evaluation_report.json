@@ -2,14 +2,14 @@
   "scope": "Auditoría interna de constelaciones; no estima relevancia humana.",
   "queries": 10,
   "all_contracts_pass": true,
-  "mean_pairwise_lexical_distance": 0.5215,
-  "mean_resilience": 89.99,
+  "mean_pairwise_lexical_distance": 0.523,
+  "mean_resilience": 90.38,
   "results": [
     {
       "query": "Quiero playas tranquilas, agua turquesa y snorkel",
       "destinations": [
-        "Tulum",
         "Isla_Mujeres",
+        "Tulum",
         "Sayulita",
         "Palenque",
         "Cuatro_Cienegas"
@@ -24,9 +24,9 @@
       "destinations": [
         "Teotihuacan",
         "Cholula",
-        "Cuetzalan",
+        "Izamal",
         "Dolores_Hidalgo",
-        "Izamal"
+        "Cuetzalan"
       ],
       "unique": true,
       "deterministic": true,
@@ -94,23 +94,23 @@
       "destinations": [
         "Cholula",
         "Taxco",
-        "Dolores_Hidalgo",
+        "Coatepec",
         "Atlixco",
         "Izamal"
       ],
       "unique": true,
       "deterministic": true,
-      "mean_pairwise_lexical_distance": 0.5664,
-      "mean_resilience": 86.28
+      "mean_pairwise_lexical_distance": 0.5811,
+      "mean_resilience": 90.26
     },
     {
       "query": "Quiero cascadas, vegetación y aventura al aire libre",
       "destinations": [
         "Palenque",
-        "Zacatlan",
+        "Tapalpa",
         "Xilitla",
         "Loreto",
-        "Tapalpa"
+        "Zacatlan"
       ],
       "unique": true,
       "deterministic": true,

@@ -62,6 +62,10 @@ def main() -> None:
         f"(IC95 {boot['mrr']['ci95_low']:+.4f} a {boot['mrr']['ci95_high']:+.4f}); "
         f"ΔHit@5 = {boot['hit_at_5']['mean_diff']:+.4f} "
         f"(IC95 {boot['hit_at_5']['ci95_low']:+.4f} a {boot['hit_at_5']['ci95_high']:+.4f}).",
+        "",
+        "Léxico en producción (con cobertura de facetas) vs léxico anterior en prueba: " + "; ".join(
+            f"Δ{k.upper()} = {b['mean_diff']:+.4f} (IC95 {b['ci95_low']:+.4f} a {b['ci95_high']:+.4f})"
+            for k, b in report["lexical_new_vs_previous_test"].items()) + ".",
     ]) + "\n"
     (ROOT / f"docs/experimentos_{suffix}.md").write_text(text, encoding="utf-8")
     print(text)

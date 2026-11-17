@@ -3,8 +3,8 @@
 Protocolo (sin consultas escritas a mano):
 1. Holdout autosupervisado: reseñas reservadas fuera del índice, nombres enmascarados.
 2. División estratificada por pueblo: reseñas alternas a calibración y a prueba.
-3. Para cada consulta se calculan una sola vez las cuatro señales escaladas a [0, 1]:
-   perfil TF-IDF, evidencia por reseñas, BM25 medio por reseña y E5.
+3. Para cada consulta se calculan una sola vez las cinco señales escaladas a [0, 1]:
+   perfil TF-IDF, evidencia por reseñas, BM25 medio por reseña, E5 y cobertura de facetas.
 4. Cualquier sistema es una combinación convexa s(w) = Σ_i w_i·signal_i (+ ajustes de exclusión).
 5. Se elige w en calibración (MRR) y se reporta en prueba contra el híbrido actual con un
    bootstrap pareado (IC 95 % de la diferencia). Solo se adopta un cambio si el IC excluye 0.
@@ -18,7 +18,11 @@ from typing import Dict, List, Sequence, Tuple
 
 import numpy as np
 
-SIGNALS = ("lexical", "evidence", "bm25", "semantic")
+SIGNALS = ("lexical", "evidence", "bm25", "semantic", "coverage")
+
+
+LEXICAL_OLD = "lexico_anterior (0.68·tfidf + 0.32·evid)"
+LEXICAL_NEW = "lexico_cobertura (0.30/0.20/0.50 cob)"
 
 
 def signal_tensor(engine, queries: Sequence[Tuple[str, str]]) -> Tuple[np.ndarray, np.ndarray,
@@ -107,12 +111,14 @@ def named_systems(semantic: bool) -> Dict[str, np.ndarray]:
         "tfidf_perfil": w(lexical=1),
         "evidencia_reseñas": w(evidence=1),
         "bm25_medio": w(bm25=1),
-        "lexico_actual (0.68·tfidf + 0.32·evid)": w(lexical=0.68, evidence=0.32),
+        LEXICAL_OLD: w(lexical=0.68, evidence=0.32),
         "bm25 + evidencia (0.68/0.32)": w(bm25=0.68, evidence=0.32),
+        "cobertura_facetas": w(coverage=1),
+        LEXICAL_NEW: w(lexical=0.30, evidence=0.20, coverage=0.50),
     }
     if semantic:
         systems["e5"] = w(semantic=1)
-        systems["hibrido_actual (0.38/0.17/0.45)"] = w(lexical=0.38, evidence=0.17, semantic=0.45)
+        systems["hibrido_original (0.38/0.17/0.45)"] = w(lexical=0.38, evidence=0.17, semantic=0.45)
     return systems
 
 
@@ -123,8 +129,7 @@ def run(engine, queries, step: float = 0.1) -> dict:
     calib, test = np.array(calib_local), np.array(test_local)
     semantic = bool(engine.semantic_enabled)
     systems = named_systems(semantic)
-    reference = "hibrido_actual (0.38/0.17/0.45)" if semantic else (
-        "lexico_actual (0.68·tfidf + 0.32·evid)")
+    reference = "hibrido_original (0.38/0.17/0.45)" if semantic else LEXICAL_OLD
 
     def evaluate(weights: np.ndarray, rows: np.ndarray) -> np.ndarray:
         return ranks_for(weights, tensor[rows], adjust[rows], target[rows])
@@ -137,7 +142,7 @@ def run(engine, queries, step: float = 0.1) -> dict:
             "test": metrics_from_ranks(evaluate(weights, test)),
         }
 
-    grid = simplex_grid(step, [True, True, True, semantic])
+    grid = simplex_grid(step, [True, True, True, semantic, True])
     best_w, best_mrr = None, -math.inf
     for weights in grid:
         mrr = float(np.mean(1.0 / evaluate(weights, calib)))
@@ -145,6 +150,7 @@ def run(engine, queries, step: float = 0.1) -> dict:
             best_w, best_mrr = weights, mrr
     tuned_test = evaluate(best_w, test)
     ref_test = evaluate(systems[reference], test)
+    new_test = evaluate(systems[LEXICAL_NEW], test)
     results["ajustado_en_calibracion"] = {
         "weights": dict(zip(SIGNALS, map(float, best_w))),
         "calibration": metrics_from_ranks(evaluate(best_w, calib)),
@@ -161,5 +167,12 @@ def run(engine, queries, step: float = 0.1) -> dict:
             "mrr": paired_bootstrap(1.0 / tuned_test, 1.0 / ref_test),
             "hit_at_5": paired_bootstrap((tuned_test <= 5).astype(float),
                                          (ref_test <= 5).astype(float)),
+        },
+        # Léxico en producción (con cobertura) contra el léxico anterior, en prueba.
+        "lexical_new_vs_previous_test": {
+            "mrr": paired_bootstrap(1.0 / new_test, 1.0 / evaluate(systems[LEXICAL_OLD], test)),
+            "hit_at_1": paired_bootstrap(
+                (new_test == 1).astype(float),
+                (evaluate(systems[LEXICAL_OLD], test) == 1).astype(float)),
         },
     }

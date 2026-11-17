@@ -27,7 +27,8 @@ from restmex_recommender import evaluation as ev  # noqa: E402
 from restmex_recommender.lab import Lab  # noqa: E402
 
 HOST = os.environ.get("ORBITA_HOST", "127.0.0.1")
-PORT = int(os.environ.get("ORBITA_API_PORT", "8765"))
+# PORT lo inyectan plataformas como Railway y tiene prioridad sobre el puerto propio.
+PORT = int(os.environ.get("PORT") or os.environ.get("ORBITA_API_PORT", "8765"))
 CORS_ORIGIN = os.environ.get("ORBITA_CORS_ORIGIN", "http://127.0.0.1:4321")
 ARTIFACTS = Path(os.environ.get("ORBITA_ARTIFACTS", ROOT / "artifacts"))
 MODEL_DIR = ROOT / "models/multilingual-e5-base"

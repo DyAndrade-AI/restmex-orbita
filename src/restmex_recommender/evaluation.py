@@ -161,12 +161,16 @@ def baseline_suite(engine: Recommender, gold: List[dict], seed: int = 2025) -> d
 
 def ablation_suite(engine: Recommender, gold: List[dict]) -> dict:
     """Contribución de cada señal: mismas consultas, pesos distintos."""
-    from .engine import HYBRID_WEIGHTS, LEXICAL_WEIGHTS, PREVIOUS_HYBRID_WEIGHTS
+    from .engine import (
+        HYBRID_WEIGHTS, LEXICAL_WEIGHTS, PREVIOUS_HYBRID_WEIGHTS, PREVIOUS_LEXICAL_WEIGHTS,
+    )
 
     configs = {
         "solo_perfil_lexico": {"lexical": 1.0, "evidence": 0.0, "semantic": 0.0},
         "solo_evidencia": {"lexical": 0.0, "evidence": 1.0, "semantic": 0.0},
-        "lexico_mas_evidencia": dict(LEXICAL_WEIGHTS),
+        "solo_cobertura": {"coverage": 1.0},
+        "lexico_anterior": dict(PREVIOUS_LEXICAL_WEIGHTS),
+        "lexico_cobertura": dict(LEXICAL_WEIGHTS),
         "bm25": {"bm25": 1.0},
     }
     if engine.semantic_enabled:

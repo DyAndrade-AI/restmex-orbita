@@ -31,7 +31,7 @@ flowchart LR
 Datos: solo `data/Rest-Mex_2025_train_clean.csv`. Son 208,051 reseñas de 40 pueblos; el SHA-256
 está en `artifacts/manifest.json` y lo verifica `tests/test_contract.py`.
 
-Para una consulta $q$ y un destino $d$ se calculan cuatro señales, cada una escalada a $[0,1]$
+Para una consulta $q$ y un destino $d$ se calculan cinco señales, cada una escalada a $[0,1]$
 entre los 40 destinos: $\tilde s(d) = (s(d) - \min s)/(\max s - \min s)$.
 
 | Señal | Definición |
@@ -40,13 +40,18 @@ entre los 40 destinos: $\tilde s(d) = (s(d) - \min s)/(\max s - \min s)$.
 | Evidencia $s_{evi}$ | $0.65\max + 0.35\,\overline{\text{top-}3}$ del coseno entre $\mathbf q$ y una muestra estratificada de reseñas positivas de $d$ (40 por pueblo y tipo). |
 | BM25 medio $s_{bm25}$ | $\sum_{t\in q} \mathrm{idf}(t)\,\frac{1}{n_d}\sum_{r\in d}\frac{tf(r,t)(k_1+1)}{tf(r,t)+k_1(1-b+b\,|r|/\overline{|r|})}$, con $k_1=1.2$ y $b=0.75$. |
 | Semántica $s_{sem}$ | Máximo coseno entre el embedding E5 de la consulta y los perfiles textuales de $d$. |
+| Cobertura de facetas $s_{cov}$ | $\sum_G \mathrm{idf}_G \log\big(1 + r(d,G)/(m(G)+10^{-3})\big) / \sum_G \mathrm{idf}_G$, con $r(d,G)$ y $m(G)$ definidos en §2. Premia al destino que habla de **cada** faceta de la consulta más que el destino típico; el peso idf hace que una faceta rara ("termales") pese más que una genérica ("tranquilo"). |
 
 Puntaje compatible: $u(d) = \sum_i w_i\,\tilde s_i(d) - 0.28\,\pi(d) - \mathbb 1[d \text{ viola}] - \mathbb 1[d \text{ excluido por nombre}] + 0.35\,\mathbb 1[d \text{ nombrado}]$.
 El reportado es $\tilde u(d)\in[0,100]$.
 
-- **Pesos híbridos:** $w = (0.40, 0.20, 0.30, 0.10)$ para (TF-IDF, evidencia, BM25, E5), elegidos
-  en calibración (§4).
-- **Modo léxico** (Docker): $(0.68, 0.32)$.
+- **Modo léxico** (Docker y producción): $w = (0.30, 0.20, 0.50)$ para (TF-IDF, evidencia,
+  cobertura). Frente al anterior $(0.68, 0.32)$ sube el MRR de prueba del holdout de 0.511 a 0.575
+  (ΔMRR +0.063, IC95 [+0.035, +0.093]) y el Hit@1 de 0.396 a 0.471 (§4).
+- **Pesos híbridos:** $w = (0.20, 0.30, 0.10, 0.40)$ para (evidencia, BM25, E5, cobertura),
+  elegidos en calibración (§4). Empatan con el léxico (MRR 0.572): E5 ya no aporta mejora medible.
+- Los sinónimos de dominio adicionales (lago, termales, café…) se probaron y **se descartaron**:
+  bajaban el MRR del holdout de calibración (0.597 → 0.592) y el P@5 del gold de ajuste.
 - **Penalización blanda** $\pi$: afinidad escalada con el concepto excluido.
 - **Restricción dura:** se aplica solo si hay **evidencia explícita** (§3).
 
@@ -132,18 +137,19 @@ El léxico ajustado mejora el Hit@5 de forma significativa, pero no el criterio 
 Adoptarlo por la métrica secundaria sería elegir la métrica después de ver el resultado. Queda
 como hipótesis a confirmar con los juicios humanos de la partición calibration.
 
-Métricas finales (`make evaluate-semantic`, modo híbrido):
+Métricas finales (`make evaluate-full`, modo léxico con cobertura de facetas, el de producción):
 
 | Fuente | Métrica | Sistema | Popularidad | Azar |
 |---|---|---|---|---|
-| Holdout (600) | Hit@5 | 0.662 | 0.125 | 0.125 |
-| Holdout | MRR | 0.541 | 0.107 | — |
+| Holdout (600) | Hit@1 | 0.475 | 0.025 | 0.025 |
+| Holdout (600) | Hit@5 | 0.708 | 0.125 | 0.125 |
+| Holdout | MRR | 0.587 | 0.107 | — |
 | Holdout | Pueblo correcto en bottom 5 | 0.015 | 0.125 | 0.125 |
-| Seed | Precision@5 (11 consultas con ≥5 relevantes) | 0.891 | — | — |
+| Seed | Precision@5 (11 consultas con ≥5 relevantes) | 0.927 | — | — |
 | Seed | Violaciones de exclusión en top 5 | 0.000 | 1.000 | 0.422 |
 
-**Sesgo por volumen:** Spearman entre apariciones en el top 5 y número de reseñas es ρ = 0.30
-(p = 0.063), y entre Hit@5 por pueblo y reseñas en el holdout ρ = 0.20. Es leve y no
+**Sesgo por volumen:** Spearman entre apariciones en el top 5 y número de reseñas es ρ = 0.17
+(p = 0.30; antes de la cobertura era 0.30), y entre Hit@5 por pueblo y reseñas en el holdout ρ = 0.25. Es leve y no
 significativo. Los perfiles promedian por pueblo y BM25 promedia por reseña precisamente para que
 Tulum (45,345 reseñas) no gane por volumen.
 
@@ -342,7 +348,7 @@ make benchmark-api && make smoke-e2e
 
 **Demostrado con datos:**
 
-- Supera con amplitud a popularidad y azar: Hit@5 0.662 frente a 0.125 en el holdout.
+- Supera con amplitud a popularidad y azar: Hit@5 0.708 frente a 0.125 en el holdout.
 - El nuevo híbrido es significativamente mejor que el anterior.
 - El bottom 5 casi nunca contiene al destino correcto (1.5 % frente a 12.5 % al azar).
 - Las restricciones se respetan en el top 5 del seed.

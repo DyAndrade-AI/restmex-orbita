@@ -103,3 +103,10 @@ def test_multiverse_is_deterministic(engine):
     assert first["seed"] == second["seed"]
     assert first["destinations"] == second["destinations"]
 
+
+
+def test_coverage_favours_towns_that_mention_the_rare_facet(engine):
+    # "termales" es raro en el corpus: el pueblo de balnearios debe dominar la cobertura.
+    scores = engine.coverage_scores("viaje relajante con aguas termales")
+    assert engine.towns[int(scores.argmax())] == "Ixtapan_de_la_Sal"
+    assert engine.coverage_scores("zzzz qqqq").sum() == 0

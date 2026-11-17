@@ -1,19 +1,20 @@
 {
-  "protocol": "Comparación de señales de recuperación con selección en calibración y reporte en prueba.\n\nProtocolo (sin consultas escritas a mano):\n1. Holdout autosupervisado: reseñas reservadas fuera del índice, nombres enmascarados.\n2. División estratificada por pueblo: reseñas alternas a calibración y a prueba.\n3. Para cada consulta se calculan una sola vez las cuatro señales escaladas a [0, 1]:\n   perfil TF-IDF, evidencia por reseñas, BM25 medio por reseña y E5.\n4. Cualquier sistema es una combinación convexa s(w) = Σ_i w_i·signal_i (+ ajustes de exclusión).\n5. Se elige w en calibración (MRR) y se reporta en prueba contra el híbrido actual con un\n   bootstrap pareado (IC 95 % de la diferencia). Solo se adopta un cambio si el IC excluye 0.",
+  "protocol": "Comparación de señales de recuperación con selección en calibración y reporte en prueba.\n\nProtocolo (sin consultas escritas a mano):\n1. Holdout autosupervisado: reseñas reservadas fuera del índice, nombres enmascarados.\n2. División estratificada por pueblo: reseñas alternas a calibración y a prueba.\n3. Para cada consulta se calculan una sola vez las cinco señales escaladas a [0, 1]:\n   perfil TF-IDF, evidencia por reseñas, BM25 medio por reseña, E5 y cobertura de facetas.\n4. Cualquier sistema es una combinación convexa s(w) = Σ_i w_i·signal_i (+ ajustes de exclusión).\n5. Se elige w en calibración (MRR) y se reporta en prueba contra el híbrido actual con un\n   bootstrap pareado (IC 95 % de la diferencia). Solo se adopta un cambio si el IC excluye 0.",
   "queries": {
     "calibration": 320,
     "test": 280
   },
   "semantic": false,
-  "reference": "lexico_actual (0.68·tfidf + 0.32·evid)",
-  "grid_size": 66,
+  "reference": "lexico_anterior (0.68·tfidf + 0.32·evid)",
+  "grid_size": 286,
   "systems": {
     "tfidf_perfil": {
       "weights": {
         "lexical": 1.0,
         "evidence": 0.0,
         "bm25": 0.0,
-        "semantic": 0.0
+        "semantic": 0.0,
+        "coverage": 0.0
       },
       "calibration": {
         "mrr": 0.5202153166625092,
@@ -37,7 +38,8 @@
         "lexical": 0.0,
         "evidence": 1.0,
         "bm25": 0.0,
-        "semantic": 0.0
+        "semantic": 0.0,
+        "coverage": 0.0
       },
       "calibration": {
         "mrr": 0.360119827613458,
@@ -61,7 +63,8 @@
         "lexical": 0.0,
         "evidence": 0.0,
         "bm25": 1.0,
-        "semantic": 0.0
+        "semantic": 0.0,
+        "coverage": 0.0
       },
       "calibration": {
         "mrr": 0.4973597946553081,
@@ -80,12 +83,13 @@
         "mean_rank": 7.792857142857143
       }
     },
-    "lexico_actual (0.68·tfidf + 0.32·evid)": {
+    "lexico_anterior (0.68·tfidf + 0.32·evid)": {
       "weights": {
         "lexical": 0.68,
         "evidence": 0.32,
         "bm25": 0.0,
-        "semantic": 0.0
+        "semantic": 0.0,
+        "coverage": 0.0
       },
       "calibration": {
         "mrr": 0.5293959503131223,
@@ -109,7 +113,8 @@
         "lexical": 0.0,
         "evidence": 0.32,
         "bm25": 0.68,
-        "semantic": 0.0
+        "semantic": 0.0,
+        "coverage": 0.0
       },
       "calibration": {
         "mrr": 0.5326952606997192,
@@ -128,44 +133,109 @@
         "mean_rank": 7.4678571428571425
       }
     },
-    "ajustado_en_calibracion": {
+    "cobertura_facetas": {
       "weights": {
-        "lexical": 0.5,
-        "evidence": 0.2,
-        "bm25": 0.3,
-        "semantic": 0.0
+        "lexical": 0.0,
+        "evidence": 0.0,
+        "bm25": 0.0,
+        "semantic": 0.0,
+        "coverage": 1.0
       },
       "calibration": {
-        "mrr": 0.5424320354665424,
-        "hit_at_1": 0.425,
-        "hit_at_5": 0.65625,
-        "ndcg_at_5": 0.5489951442363422,
-        "bottom5_rate": 0.0125,
-        "mean_rank": 6.553125
+        "mrr": 0.5582079436031122,
+        "hit_at_1": 0.434375,
+        "hit_at_5": 0.703125,
+        "ndcg_at_5": 0.5764792675907415,
+        "bottom5_rate": 0.01875,
+        "mean_rank": 6.359375
       },
       "test": {
-        "mrr": 0.5218723872686221,
-        "hit_at_1": 0.4,
-        "hit_at_5": 0.6607142857142857,
-        "ndcg_at_5": 0.5382431243705774,
+        "mrr": 0.5408850307601215,
+        "hit_at_1": 0.43214285714285716,
+        "hit_at_5": 0.6714285714285714,
+        "ndcg_at_5": 0.5533260562691674,
+        "bottom5_rate": 0.02142857142857143,
+        "mean_rank": 6.639285714285714
+      }
+    },
+    "lexico_cobertura (0.30/0.20/0.50 cob)": {
+      "weights": {
+        "lexical": 0.3,
+        "evidence": 0.2,
+        "bm25": 0.0,
+        "semantic": 0.0,
+        "coverage": 0.5
+      },
+      "calibration": {
+        "mrr": 0.5967987435205144,
+        "hit_at_1": 0.478125,
+        "hit_at_5": 0.73125,
+        "ndcg_at_5": 0.6139646723532742,
+        "bottom5_rate": 0.0125,
+        "mean_rank": 5.784375
+      },
+      "test": {
+        "mrr": 0.5748275947645528,
+        "hit_at_1": 0.4714285714285714,
+        "hit_at_5": 0.6821428571428572,
+        "ndcg_at_5": 0.5823272116235965,
         "bottom5_rate": 0.017857142857142856,
-        "mean_rank": 7.253571428571429
+        "mean_rank": 6.207142857142857
+      }
+    },
+    "ajustado_en_calibracion": {
+      "weights": {
+        "lexical": 0.2,
+        "evidence": 0.1,
+        "bm25": 0.1,
+        "semantic": 0.0,
+        "coverage": 0.6
+      },
+      "calibration": {
+        "mrr": 0.5988744326774389,
+        "hit_at_1": 0.484375,
+        "hit_at_5": 0.734375,
+        "ndcg_at_5": 0.6166063949537202,
+        "bottom5_rate": 0.01875,
+        "mean_rank": 5.803125
+      },
+      "test": {
+        "mrr": 0.567729229273745,
+        "hit_at_1": 0.45714285714285713,
+        "hit_at_5": 0.675,
+        "ndcg_at_5": 0.5741729136894794,
+        "bottom5_rate": 0.02142857142857143,
+        "mean_rank": 6.2178571428571425
       }
     }
   },
   "tuned_vs_reference_test": {
     "mrr": {
-      "mean_diff": 0.010480611167845228,
-      "ci95_low": -0.009496618753130199,
-      "ci95_high": 0.0313704192440176,
-      "p_two_sided": 0.3052
+      "mean_diff": 0.05633745317296826,
+      "ci95_low": 0.024109484655620624,
+      "ci95_high": 0.08907567212058595,
+      "p_two_sided": 0.0002
     },
     "hit_at_5": {
-      "mean_diff": 0.04642857142857143,
+      "mean_diff": 0.060714285714285714,
       "ci95_low": 0.02142857142857143,
-      "ci95_high": 0.075,
+      "ci95_high": 0.1,
+      "p_two_sided": 0.0028
+    }
+  },
+  "lexical_new_vs_previous_test": {
+    "mrr": {
+      "mean_diff": 0.06343581866377608,
+      "ci95_low": 0.03526248607593988,
+      "ci95_high": 0.09322175890062612,
+      "p_two_sided": 0.0002
+    },
+    "hit_at_1": {
+      "mean_diff": 0.075,
+      "ci95_low": 0.02857142857142857,
+      "ci95_high": 0.12142857142857143,
       "p_two_sided": 0.0002
     }
   },
-  "duration_s": 44.8
+  "duration_s": 47.8
 }
