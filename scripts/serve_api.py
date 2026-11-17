@@ -11,6 +11,7 @@ import hashlib
 import hmac
 import json
 import os
+import socket
 import sys
 import threading
 import time
@@ -315,6 +316,8 @@ class ApiHandler(BaseHTTPRequestHandler):
 
 def main() -> None:
     load_engines()
+    if ":" in HOST:  # "::" escucha IPv6 e IPv4 (la red privada de Railway es IPv6)
+        ThreadingHTTPServer.address_family = socket.AF_INET6
     server = ThreadingHTTPServer((HOST, PORT), ApiHandler)
     print(f"Órbita API disponible en http://{HOST}:{PORT}", flush=True)
     try:

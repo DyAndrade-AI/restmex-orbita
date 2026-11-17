@@ -56,6 +56,7 @@ la CLI:
 | Servicio | Variable | Valor |
 |---|---|---|
 | restmex-orbita | `RAILWAY_RUN_UID` | `0` (el volumen se monta como root) |
+| restmex-orbita | `ORBITA_HOST` | `::` (la red privada es IPv6; también acepta IPv4) |
 | restmex-orbita | `RAILWAY_DOCKERFILE_PATH` | `docker/api.Dockerfile` |
 | web | `API_UPSTREAM` | `http://${{restmex-orbita.RAILWAY_PRIVATE_DOMAIN}}:8080` |
 
