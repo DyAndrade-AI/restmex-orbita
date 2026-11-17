@@ -45,8 +45,8 @@ Toda la infraestructura está en `.railway/railway.ts` (Infrastructure as Code d
 
 - **`restmex-orbita`**: la API léxica (`docker/api.Dockerfile`, sin torch). Railway inyecta `PORT`
   y la API lo respeta. Volumen `orbita-labels` montado en `/app/eval/labels`: ahí viven
-  `judgments.jsonl` y `pools.json`, que sobreviven a cada deploy. Al arrancar se refresca
-  `query_bank.json` desde el repo; los pools congelados nunca se pisan.
+  `judgments.jsonl` y `pools.json` (los pools se congelan la primera vez que se pide cada consulta),
+  que sobreviven a cada deploy. Al arrancar se refresca `query_bank.json` desde el repo.
 - **`web`**: Astro + nginx (`web/`). nginx reenvía `/api` y `/health` a la API por la red
   privada, así que el navegador habla con un solo dominio y no hace falta CORS.
 
