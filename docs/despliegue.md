@@ -39,19 +39,30 @@ La clave de Supabase solo la conoce la API: el navegador nunca habla con Supabas
 Para actualizar la API tras un push a `main`: *Settings → Factory rebuild*.
 El Space gratuito se duerme tras 48 h sin visitas; la primera petición lo despierta (~1–2 min).
 
-## 2 bis. Railway (alternativa a Hugging Face, la que está en producción)
+## 2 bis. Railway (la que está en producción: API + web)
 
-La API léxica (`docker/api.Dockerfile`, sin torch) corre en Railway; `railway.json` fija el
-Dockerfile y el healthcheck `/health`. Railway inyecta `PORT` y la API lo respeta.
+Toda la infraestructura está en `.railway/railway.ts` (Infrastructure as Code de Railway):
 
-1. Railway → *New project → Deploy from GitHub repo* → `restmex-orbita` (auto-deploy en cada push
-   a `main`).
-2. **Variables**: `SUPABASE_URL`, `SUPABASE_KEY` y `ORBITA_CORS_ORIGIN` (URL de Netlify).
-3. *Settings → Networking → Generate domain*. Comprueba `https://<dominio>/health` → `"mode": "léxico"`.
-4. En Netlify cambia `PUBLIC_API_URL` a ese dominio y vuelve a desplegar.
+- **`restmex-orbita`**: la API léxica (`docker/api.Dockerfile`, sin torch). Railway inyecta `PORT`
+  y la API lo respeta. Volumen `orbita-labels` montado en `/app/eval/labels`: ahí viven
+  `judgments.jsonl` y `pools.json`, que sobreviven a cada deploy. Al arrancar se refresca
+  `query_bank.json` desde el repo; los pools congelados nunca se pisan.
+- **`web`**: Astro + nginx (`web/`). nginx reenvía `/api` y `/health` a la API por la red
+  privada, así que el navegador habla con un solo dominio y no hace falta CORS.
 
-No se duerme como el Space gratuito. El modo léxico empata con el híbrido en el holdout
-(docs/experimentos_hybrid.md), así que no hace falta E5 en producción.
+Las variables no las gestiona el IaC (`variables: { managed: false }`); se ponen en el panel o con
+la CLI:
+
+| Servicio | Variable | Valor |
+|---|---|---|
+| restmex-orbita | `RAILWAY_RUN_UID` | `0` (el volumen se monta como root) |
+| restmex-orbita | `RAILWAY_DOCKERFILE_PATH` | `docker/api.Dockerfile` |
+| web | `API_UPSTREAM` | `http://${{restmex-orbita.RAILWAY_PRIVATE_DOMAIN}}:8080` |
+
+Cambios de infraestructura: edita `.railway/railway.ts`, `railway config plan` y
+`railway config apply`. El código se despliega solo con cada push a `main`.
+
+Exportar los juicios: `https://<dominio-web>/api/lab/export?format=csv`.
 
 ## 3. Netlify (≈3 min)
 

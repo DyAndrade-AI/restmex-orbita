@@ -1,0 +1,8 @@
+{
+  "name": "restmex-orbita-infra",
+  "private": true,
+  "description": "Solo para la infraestructura de Railway (.railway/railway.ts); la web vive en web/.",
+  "devDependencies": {
+    "railway": "3.17.0"
+  }
+}

@@ -25,3 +25,4 @@ eval/pools.json
 
 # Renders maestros de video (>100 MB, límite de GitHub); las versiones web están en web/public/media/
 video/*.mp4
+/node_modules/

@@ -11,7 +11,9 @@ RUN npm run build
 
 FROM nginx:1.27-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# La imagen de nginx sustituye ${API_UPSTREAM} al arrancar (solo variables definidas, no $uri).
+ENV API_UPSTREAM=http://api:8765
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 8080
