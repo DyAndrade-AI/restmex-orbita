@@ -1,0 +1,190 @@
+/* Capa de diseño del rediseño: jerarquía, roles, Strange Loop nocturno y evidencia.
+   Se carga después de global.css y solo redefine lo que cambió de estructura. */
+:root {
+  --sky: #8db6ff;
+  --violet: #d89cff;
+  --ivory: #f6f3ec;
+  --ink-dark: #102027;
+  --r-ancla: #2fb894;
+  --r-superviviente: #3d7fd6;
+  --r-portal: #c98a1b;
+  --r-especialista: #d0583f;
+  --r-comodin: #9b5fc9;
+  --radius: 14px;
+}
+
+.skip-link { position: absolute; left: 16px; top: -60px; z-index: 50; padding: 10px 14px; background: var(--mint); color: var(--night); font-weight: 700; border-radius: 8px; }
+.skip-link:focus { top: 12px; }
+:focus-visible { outline: 2px solid var(--sun); outline-offset: 3px; }
+section[id] { scroll-margin-top: 16px; }
+
+/* ---------- Hero ---------- */
+.hero h1 { font-size: clamp(42px, 5.4vw, 74px); }
+.hero-play span { font-size: 18px; }
+.hero-stats dt { white-space: nowrap; }
+.hero-footnote { margin: 14px 0 0; max-width: 600px; color: rgba(145, 166, 165, .8); font-size: 12px; line-height: 1.6; }
+.p-four { background: var(--sky); color: var(--sky); bottom: 4%; right: 24%; }
+.p-five { background: var(--violet); color: var(--violet); top: 30%; right: -1%; }
+.orbit-visual .planet::after { color: #b9cbc9; }
+#api-status.offline { color: #ffb4a2; }
+
+/* ---------- Encabezados de sección ---------- */
+.section-heading h2 { text-wrap: balance; }
+.section-heading > p { text-wrap: pretty; }
+.orbit-section { background: var(--ivory); }
+.risk-help { margin: 10px 0 0; color: #5b6f6c; font-size: 12px; line-height: 1.5; }
+
+/* ---------- Leyenda de roles ---------- */
+.role-legend { list-style: none; margin: 0 0 34px; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.role-legend li { --c: var(--r-ancla); position: relative; padding: 16px 16px 18px; background: #fff; border: 1px solid #ddd6c6; border-radius: var(--radius); display: grid; gap: 6px; overflow: hidden; }
+.role-legend li::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--c); }
+.role-legend i { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--c) 14%, white); color: var(--c); font-style: normal; font-size: 15px; }
+.role-legend b { font-size: 15px; color: var(--ink-dark); }
+.role-legend span { color: #56645f; font-size: 12.5px; line-height: 1.45; }
+[data-role="Superviviente"] { --c: var(--r-superviviente); }
+[data-role="Portal"] { --c: var(--r-portal); }
+[data-role="Especialista"] { --c: var(--r-especialista); }
+[data-role="Comodín"] { --c: var(--r-comodin); }
+[data-role="Ancla"] { --c: var(--r-ancla); }
+
+/* ---------- Resultados de Órbita ---------- */
+.orbit-results { padding-top: 70px; animation: rise .6s ease both; }
+.atoms-panel { display: grid; grid-template-columns: minmax(220px, .8fr) 2fr; gap: 28px; align-items: center; padding: 22px 26px; margin-bottom: 22px; background: #fff; border: 1px solid #ddd6c6; border-radius: var(--radius); }
+.atoms-panel .eyebrow { margin-bottom: 6px; color: #216d61; }
+.atoms-help { margin: 0; color: #56645f; font-size: 13px; line-height: 1.5; }
+.atoms { display: flex; flex-wrap: wrap; gap: 10px; }
+.atom { display: inline-flex; align-items: center; gap: 9px; padding: 10px 16px; border-radius: 999px; background: #eaf6f1; border: 1px solid #b9e2d4; color: #134b42; font-weight: 700; font-size: 14px; animation: rise .5s ease both; }
+.atom i { width: 9px; height: 9px; border-radius: 50%; background: var(--r-ancla); box-shadow: 0 0 0 4px rgba(47, 184, 148, .18); }
+.atom.excluded { background: #fff1ec; border-color: #f0c4b6; color: #8a3a28; }
+.atom.excluded i { width: auto; height: auto; background: none; box-shadow: none; font-style: normal; color: #c2472d; }
+.orbit-note { margin: 0 0 18px; padding: 12px 16px; background: #fff8e8; border: 1px solid #ecd9a6; border-radius: 10px; color: #6b5414; font-size: 13px; }
+.orbit-results .orbit-grid { gap: 14px; }
+.orbit-results .future-card { position: relative; border-radius: var(--radius); border-color: #ddd6c6; background: #fff; transition: transform .25s ease, box-shadow .25s ease; animation: rise .55s ease both; }
+.orbit-results .future-card:nth-child(2) { animation-delay: .06s; } .orbit-results .future-card:nth-child(3) { animation-delay: .12s; }
+.orbit-results .future-card:nth-child(4) { animation-delay: .18s; } .orbit-results .future-card:nth-child(5) { animation-delay: .24s; }
+.orbit-results .future-card::before { content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 3px; border-radius: 3px; background: var(--c); }
+.orbit-results .future-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -24px rgba(16, 32, 39, .45); }
+.orbit-results .future-card .role-pill { color: var(--c); font-weight: 700; }
+.role-icon { width: 22px; height: 22px; display: inline-grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--c) 15%, white); font-size: 11px; }
+.orbit-results .future-card.anchor { background: linear-gradient(160deg, #0c2733, #08161f); border-color: #1d4a4c; }
+.orbit-results .future-card.anchor .role-icon { background: rgba(124, 230, 199, .14); }
+.soft-details { margin-top: 24px; padding: 16px 20px; background: #fff; border: 1px solid #ddd6c6; border-radius: var(--radius); }
+.soft-details summary, .math-panel summary, .method-details summary { cursor: pointer; font-weight: 700; }
+.soft-details summary { color: #216d61; }
+.fine { color: #6a7874; font-size: 12px; line-height: 1.55; }
+
+/* ---------- Strange Loop (sección nocturna) ---------- */
+.loop-section { background: radial-gradient(900px 520px at 85% 0%, rgba(124, 230, 199, .08), transparent 60%), radial-gradient(800px 500px at 0% 100%, rgba(242, 200, 121, .06), transparent 60%), var(--night); color: var(--ink); }
+.loop-section .section-heading > p, .loop-section .basin-heading p { color: var(--muted); }
+.loop-steps { list-style: none; margin: 0 0 36px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+.loop-steps li { padding: 18px 18px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.loop-steps span { display: block; margin-bottom: 8px; color: var(--sun); font: 11px var(--mono); letter-spacing: .12em; }
+.loop-steps b { color: var(--ink); }
+.loop-empty { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px; border: 1px dashed rgba(124, 230, 199, .3); border-radius: var(--radius); color: var(--muted); }
+.loop-empty p { margin: 0; }
+.loop-section .results { padding-top: 10px; }
+.loop-title { margin: 0; font-size: clamp(24px, 3vw, 34px); letter-spacing: -.03em; }
+.loop-section .multiverse-stats { background: rgba(13, 36, 48, .55); border-color: var(--line); border-radius: var(--radius); overflow: hidden; }
+.loop-section .multiverse-stats div { border-color: var(--line) !important; }
+.loop-section .multiverse-stats strong { color: var(--ink); }
+.loop-section .multiverse-stats span { color: var(--muted); }
+.stat-text { font-size: clamp(18px, 2vw, 24px) !important; line-height: 1.2; letter-spacing: -.02em; }
+#change-value { color: var(--muted) !important; }
+#change-value.changed { color: var(--sun) !important; }
+.loop-section .facet-row span { background: rgba(124, 230, 199, .08); border-color: rgba(124, 230, 199, .25); color: var(--ink); }
+.loop-section .reset-loop { background: transparent; color: var(--mint); border-color: rgba(124, 230, 199, .35); }
+.loop-section .basin-card { border-radius: var(--radius); }
+.sacrifice-console { border-radius: var(--radius); border: 1px solid rgba(242, 200, 121, .22); }
+.sacrifice-actions button { border-radius: 12px; min-height: 104px; }
+.sacrifice-actions strong { font-size: 22px !important; }
+.sacrifice-actions small b { color: var(--sun); font-weight: 700; }
+.loop-section .shift-panel { background: rgba(13, 36, 48, .6); border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); }
+.loop-section .shift-list span, .loop-section .shift-list i { color: var(--muted); }
+.basin-ci { margin: 0 0 8px; font-size: 12px; }
+.math-panel { margin-top: 26px; padding: 18px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(9, 27, 39, .7); }
+.math-panel summary { color: var(--mint); }
+.math-panel p, .math-panel li, .math-panel .simulation-disclaimer { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.math-panel h4 { margin: 22px 0 10px; }
+.math-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 18px 0 8px; }
+.math-grid div { padding: 16px; border: 1px solid var(--line); border-radius: 10px; display: grid; gap: 4px; }
+.math-grid strong { font-size: 26px; }
+.math-grid span { color: var(--muted); font-size: 12px; }
+.formula-list { margin: 10px 0 0; padding-left: 18px; display: grid; gap: 6px; }
+.formula-list b { color: var(--ink); }
+.loop-section .bottom-orbit li { color: var(--muted); }
+.loop-section .trajectory-panel { border-radius: var(--radius); }
+.loop-section .simulation-disclaimer { color: var(--muted); }
+
+/* ---------- Ranking 5 + 5: el Bottom 5 pesa menos ---------- */
+.bottom-column { opacity: .92; }
+.bottom-column h3 { color: #5b6f6c; }
+.bottom-column .dest-card { background: #f7f9f7; }
+
+/* ---------- Evidencia ---------- */
+.proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.proof { padding: 26px 24px 24px; display: flex; flex-direction: column; gap: 10px; background: linear-gradient(180deg, rgba(13, 36, 48, .92), rgba(9, 27, 39, .92)); border: 1px solid var(--line); border-radius: 18px; min-width: 0; }
+.proof-kind { color: var(--mint); font: 500 10.5px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.proof-big { font-size: clamp(44px, 5vw, 62px); line-height: 1; letter-spacing: -.05em; color: var(--ink); }
+.proof h3 { margin: 0; font-size: 18px; }
+.proof > p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.proof .proof-meta { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12.5px; }
+.hbars { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 9px; }
+.hbars li { display: grid; grid-template-columns: 92px 1fr 54px; align-items: center; gap: 10px; font-size: 12.5px; color: var(--ink); }
+.hbars i { height: 10px; border-radius: 6px; background: rgba(145, 166, 165, .15); position: relative; overflow: hidden; }
+.hbars i::after { content: ""; position: absolute; inset: 0 auto 0 0; width: calc(var(--v) * 100%); border-radius: 6px; background: linear-gradient(90deg, var(--mint), var(--sky)); }
+.hbars li.muted i::after { background: rgba(145, 166, 165, .55); }
+.hbars b { text-align: right; font-family: var(--mono); }
+.proof .steps-chart { margin: 10px 0 4px; height: 130px; }
+.proof .checks { margin-top: 6px; }
+.method-details { margin-top: 26px; padding: 20px 24px; border: 1px solid var(--line); border-radius: 18px; background: rgba(9, 27, 39, .6); }
+.method-details > summary { color: var(--mint); font-size: 16px; }
+.method-grid { display: grid; grid-template-columns: 1.1fr 1.1fr .9fr; gap: 28px; margin-top: 22px; }
+.method-grid h3 { margin: 0 0 12px; font-size: 16px; }
+.method-grid p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.method-grid .fine { color: rgba(145, 166, 165, .85); }
+.evidence-types { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.evidence-types b { color: var(--ink); }
+.stress-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.stress-table th, .stress-table td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; }
+.stress-table thead th { color: var(--muted); font: 500 10px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.stress-table tbody th { font-weight: 500; color: var(--ink); }
+.stress-table td { font-family: var(--mono); color: var(--ink); white-space: nowrap; }
+.stress-table tr.inconclusive th, .stress-table tr.inconclusive td { color: rgba(145, 166, 165, .75); }
+.method-details .eval-live { margin-top: 24px; }
+footer a:not(.brand) { color: var(--muted); font-size: 13px; }
+
+/* Nombres largos ("Huasca de Ocampo") en la rejilla de 4 columnas. */
+.orbit-results .future-card:not(.anchor) .card-heading h3 { font-size: clamp(22px, 2.1vw, 28px); line-height: 1.08; overflow-wrap: anywhere; }
+.loop-section .eyebrow { color: var(--mint); }
+.loop-section .basin-heading .eyebrow { color: var(--sun); }
+#change-value { font-size: clamp(15px, 1.5vw, 19px) !important; }
+
+/* WCAG 2.2 · 2.5.8: objetivos táctiles de al menos 24 px. */
+details > summary { min-height: 24px; padding-block: 3px; display: list-item; }
+#risk { min-height: 24px; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Adaptable ---------- */
+@media (max-width: 1080px) {
+  .role-legend { grid-template-columns: repeat(3, 1fr); }
+  .proof-grid, .method-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  nav a:not(.nav-cta) { display: none; }
+  .role-legend { grid-template-columns: 1fr 1fr; }
+  .atoms-panel { grid-template-columns: 1fr; gap: 14px; }
+  .loop-steps { grid-template-columns: 1fr 1fr; }
+  .loop-empty { flex-direction: column; align-items: flex-start; }
+  .math-grid { grid-template-columns: 1fr; }
+  .hbars li { grid-template-columns: 78px 1fr 48px; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 18px !important; }
+}
+@media (max-width: 420px) {
+  .role-legend { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-results, .atom, .orbit-results .future-card { animation: none; }
+  .orbit-results .future-card:hover { transform: none; }
+}
+nav a, footer a:not(.brand) { display: inline-flex; align-items: center; min-height: 32px; }

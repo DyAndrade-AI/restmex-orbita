@@ -10,6 +10,7 @@ interface Future {
   stability?: number;
   counterfactual: { facet: string; priority_shift: number | null };
   eligibility?: string;
+  icon?: string;
   evidence?: { Review: string; Type: string; Polarity: number };
 }
 
@@ -26,11 +27,11 @@ export default function cardMarkup(future: Future, index: number): string {
   if (future.role === "Ancla") {
     explanation = `Es la coincidencia directa. Su eje dominante es ${future.dominant_facet}.`;
   } else if (shift === null) {
-    explanation = `Está por su rol, no por afinidad: ninguna ponderación de tus facetas lo iguala al Ancla. Su fuerza: ${future.counterfactual.facet}.`;
+    explanation = `Esta alternativa destaca por su función exploratoria, aunque no alcanza al Ancla bajo las preferencias consideradas. Su fuerza: ${future.counterfactual.facet}.`;
   } else if (shift === 0) {
     explanation = `Con tus facetas pesadas por igual ya iguala al Ancla en la utilidad de facetas (el ranking 5 + 5 pesa la consulta completa).`;
   } else {
-    explanation = `Con ${shift} % de tu atención desplazada hacia ${future.counterfactual.facet}, iguala al Ancla en la utilidad de facetas (no en el ranking 5 + 5).`;
+    explanation = `Si concentras ${shift} % más de tu atención en ${future.counterfactual.facet}, esta alternativa alcanza al Ancla dentro del modelo de preferencias (no cambia el ranking completo).`;
   }
   if (future.eligibility === "umbral relajado") {
     explanation += " Ningún destino seguro cumplía el umbral de afinidad del rol: se relajó ese umbral, nunca tus exclusiones.";
@@ -47,7 +48,7 @@ export default function cardMarkup(future: Future, index: number): string {
   return `
     <article class="future-card ${index === 0 ? "anchor" : ""}" data-role="${escapeHtml(future.role)}">
       <div class="card-topline">
-        <span class="role-pill"><span class="role-dot"></span>${escapeHtml(future.role)}</span>
+        <span class="role-pill"><span class="role-icon" aria-hidden="true">${escapeHtml(future.icon ?? "•")}</span>${escapeHtml(future.role)}</span>
         <span class="future-number">0${index + 1}</span>
       </div>
       <div class="card-heading">

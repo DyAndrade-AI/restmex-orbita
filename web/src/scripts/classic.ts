@@ -118,16 +118,28 @@ export function renderClassic(data: RecommendResult): string {
   return `${confidence}${excluded}
     <div class="classic-columns">
       <section aria-labelledby="top-title">
-        <h3 id="top-title">TOP 5 — MAYOR COMPATIBILIDAD</h3>
-        <p class="bottom-note">Los 5 mejores para esta consulta (posiciones 1–5 de 40).</p>
+        <h3 id="top-title">Recomendaciones más afines</h3>
+        <p class="bottom-note">Posiciones 1–5 de 40 para esta búsqueda.</p>
         <ol class="dest-list">${data.top.map(destinationCard).join("")}</ol>
       </section>
-      <section aria-labelledby="bottom-title">
-        <h3 id="bottom-title">BOTTOM 5 — MENOR COMPATIBILIDAD</h3>
-        <p class="bottom-note">Los 5 peores para esta consulta, del menos compatible (40) hacia arriba. No significa peor destino ni peor servicio.</p>
+      <section class="bottom-column" aria-labelledby="bottom-title">
+        <h3 id="bottom-title">Alternativas con menor afinidad para esta búsqueda</h3>
+        <p class="bottom-note">Posiciones 36–40. La clasificación corresponde a tu consulta, no a la calidad general del pueblo.</p>
         <ol class="dest-list">${data.bottom.map(destinationCard).join("")}</ol>
       </section>
     </div>`;
+}
+
+// Mensaje útil para el usuario; el detalle técnico sigue en la consola para diagnóstico.
+export function friendlyError(error: unknown): string {
+  console.error(error);
+  if (error instanceof TypeError) {
+    return "No pudimos conectar con el motor de recomendación. Verifica que la API esté en ejecución (make web-api) y vuelve a intentarlo.";
+  }
+  const message = error instanceof Error ? error.message : "";
+  if (/excluye lo mismo/i.test(message)) return "Encontramos preferencias incompatibles: pides y excluyes lo mismo. Ajusta tu descripción para continuar.";
+  if (/no distingue|vac[ií]a|caracteres|corta/i.test(message)) return `Cuéntanos un poco más sobre el tipo de viaje que buscas. (${message})`;
+  return message || "Ocurrió un error inesperado. Intenta de nuevo.";
 }
 
 export async function postJson<T>(url: string, body: unknown): Promise<T> {

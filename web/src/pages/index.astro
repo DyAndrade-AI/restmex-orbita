@@ -14,64 +14,392 @@ const chapters: [number, string][] = [
   [291.1, "Tres niveles de evaluación"], [357.2, "Auditoría"], [385, "Innovación y riesgos"],
   [411.1, "Cierre"],
 ];
+const stressLabels: Record<string, string> = {
+  prior: "Mismos supuestos del modelo",
+  concentrada: "Gustos dominados por una preferencia",
+  "relevancia_0.50": "Otra ponderación del ranking",
+  rendimientos_decrecientes: "Rendimientos decrecientes",
+  ruido_15: "15 % de respuestas erróneas",
+  ruido_30: "30 % de respuestas erróneas",
+};
 const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 ---
 
 <BaseLayout
-  title="Órbita — no una respuesta: todos tus futuros"
-  description="Órbita recomienda Pueblos Mágicos con 208,051 reseñas: cinco futuros con roles distintos, 50,000 versiones simuladas de tus gustos y evaluación abierta."
+  title="Órbita — explora posibilidades, no solo destinos"
+  description="Sistema de inteligencia artificial sobre 208,051 reseñas de 40 Pueblos Mágicos: ranking 5 + 5, cinco perspectivas con roles distintos y exploración de 50,000 escenarios de preferencias."
 >
+  <a class="skip-link" href="#recomendar">Saltar al recomendador</a>
   <header class="site-header">
     <a class="brand" href="#top" aria-label="Órbita, inicio">
       <span class="brand-mark"><i></i></span>
       <span>ÓRBITA</span>
     </a>
     <nav aria-label="Navegación principal">
-      <a href="#video">Video</a>
-      <a href="#recomendar">5 + 5</a>
-      <a href="#laboratorio">Órbita</a>
-      <a href="#evaluacion">Evaluación</a>
-      <a href="#califica" class="nav-cta">Ayúdanos a evaluar</a>
+      <a href="#recomendar">Recomendar</a>
+      <a href="#orbita">Órbita</a>
+      <a href="#strange-loop">Strange Loop</a>
+      <a href="#resultados">Resultados</a>
+      <a href="#califica" class="nav-cta">Evaluar</a>
     </nav>
   </header>
 
   <main id="top">
     <section class="hero shell">
       <div class="hero-copy">
-        <p class="eyebrow">SISTEMA DE RECOMENDACIÓN · REST-MEX 2025</p>
-        <h1>No te damos una respuesta.<br /><em>Te mostramos tus futuros.</em></h1>
+        <p class="eyebrow">INTELIGENCIA ARTIFICIAL · TURISMO · REST-MEX 2025</p>
+        <h1>No explores solo destinos.<br /><em>Explora posibilidades.</em></h1>
         <p class="hero-lede">
-          Órbita rompe tu viaje ideal en gustos, simula 50,000 versiones de ti y te entrega cinco
-          futuros con papeles distintos, con la evidencia de {m.corpus.reviews.toLocaleString("es-MX")} reseñas reales.
+          Un sistema de inteligencia artificial que analiza experiencias turísticas reales, interpreta
+          tus preferencias y explora cómo diferentes prioridades pueden transformar tus recomendaciones.
         </p>
         <div class="hero-actions">
-          <a class="hero-play" href="#video"><span aria-hidden="true">▶</span> Ver cómo funciona <small>2 min</small></a>
-          <a class="text-link" href="#laboratorio">Probar Órbita <span>↓</span></a>
+          <a class="hero-play" href="#recomendar"><span aria-hidden="true">↗</span> Explorar destinos</a>
+          <a class="text-link" href="#orbita">Descubrir Órbita <span aria-hidden="true">↓</span></a>
         </div>
         <dl class="hero-stats">
-          <div><dt>Reseñas</dt><dd>{m.corpus.reviews.toLocaleString("es-MX")}</dd></div>
           <div><dt>Pueblos Mágicos</dt><dd>{m.corpus.towns}</dd></div>
-          <div><dt>Futuros simulados</dt><dd>50,000</dd></div>
-          <div><dt>Pruebas automáticas</dt><dd>{m.tests}</dd></div>
+          <div><dt>Reseñas en el corpus</dt><dd>{m.corpus.reviews.toLocaleString("es-MX")}</dd></div>
+          <div><dt>Hit@5 · reseñas ocultas</dt><dd>{pct(m.holdout.hit_at_5, 1)}</dd></div>
+          <div><dt>Escenarios por consulta</dt><dd>50,000</dd></div>
         </dl>
+        <p class="hero-footnote">Hit@5: el pueblo correcto aparece entre los 5 primeros en {m.holdout.reviews} reseñas reservadas usadas como consultas (azar: {pct(m.holdout.random_hit_at_5, 1)}).</p>
       </div>
 
-      <div class="orbit-visual" aria-label="Cinco futuros orbitando alrededor de tu intención">
+      <div class="orbit-visual" role="img" aria-label="Diagrama: tu consulta en el centro y cinco destinos con roles distintos orbitando alrededor">
         <div class="portal-gate" aria-hidden="true">
           <div class="portal-ring ring-a"></div>
           <div class="portal-ring ring-b"></div>
           <div class="portal-ring ring-c"></div>
           <div class="portal-sparks" id="hero-sparks"></div>
         </div>
-        <div class="orbit orbit-one"><span class="planet p-one" data-orbit-label="Ancla"></span></div>
-        <div class="orbit orbit-two"><span class="planet p-two" data-orbit-label="Portal"></span></div>
-        <div class="orbit orbit-three"><span class="planet p-three" data-orbit-label="Comodín"></span></div>
-        <div class="core">
+        <div class="orbit orbit-one" aria-hidden="true"><span class="planet p-one" data-orbit-label="Ancla"></span><span class="planet p-four" data-orbit-label="Superviviente"></span></div>
+        <div class="orbit orbit-two" aria-hidden="true"><span class="planet p-two" data-orbit-label="Portal"></span></div>
+        <div class="orbit orbit-three" aria-hidden="true"><span class="planet p-three" data-orbit-label="Comodín"></span><span class="planet p-five" data-orbit-label="Especialista"></span></div>
+        <div class="core" aria-hidden="true">
           <span>TU</span>
-          <strong>INTENCIÓN</strong>
+          <strong>CONSULTA</strong>
         </div>
-        <div class="coordinate coord-a">19.4326° N</div>
-        <div class="coordinate coord-b">40 DESTINOS</div>
+        <div class="coordinate coord-a" aria-hidden="true">5 ROLES</div>
+        <div class="coordinate coord-b" aria-hidden="true">40 DESTINOS</div>
+      </div>
+    </section>
+
+    <section class="lab-section classic-section" id="recomendar">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 · RECOMENDACIÓN</p>
+            <h2>Describe tu viaje. Te mostramos los más afines.</h2>
+          </div>
+          <p>Ordenamos los 40 pueblos por afinidad con tu descripción y respaldamos cada resultado con reseñas reales.</p>
+        </div>
+        <form class="query-console" id="classic-form">
+          <div class="console-bar"><span><i></i> RANKING 5 + 5</span><span id="classic-status" role="status">LISTO</span></div>
+          <label for="classic-query">¿Qué experiencia estás buscando?</label>
+          <textarea id="classic-query" name="classic-query" rows="2" required minlength="8"
+            placeholder="Quiero cenotes para nadar y comida yucateca, sin Tulum…">Quiero cenotes para nadar y comida yucateca, sin Tulum</textarea>
+          <div class="console-controls classic-controls">
+            <button class="submit-button" type="submit"><span>Recomendar</span><b aria-hidden="true">↗</b></button>
+          </div>
+          <div class="examples" aria-label="Consultas de ejemplo">
+            <span>Prueba:</span>
+            <button type="button" data-classic="Playas tranquilas, agua turquesa y snorkel">Playa</button>
+            <button type="button" data-classic="Busco pirámides, arqueología e historia prehispánica">Arqueología</button>
+            <button type="button" data-classic="Naturaleza y aventura en la sierra, sin playa ni mar">Sierra sin mar</button>
+            <button type="button" data-classic="Quiero vino, viñedos y recorridos por bodegas">Vino</button>
+          </div>
+        </form>
+        <div class="classic-results" id="classic-results" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="lab-section orbit-section" id="orbita">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02 · ÓRBITA</p>
+            <h2>Una intención. Cinco perspectivas.</h2>
+          </div>
+          <p>Órbita explora alternativas con fortalezas distintas para que veas cómo cambian las recomendaciones cuando cambian tus prioridades.</p>
+        </div>
+
+        <ul class="role-legend" aria-label="Los cinco roles de Órbita">
+          <li data-role="Ancla"><i aria-hidden="true">◎</i><b>Ancla</b><span>La coincidencia más directa con tu consulta.</span></li>
+          <li data-role="Superviviente"><i aria-hidden="true">◆</i><b>Superviviente</b><span>Resiste aunque una prioridad desaparezca.</span></li>
+          <li data-role="Portal"><i aria-hidden="true">◐</i><b>Portal</b><span>Novedosa, sin romper tu intención.</span></li>
+          <li data-role="Especialista"><i aria-hidden="true">▲</i><b>Especialista</b><span>Destaca en una preferencia concreta.</span></li>
+          <li data-role="Comodín"><i aria-hidden="true">✦</i><b>Comodín</b><span>Equilibra afinidad, estabilidad y sorpresa.</span></li>
+        </ul>
+
+        <form class="query-console" id="query-form">
+          <div class="console-bar">
+            <span><i></i> ÓRBITA + STRANGE LOOP</span>
+            <span id="api-status" role="status">CONECTANDO AL MOTOR…</span>
+          </div>
+          <label for="query">Describe tu viaje ideal</label>
+          <textarea id="query" name="query" rows="3" required minlength="8"
+            placeholder="Quiero bosque, cabañas, comida tradicional y aventura, sin playa…">Quiero bosque, cabañas, gastronomía y aventura, sin playa</textarea>
+          <div class="console-controls">
+            <div class="risk-control">
+              <div class="risk-labels">
+                <label for="risk">Riesgo creativo</label>
+                <output id="risk-output" for="risk">55%</output>
+              </div>
+              <input id="risk" name="risk" type="range" min="0" max="100" value="55" aria-describedby="risk-help" />
+              <div class="risk-scale"><span>PRECISO</span><span>INESPERADO</span></div>
+              <p class="risk-help" id="risk-help">Más riesgo = el Portal se aleja más del Ancla y los escenarios exploran prioridades más extremas.</p>
+            </div>
+            <button class="submit-button" type="submit">
+              <span>Explorar perspectivas</span><b aria-hidden="true">↗</b>
+            </button>
+          </div>
+          <div class="examples" aria-label="Consultas de ejemplo">
+            <span>Prueba:</span>
+            <button type="button" data-query="Quiero cascadas, vegetación y aventura al aire libre">Cascadas y aventura</button>
+            <button type="button" data-query="Quiero arquitectura colonial, gastronomía tradicional y actividades culturales, pero sin playa">Colonial sin playa</button>
+            <button type="button" data-query="Desierto, silencio y paisajes naturales, sin playa">Desierto</button>
+          </div>
+        </form>
+
+        <div class="loading-panel" id="loading" hidden role="status">
+          <div class="loader-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+          <p>Analizando tu intención y explorando 50,000 escenarios…</p>
+          <span>Cada escenario es una forma distinta de priorizar tus preferencias</span>
+        </div>
+
+        <div class="error-panel" id="error" hidden role="alert">
+          <strong id="error-title">No pudimos completar la exploración.</strong>
+          <p id="error-message"></p>
+        </div>
+
+        <div class="orbit-results" id="orbit-results" hidden>
+          <div class="atoms-panel">
+            <div>
+              <p class="eyebrow">ÁTOMOS DE GUSTO</p>
+              <p class="atoms-help">Cada átomo representa una preferencia que podemos explorar por separado.</p>
+            </div>
+            <div class="atoms" id="orbit-atoms"></div>
+          </div>
+          <p class="orbit-note" id="orbit-note" hidden></p>
+          <div class="orbit-grid" id="orbit-grid"></div>
+          <details class="soft-details">
+            <summary>¿Por qué las alternativas con menor afinidad quedan abajo?</summary>
+            <ul class="bottom-orbit" id="bottom-orbit"></ul>
+            <p class="fine">“Igualar al Ancla” se calcula en la utilidad de facetas U = 0.16·r + 0.84·w·M, no en el ranking completo de 40.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="lab-section loop-section" id="strange-loop">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">03 · STRANGE LOOP</p>
+            <h2>Explora miles de posibilidades.</h2>
+          </div>
+          <p>Strange Loop prueba muchas maneras de repartir tus prioridades y descubre qué destinos destacan en cada escenario. Tus respuestas cierran los escenarios que no encajan contigo.</p>
+        </div>
+
+        <ol class="loop-steps" aria-label="Cómo funciona Strange Loop">
+          <li><span>01</span><b>Reconoce</b> tus preferencias.</li>
+          <li><span>02</span><b>Simula</b> 50,000 formas de priorizarlas.</li>
+          <li><span>03</span><b>Pregunta</b> qué conservarías.</li>
+          <li><span>04</span><b>Descarta</b> los escenarios incompatibles.</li>
+        </ol>
+
+        <div class="loop-empty" id="loop-empty">
+          <p>Describe tu viaje en Órbita y aquí aparecerá tu multiverso de escenarios.</p>
+          <a class="text-link" href="#orbita">Ir a Órbita <span aria-hidden="true">↑</span></a>
+        </div>
+
+        <div class="results multiverse-results" id="results" hidden>
+          <div class="multiverse-head">
+            <div>
+              <p class="eyebrow">TU MULTIVERSO</p>
+              <h3 class="loop-title">¿Qué destino destaca en más escenarios?</h3>
+            </div>
+            <button class="reset-loop" id="reset-loop" type="button">↺ Reiniciar decisiones</button>
+          </div>
+
+          <div class="multiverse-stats" aria-live="polite">
+            <div><strong id="total-futures">0</strong><span>escenarios explorados</span></div>
+            <div><strong id="surviving-futures">0</strong><span>compatibles con tus decisiones</span></div>
+            <div><strong id="top-destination" class="stat-text">—</strong><span>destino más frecuente</span></div>
+            <div><strong id="change-value" class="stat-text">—</strong><span>cambio tras responder</span></div>
+          </div>
+
+          <div class="facet-row multiverse-facets" id="facets" aria-label="Peso medio de cada preferencia en los escenarios compatibles"></div>
+
+          <div class="multiverse-chamber" id="multiverse-chamber">
+            <canvas id="multiverse-canvas" role="img" aria-label="Visualización: escenarios fluyendo hacia los destinos que ganan en ellos"></canvas>
+            <div class="canvas-overlay">
+              <span>MAPA DE ESCENARIOS</span>
+              <b id="particle-caption">Cada luz es una forma posible de priorizar tus gustos</b>
+            </div>
+            <div class="portal-legend" id="portal-legend"></div>
+            <div class="collapse-flash" id="collapse-flash"></div>
+          </div>
+
+          <section class="sacrifice-console" id="sacrifice-console" aria-labelledby="sacrifice-question">
+            <div class="sacrifice-symbol" aria-hidden="true">
+              <span></span><i></i><b></b>
+            </div>
+            <div class="sacrifice-content">
+              <p class="eyebrow">TU DECISIÓN</p>
+              <h3 id="sacrifice-question">Calculando la pregunta más útil…</h3>
+              <div class="sacrifice-actions" id="sacrifice-actions"></div>
+              <div class="decision-trail" id="decision-trail"></div>
+            </div>
+          </section>
+
+          <div class="basin-heading">
+            <div><p class="eyebrow">DESTINOS QUE DESTACAN</p><h3>Dónde terminan tus escenarios</h3></div>
+            <p>El porcentaje es la fracción de escenarios simulados en que cada destino resulta el mejor. Es una frecuencia de simulación, no una probabilidad de que el viaje te guste.</p>
+          </div>
+          <div class="basin-grid" id="basin-grid"></div>
+
+          <section class="shift-panel" id="shift-panel" hidden aria-labelledby="shift-title">
+            <h3 id="shift-title">Antes y después de tu decisión</h3>
+            <ol class="shift-list" id="shift-list"></ol>
+          </section>
+
+          <details class="math-panel">
+            <summary>Explorar matemáticas y metodología</summary>
+            <div class="math-grid">
+              <div><strong id="entropy-value">0</strong><span>entropía de decisión (0 = un solo destino, 100 = todos igual de frecuentes)</span></div>
+              <div><strong id="collapsed-futures">0</strong><span>escenarios descartados por tus respuestas</span></div>
+            </div>
+            <p id="information-gain"></p>
+            <p class="simulation-disclaimer" id="mc-note"></p>
+            <ul class="formula-list">
+              <li><b>Preferencias:</b> w ~ Dirichlet(α·1), α = (28 − 24ρ)/K, con ρ = riesgo creativo.</li>
+              <li><b>Utilidad:</b> U(d) = 0.16·r(d) + 0.84·Σ w<sub>f</sub>·M[f,d] + ε, con ε ~ Gumbel. Los destinos que incumplen una exclusión quedan descartados.</li>
+              <li><b>Pregunta:</b> se elige la de mayor ganancia de información, IG = H(antes) − Σ (n<sub>b</sub>/n)·H(rama).</li>
+              <li><b>Respuesta:</b> conserva exactamente los escenarios con w<sub>conservar</sub> ≥ w<sub>sacrificar</sub>.</li>
+            </ul>
+            <h4>Alternativas con menor afinidad dentro del multiverso</h4>
+            <ul class="bottom-orbit" id="bottom-multiverse"></ul>
+          </details>
+
+          <section class="trajectory-panel">
+            <div class="trajectory-copy">
+              <p class="eyebrow">EXPLORACIÓN ESPECULATIVA</p>
+              <h3>Un viaje puede inspirar el siguiente.</h3>
+              <p>Simulación exploratoria de cómo un destino podría reforzar ciertas preferencias para la próxima elección. No es una predicción.</p>
+            </div>
+            <div class="trajectory-line" id="trajectory-line"></div>
+          </section>
+
+          <p class="simulation-disclaimer" id="simulation-disclaimer"></p>
+        </div>
+        <div class="error-panel" id="loop-error" hidden role="alert">
+          <strong>Strange Loop no pudo abrir el multiverso.</strong>
+          <p id="loop-error-message"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="eval-section" id="resultados">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">04 · EVIDENCIA</p>
+            <h2>Resultados respaldados por experimentación.</h2>
+          </div>
+          <p>Cada cifra se genera desde los artefactos experimentales del repositorio, con su muestra y su tipo de evaluación.</p>
+        </div>
+
+        <div class="proof-grid">
+          <article class="proof">
+            <span class="proof-kind">Recuperación de información · prueba autosupervisada</span>
+            <strong class="proof-big">{pct(m.holdout.hit_at_5, 1)}</strong>
+            <h3>Hit@5</h3>
+            <p>Recuperación del pueblo correcto entre los primeros cinco, usando {m.holdout.reviews} reseñas reservadas como consultas, sin que el índice las haya visto.</p>
+            <ul class="hbars" aria-label="Hit@5 comparado con referencias">
+              <li style={`--v:${m.holdout.hit_at_5}`}><span>Órbita</span><i></i><b>{pct(m.holdout.hit_at_5, 1)}</b></li>
+              <li class="muted" style={`--v:${m.holdout.popularity_hit_at_5}`}><span>Popularidad</span><i></i><b>{pct(m.holdout.popularity_hit_at_5, 1)}</b></li>
+              <li class="muted" style={`--v:${m.holdout.random_hit_at_5}`}><span>Azar</span><i></i><b>{pct(m.holdout.random_hit_at_5, 1)}</b></li>
+            </ul>
+            <p class="proof-meta">Hit@1 {pct(m.holdout.hit_at_1, 1)} · MRR {m.holdout.mrr.toFixed(3)} · el pueblo correcto cae en el Bottom 5 solo {pct(m.holdout.bottom_error_rate, 1)} de las veces (azar: 12.5%).</p>
+          </article>
+
+          <article class="proof">
+            <span class="proof-kind">Exploración de preferencias · usuarios simulados</span>
+            <strong class="proof-big">{pct(su.loop_hit_at_1[3], 1)}</strong>
+            <h3>Destino ideal encontrado tras 3 preguntas</h3>
+            <p>Evaluación con usuarios simulados bajo los supuestos del modelo, en {su.queries} consultas con dos o más preferencias.</p>
+            <ol class="steps-chart" aria-label="Acierto del destino ideal según el número de preguntas">
+              <li style={`--v:${su.anchor_hit_at_1}`}><b>{pct(su.anchor_hit_at_1, 1)}</b><span>Ancla</span></li>
+              {su.loop_hit_at_1.map((v, i) => <li class="hot" style={`--v:${v}`}><b>{pct(v, 1)}</b><span>{i === 0 ? "Sin preg." : `${i} preg.`}</span></li>)}
+            </ol>
+            <p class="proof-meta">Con 1 pregunta, la pregunta informativa supera a una al azar por {(su.gain_1q.informativa_menos_azar * 100).toFixed(1)} pp (IC95 [{(su.gain_1q.ci95[0] * 100).toFixed(1)}, {(su.gain_1q.ci95[1] * 100).toFixed(1)}]). Con 3 preguntas ambas prácticamente empatan.</p>
+          </article>
+
+          <article class="proof">
+            <span class="proof-kind">Robustez y reproducibilidad</span>
+            <strong class="proof-big">{m.role_sensitivity.portfolio_jaccard_mean.toFixed(2)}</strong>
+            <h3>Similitud de Jaccard de la cartera</h3>
+            <p>Mide cuánto se parecen los cinco destinos de Órbita (1 = idénticos) cuando todos sus pesos de diseño se perturban ±{pct(m.role_sensitivity.spread)} a la vez.</p>
+            <ul class="checks">
+              <li><b>{m.tests}</b> pruebas automáticas aprobadas</li>
+              <li><b>{m.monte_carlo.max_diff_pp_at_50k.toFixed(2)} pp</b> diferencia máxima con 50,000 escenarios frente a 200,000</li>
+              <li><b>{pct(m.monte_carlo.seed_agreement_min)}</b> de las semillas auditadas coinciden en el destino líder (peor consulta)</li>
+              <li><b>{m.orbit_audit.all_contracts_pass ? "✓" : "✗"}</b> cinco perspectivas distintas y reproducibles en {m.orbit_audit.queries} consultas</li>
+            </ul>
+          </article>
+        </div>
+
+        <details class="method-details">
+          <summary>Metodología y alcance de los resultados</summary>
+          <div class="method-grid">
+            <section>
+              <h3>Tipos de evidencia</h3>
+              <ul class="evidence-types">
+                <li><b>Prueba autosupervisada</b> · {m.holdout.reviews} reseñas reservadas como consultas, con el nombre del pueblo oculto. Es la medida principal de relevancia.</li>
+                <li><b>Conjunto heurístico</b> · {m.gold.queries} consultas escritas por el equipo: Hit@1 {pct(m.gold.hit_at_1, 1)}, nDCG@5 {m.gold.ndcg_at_5.toFixed(3)}. La Precision@5 de {pct(m.gold.precision_at_5, 1)} se calcula solo en las {m.gold.wide_queries} consultas con al menos 5 destinos aceptables. Se usa como prueba de regresión: sus autores conocían el sistema.</li>
+                <li><b>Usuarios simulados</b> · gustos ocultos y respuestas automáticas. Miden coherencia interna y eficiencia de las preguntas, no satisfacción de personas.</li>
+                <li><b>Evaluación humana</b> · laboratorio ciego en curso (sección 05). Aún no hay juicios suficientes para reportar métricas humanas.</li>
+              </ul>
+            </section>
+            <section>
+              <h3>Supuestos puestos a prueba</h3>
+              <p>Cada población rompe un supuesto del modelo. Mejora con 3 preguntas frente a ninguna (IC95 bootstrap sobre consultas):</p>
+              <table class="stress-table">
+                <thead><tr><th scope="col">Población simulada</th><th scope="col">Acierto, 3 preg.</th><th scope="col">Mejora (IC95)</th></tr></thead>
+                <tbody>
+                  {Object.entries(m.stress).map(([name, row]: [string, any]) => (
+                    <tr class={row.gain_3q.ci95_mejora[0] <= 0 ? "inconclusive" : ""}>
+                      <th scope="row">{stressLabels[name] ?? name}</th>
+                      <td>{pct(row.loop_hit_at_1[3], 1)}</td>
+                      <td>{(row.gain_3q.mejora_vs_sin_preguntas * 100).toFixed(1)} pp [{(row.gain_3q.ci95_mejora[0] * 100).toFixed(1)}, {(row.gain_3q.ci95_mejora[1] * 100).toFixed(1)}]</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p class="fine">Filas atenuadas: el intervalo incluye 0, la mejora no es concluyente bajo ese supuesto.</p>
+            </section>
+            <section>
+              <h3>Sensibilidad de los roles</h3>
+              <p>Frecuencia con que cada rol conserva su destino al perturbar los pesos de diseño ±{pct(m.role_sensitivity.spread)}:</p>
+              <ul class="role-bars">
+                {roles.map(([role, v]) => <li><span>{role}</span><i style={`--v:${(v as number) / 100}`}></i><b>{(v as number).toFixed(0)}%</b></li>)}
+              </ul>
+              <p class="fine">Los pesos de los roles y del modelo de escenarios son de diseño: su sensibilidad está medida, pero su valor óptimo requiere evaluación humana.</p>
+            </section>
+          </div>
+          <details class="eval-live">
+            <summary>Ejecutar la evaluación automática en vivo</summary>
+            <div class="eval-panel" id="eval-panel">
+              <div class="eval-actions">
+                <button type="button" class="submit-button" id="eval-run"><span>Ejecutar evaluación</span><b aria-hidden="true">▶</b></button>
+                <button type="button" class="ghost-button" id="eval-last">Ver último reporte completo</button>
+              </div>
+              <div id="eval-output" aria-live="polite"></div>
+            </div>
+          </details>
+        </details>
       </div>
     </section>
 
@@ -80,9 +408,9 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
         <div class="section-heading">
           <div>
             <p class="eyebrow">EN 2 MINUTOS</p>
-            <h2>Qué es Órbita y por qué es diferente.</h2>
+            <h2>Cómo funciona Órbita.</h2>
           </div>
-          <p>Para todo público. Si quieres el detalle técnico, cambia a la versión de 7 minutos con capítulos.</p>
+          <p>Para todo público. Para el detalle técnico, cambia a la versión de 7 minutos con capítulos.</p>
         </div>
         <div class="video-tabs" role="tablist" aria-label="Versión del video">
           <button type="button" role="tab" aria-selected="true" data-src="/media/orbita-2min.mp4" data-poster="/media/orbita-2min-poster.jpg">2 min · para todos</button>
@@ -105,257 +433,14 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
       </div>
     </section>
 
-    <section class="lab-section classic-section" id="recomendar">
-      <div class="shell">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">RECOMENDACIÓN 5 + 5</p>
-            <h2>Los 5 más afines y los 5 menos afines.</h2>
-          </div>
-          <p>Afinidad temática con tu consulta. La calidad se muestra aparte y no altera el orden.</p>
-        </div>
-        <form class="query-console" id="classic-form">
-          <div class="console-bar"><span><i></i> CONSULTA / 5 + 5</span><span id="classic-status">LISTO</span></div>
-          <label for="classic-query">¿Qué experiencia estás buscando?</label>
-          <textarea id="classic-query" name="classic-query" rows="2" required minlength="8"
-            placeholder="Quiero cenotes para nadar y comida yucateca, sin Tulum…">Quiero cenotes para nadar y comida yucateca, sin Tulum</textarea>
-          <div class="console-controls classic-controls">
-            <button class="submit-button" type="submit"><span>Recomendar</span><b>↗</b></button>
-          </div>
-          <div class="examples" aria-label="Consultas de ejemplo">
-            <span>Prueba:</span>
-            <button type="button" data-classic="Playas tranquilas, agua turquesa y snorkel">Playa</button>
-            <button type="button" data-classic="Busco pirámides, arqueología e historia prehispánica">Arqueología</button>
-            <button type="button" data-classic="Naturaleza y aventura en la sierra, sin playa ni mar">Sierra sin mar</button>
-          </div>
-        </form>
-        <div class="classic-results" id="classic-results" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section class="lab-section" id="laboratorio">
-      <div class="shell">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">ÓRBITA + STRANGE LOOP</p>
-            <h2>Describe tu viaje imposible.</h2>
-          </div>
-          <p>El motor lo separa en gustos, límites y futuros alternativos.</p>
-        </div>
-
-        <form class="query-console" id="query-form">
-          <div class="console-bar">
-            <span><i></i> INTENCIÓN / 001</span>
-            <span id="api-status">CONECTANDO AL MOTOR…</span>
-          </div>
-          <label for="query">¿Qué experiencia estás buscando?</label>
-          <textarea
-            id="query"
-            name="query"
-            rows="3"
-            required
-            minlength="8"
-            placeholder="Quiero bosque, cabañas, comida tradicional y aventura, sin playa…"
-          >Quiero bosque, cabañas, gastronomía y aventura, sin playa</textarea>
-          <div class="console-controls">
-            <div class="risk-control">
-              <div class="risk-labels">
-                <label for="risk">Riesgo creativo</label>
-                <output id="risk-output" for="risk">55%</output>
-              </div>
-              <input id="risk" name="risk" type="range" min="0" max="100" value="55" />
-              <div class="risk-scale"><span>PRECISO</span><span>INESPERADO</span></div>
-            </div>
-            <button class="submit-button" type="submit">
-              <span>Ver mis futuros</span><b>↗</b>
-            </button>
-          </div>
-          <div class="examples" aria-label="Consultas de ejemplo">
-            <span>Prueba:</span>
-            <button type="button" data-query="Playas tranquilas, agua turquesa y snorkel">Agua y snorkel</button>
-            <button type="button" data-query="Arquitectura colonial, mercados y comida tradicional">Historia y sabor</button>
-            <button type="button" data-query="Desierto, silencio y paisajes naturales, sin playa">Desierto sin playa</button>
-          </div>
-        </form>
-
-        <div class="loading-panel" id="loading" hidden>
-          <div class="loader-orbit"><i></i><i></i><i></i></div>
-          <p>Observando 50,000 líneas temporales…</p>
-          <span>Cada partícula es una versión posible de tus preferencias</span>
-        </div>
-
-        <div class="results multiverse-results" id="results" hidden>
-          <div class="multiverse-head">
-            <div>
-              <p class="eyebrow">STRANGE LOOP / SIMULACIÓN 001</p>
-              <h2>El multiverso está abierto.</h2>
-            </div>
-            <button class="reset-loop" id="reset-loop" type="button">↺ Reiniciar decisiones</button>
-          </div>
-
-          <div class="multiverse-stats">
-            <div><strong id="total-futures">0</strong><span>futuros observados</span></div>
-            <div><strong id="surviving-futures">0</strong><span>siguen abiertos</span></div>
-            <div><strong id="collapsed-futures">0</strong><span>colapsaron</span></div>
-            <div><strong id="entropy-value">0</strong><span>entropía de decisión</span></div>
-          </div>
-
-          <div class="facet-row multiverse-facets" id="facets"></div>
-
-          <div class="multiverse-chamber" id="multiverse-chamber">
-            <canvas id="multiverse-canvas" aria-label="Partículas de futuros viajando hacia destinos"></canvas>
-            <div class="canvas-overlay">
-              <span>MAPA DE CONVERGENCIA</span>
-              <b id="particle-caption">Cada luz es un posible tú</b>
-            </div>
-            <div class="portal-legend" id="portal-legend"></div>
-            <div class="collapse-flash" id="collapse-flash"></div>
-          </div>
-
-          <section class="sacrifice-console" id="sacrifice-console">
-            <div class="sacrifice-symbol">
-              <span></span><i></i><b></b>
-            </div>
-            <div class="sacrifice-content">
-              <p class="eyebrow">PUNTO DE SACRIFICIO</p>
-              <h3 id="sacrifice-question">Calculando la pregunta que cierra más futuros…</h3>
-              <p id="information-gain"></p>
-              <div class="sacrifice-actions" id="sacrifice-actions"></div>
-              <div class="decision-trail" id="decision-trail"></div>
-            </div>
-          </section>
-
-          <div class="basin-heading">
-            <div><p class="eyebrow">CUENCAS DE DESTINO</p><h3>¿Dónde terminan tus otros yo?</h3></div>
-            <p>El porcentaje indica cuántas versiones de tus preferencias eligieron cada lugar.</p>
-          </div>
-          <div class="basin-grid" id="basin-grid"></div>
-          <p class="simulation-disclaimer" id="mc-note"></p>
-
-          <section class="shift-panel" id="shift-panel" hidden aria-labelledby="shift-title">
-            <h3 id="shift-title">Antes y después de tu decisión</h3>
-            <ol class="shift-list" id="shift-list"></ol>
-          </section>
-
-          <section class="orbit-panel" aria-labelledby="orbit-title">
-            <div class="basin-heading">
-              <div><p class="eyebrow">ÓRBITA · CONSTELACIÓN CONTRAFACTUAL</p><h3 id="orbit-title">Cinco futuros con roles distintos.</h3></div>
-              <p>Ancla, Superviviente, Portal, Especialista y Comodín. La estabilidad es el % de 2,000 perturbaciones de tus pesos en que el destino sigue en el top 10.</p>
-            </div>
-            <div class="orbit-grid" id="orbit-grid"></div>
-            <h4>¿Por qué los 5 menos compatibles están abajo?</h4>
-            <ul class="bottom-orbit" id="bottom-orbit"></ul>
-            <h4>Los 5 menos compatibles dentro del multiverso</h4>
-            <ul class="bottom-orbit" id="bottom-multiverse"></ul>
-          </section>
-
-          <section class="trajectory-panel">
-            <div class="trajectory-copy">
-              <p class="eyebrow">TRAYECTORIA ESPECULATIVA</p>
-              <h3>Un viaje cambia al siguiente.</h3>
-              <p>Simulamos cómo la afinidad despertada por un destino podría modificar tu próxima elección.</p>
-            </div>
-            <div class="trajectory-line" id="trajectory-line"></div>
-          </section>
-
-          <p class="simulation-disclaimer" id="simulation-disclaimer"></p>
-        </div>
-
-        <div class="error-panel" id="error" hidden>
-          <strong>No pudimos abrir las líneas temporales.</strong>
-          <p id="error-message"></p>
-        </div>
-      </div>
-    </section>
-
-    <section class="eval-section" id="evaluacion">
-      <div class="shell">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">EVALUACIÓN</p>
-            <h2>¿Cómo sabemos que funciona?</h2>
-          </div>
-          <p>Cuatro pruebas, de la más fácil de pasar a la más exigente. Mostramos también lo que todavía no está probado.</p>
-        </div>
-
-        <div class="levels">
-          <article class="level">
-            <span class="level-n">Nivel 1 · Regresión</span>
-            <strong class="level-big">{pct(m.gold.precision_at_5)}</strong>
-            <h3>Precisión en el top 5</h3>
-            <p>{m.gold.queries} consultas de prueba con destinos aceptables; acierta el primer lugar en el {pct(m.gold.hit_at_1, 1)}.</p>
-            <p class="level-warn">Sesgada: las consultas las escribió alguien que ya había visto resultados. Sirve para detectar errores, no como prueba final.</p>
-          </article>
-          <article class="level">
-            <span class="level-n">Nivel 2 · Sin fuga de datos</span>
-            <strong class="level-big">{pct(m.holdout.hit_at_5, 1)}</strong>
-            <h3>Adivina el pueblo de una reseña oculta</h3>
-            <p>{m.holdout.reviews} reseñas fuera del índice y con el nombre tapado. El azar y la popularidad logran {pct(m.holdout.random_hit_at_5, 1)}: <b>×{(m.holdout.hit_at_5 / m.holdout.random_hit_at_5).toFixed(1)}</b>.</p>
-            <div class="bar-compare" aria-hidden="true">
-              <i style={`width:${m.holdout.hit_at_5 * 100}%`}><span>Órbita</span></i>
-              <i class="muted" style={`width:${m.holdout.random_hit_at_5 * 100}%`}><span>Azar</span></i>
-            </div>
-          </article>
-          <article class="level">
-            <span class="level-n">Nivel 3 · Usuarios simulados</span>
-            <strong class="level-big">{pct(su.loop_hit_at_1[3], 0)}</strong>
-            <h3>Strange Loop encuentra tu destino ideal</h3>
-            <p>Con gustos ocultos en {su.queries} consultas: el top 1 clásico acierta {pct(su.anchor_hit_at_1)}, Strange Loop {pct(su.loop_hit_at_1[0])} y, tras 3 preguntas, {pct(su.loop_hit_at_1[3])}. Caso optimista: los usuarios simulados comparten la utilidad del modelo; no es evaluación humana.</p>
-            <ol class="steps-chart" aria-label="Acierto según número de preguntas">
-              <li style={`--v:${su.anchor_hit_at_1}`}><b>{pct(su.anchor_hit_at_1)}</b><span>Top 1</span></li>
-              {su.loop_hit_at_1.map((v, i) => <li class="hot" style={`--v:${v}`}><b>{pct(v)}</b><span>{i === 0 ? "Loop" : `+${i}P`}</span></li>)}
-            </ol>
-          </article>
-          <article class="level level-open">
-            <span class="level-n">Nivel 4 · Personas reales</span>
-            <strong class="level-big" id="human-count">Abierto</strong>
-            <h3>Laboratorio ciego</h3>
-            <p>La prueba decisiva: personas califican de 0 a 3 sin saber qué sistema propuso cada pueblo, y medimos su acuerdo con el alfa de Krippendorff.</p>
-            <a class="level-cta" href="#califica">Participa, toma 2 minutos →</a>
-          </article>
-        </div>
-
-        <div class="robust-grid">
-          <div class="robust">
-            <h3>¿Los roles dependen de pesos elegidos a mano?</h3>
-            <p>Movimos <b>a la vez</b> los 13 pesos de diseño ±{pct(m.role_sensitivity.spread)}, 200 veces por consulta. La cartera se mantiene en un {pct(m.role_sensitivity.portfolio_jaccard_mean)} (Jaccard medio).</p>
-            <ul class="role-bars">
-              {roles.map(([role, v]) => <li><span>{role}</span><i style={`--v:${(v as number) / 100}`}></i><b>{(v as number).toFixed(0)}%</b></li>)}
-            </ul>
-          </div>
-          <div class="robust">
-            <h3>Auditoría de Órbita y Strange Loop</h3>
-            <ul class="checks">
-              <li><b>{m.orbit_audit.all_contracts_pass ? "✓" : "✗"}</b> Cinco futuros distintos y reproducibles en {m.orbit_audit.queries} consultas</li>
-              <li><b>{m.orbit_audit.mean_resilience.toFixed(0)}%</b> resiliencia media al olvidar un gusto</li>
-              <li><b>{pct(m.monte_carlo.seed_agreement_min)}</b> mismo ganador con 10 semillas distintas</li>
-              <li><b>{m.tests}</b> pruebas automáticas pasan</li>
-              <li><b>{pct(m.holdout.bottom_error_rate, 1)}</b> de las veces el pueblo correcto cae en el bottom 5 (azar: 12.5%)</li>
-            </ul>
-          </div>
-        </div>
-
-        <details class="eval-live">
-          <summary>Correr la evaluación automática en vivo</summary>
-          <div class="eval-panel" id="eval-panel">
-            <div class="eval-actions">
-              <button type="button" class="submit-button" id="eval-run"><span>Ejecutar evaluación</span><b>▶</b></button>
-              <button type="button" class="ghost-button" id="eval-last">Ver último reporte completo</button>
-            </div>
-            <div id="eval-output" aria-live="polite"></div>
-          </div>
-        </details>
-      </div>
-    </section>
-
     <section class="califica-section" id="califica">
       <div class="shell">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">LABORATORIO CIEGO</p>
-            <h2>Ayúdanos a evaluar Órbita.</h2>
+            <p class="eyebrow">05 · LABORATORIO DE EVALUACIÓN HUMANA</p>
+            <h2>Tu opinión es la siguiente prueba.</h2>
           </div>
-          <p>Tu opinión es la única prueba que un algoritmo no puede hacer por sí mismo.</p>
+          <p>Tu evaluación nos ayuda a estudiar qué tan relevantes resultan las recomendaciones para personas reales. Es ciega: no sabrás qué sistema propuso cada pueblo. Participantes hasta ahora: <b id="human-count">—</b></p>
         </div>
         <div class="lab-shell" id="lab-panel">
           <p class="lab-counter" id="lab-counter" role="status">Cargando…</p>
@@ -367,29 +452,13 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
         </div>
       </div>
     </section>
-
-    <section class="method-section shell" id="metodo">
-      <div class="section-heading method-title">
-        <div>
-          <p class="eyebrow">EL MÉTODO</p>
-          <h2>Un Doctor Strange para tus viajes.</h2>
-        </div>
-        <p>No adivina. Simula qué ocurre cuando una prioridad desaparece.</p>
-      </div>
-      <div class="method-steps">
-        <article><span>01</span><h3>Desarma</h3><p>Convierte tu frase en átomos como bosque, comida, aventura y límites.</p></article>
-        <article><span>02</span><h3>Multiplica</h3><p>Crea 50,000 versiones de ti con prioridades y experiencias ligeramente distintas.</p></article>
-        <article><span>03</span><h3>Sacrifica</h3><p>Encuentra la pregunta capaz de cerrar la mayor cantidad esperada de futuros.</p></article>
-        <article><span>04</span><h3>Colapsa</h3><p>Tus decisiones borran líneas temporales hasta revelar un futuro estable.</p></article>
-      </div>
-    </section>
   </main>
 
   <footer>
     <div class="shell footer-inner">
       <a class="brand" href="#top"><span class="brand-mark"><i></i></span><span>ÓRBITA</span></a>
-      <p>40 Pueblos Mágicos · 208,051 reseñas · Rest-Mex 2025</p>
-      <span>EXPERIMENTO 2026</span>
+      <p>{m.corpus.towns} Pueblos Mágicos · {m.corpus.reviews.toLocaleString("es-MX")} reseñas · Rest-Mex 2025</p>
+      <a href="#resultados">Metodología</a>
     </div>
   </footer>
 
@@ -403,7 +472,7 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
       trajectoryMarkup,
     } from "../scripts/multiverse-markup";
     import cardMarkup from "../scripts/card-markup";
-    import { escapeHtml, postJson, renderClassic, type RecommendResult } from "../scripts/classic";
+    import { escapeHtml, friendlyError, postJson, renderClassic, type RecommendResult } from "../scripts/classic";
     import { renderEvaluation } from "../scripts/evaluator";
     import { setupLab } from "../scripts/lab";
 
@@ -478,7 +547,8 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
         apiStatus.title = `Semántica: ${health.semantic_status}`;
         apiStatus.classList.add("online");
       } catch {
-        apiStatus.textContent = "MOTOR SIN CONEXIÓN";
+        apiStatus.textContent = "MOTOR SIN CONEXIÓN · inicia la API con make web-api";
+        apiStatus.classList.add("offline");
       }
     }
 
@@ -511,6 +581,7 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
           x: width / 2 + Math.cos(angle) * radius,
           y: height / 2 + Math.sin(angle) * radius,
           color: colors[index],
+          label: `${data.destinations[index].name} · ${data.destinations[index].share.toFixed(1)}%`,
         };
       });
       const shares = data.destinations.map((destination: any) => destination.share);
@@ -553,6 +624,10 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
           context.strokeStyle = `${portal.color}55`;
           context.lineWidth = 1;
           context.stroke();
+          context.font = "600 12px ui-sans-serif, system-ui, sans-serif";
+          context.textAlign = "center";
+          context.fillStyle = "#d9ebe7";
+          context.fillText(portal.label, portal.x, portal.y + (portal.y > height / 2 ? 50 : -38));
         });
         particles.forEach((particle: any) => {
           const portal = portals[particle.destination] || portals[0];
@@ -587,6 +662,17 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
         `Monte Carlo: error estándar máximo ${mc.worst_case_se_pp} pp con ${data.surviving_futures.toLocaleString("es-MX")} futuros; ` +
         `con ${mc.convergence[0].futures.toLocaleString("es-MX")} los porcentajes se moverían hasta ${mc.convergence[0].max_abs_share_diff_vs_full_pp} pp. ${mc.note}`;
       document.querySelector("#bottom-multiverse")!.innerHTML = bottomMultiverseMarkup(data.bottom_in_multiverse);
+      const leader = data.destinations[0]?.name ?? "—";
+      document.querySelector("#top-destination")!.textContent = leader;
+      const change = document.querySelector<HTMLElement>("#change-value")!;
+      if (collapsing && previous && data.choices.length) {
+        const before = previous.destinations[0]?.name;
+        change.textContent = before === leader ? `Se mantiene ${leader}` : `${before} → ${leader}`;
+        change.classList.toggle("changed", before !== leader);
+      } else {
+        change.textContent = "Responde una pregunta";
+        change.classList.remove("changed");
+      }
       countTo(document.querySelector("#total-futures")!, data.total_futures);
       countTo(document.querySelector("#surviving-futures")!, data.surviving_futures);
       countTo(document.querySelector("#collapsed-futures")!, data.collapsed_futures);
@@ -603,14 +689,16 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
       document.querySelector("#simulation-disclaimer")!.textContent = data.disclaimer;
 
       if (data.question) {
-        sacrificeQuestion.textContent = data.question.prompt;
+        sacrificeQuestion.textContent = "Si tuvieras que priorizar una experiencia, ¿cuál conservarías?";
         document.querySelector("#information-gain")!.textContent =
-          `En promedio, esta pregunta puede reducir la incertidumbre ${data.question.information_gain.toFixed(2)} puntos.`;
+          `Pregunta elegida por ganancia de información: reduce la entropía en ${data.question.information_gain.toFixed(2)} puntos en promedio.`;
         sacrificeActions.innerHTML = data.question.branches.map(branchMarkup).join("");
       } else {
-        sacrificeQuestion.textContent = "La línea temporal ya es estable.";
+        sacrificeQuestion.textContent = data.facets.length < 2
+          ? "Reconocimos una sola preferencia: no hay nada que priorizar."
+          : "Tus escenarios ya apuntan con claridad a un resultado.";
         document.querySelector("#information-gain")!.textContent =
-          "No queda otra pregunta capaz de cambiar materialmente el resultado.";
+          "No queda una pregunta capaz de dividir los escenarios de forma útil.";
         sacrificeActions.innerHTML = "";
       }
 
@@ -628,13 +716,10 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
       drawMultiverse(data);
     }
 
+    const loopError = document.querySelector<HTMLElement>("#loop-error")!;
     async function simulate(collapsing = false) {
-      errorPanel.hidden = true;
-      if (!collapsing) {
-        results.hidden = true;
-        loading.hidden = false;
-      }
-
+      loopError.hidden = true;
+      if (!collapsing) results.hidden = true;
       try {
         const response = await fetch(`${API_URL}/api/multiverse`, {
           method: "POST",
@@ -648,19 +733,21 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "El motor rechazó la consulta.");
+        document.querySelector<HTMLElement>("#loop-empty")!.hidden = true;
         results.hidden = false;
         renderData(data, collapsing);
-        if (!collapsing) loadOrbit();
-        if (!collapsing) results.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (error) {
-        errorMessage.textContent = error instanceof Error ? error.message : "Error desconocido.";
-        errorPanel.hidden = false;
-      } finally {
-        loading.hidden = true;
+        document.querySelector("#loop-error-message")!.textContent = friendlyError(error);
+        loopError.hidden = false;
       }
     }
 
+    const orbitResults = document.querySelector<HTMLElement>("#orbit-results")!;
+    const roleIcon: Record<string, string> = { Ancla: "◎", Superviviente: "◆", Portal: "◐", Especialista: "▲", Comodín: "✦" };
     async function loadOrbit() {
+      errorPanel.hidden = true;
+      orbitResults.hidden = true;
+      loading.hidden = false;
       try {
         const response = await fetch(`${API_URL}/api/futures`, {
           method: "POST",
@@ -669,28 +756,44 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
         });
         const orbit = await response.json();
         if (!response.ok) throw new Error(orbit.error);
-        document.querySelector("#orbit-grid")!.innerHTML = orbit.destinations.map(cardMarkup).join("");
+        document.querySelector("#orbit-atoms")!.innerHTML = orbit.facets.map((f: any) =>
+          `<span class="atom"><i aria-hidden="true"></i>${escapeHtml(f.label)}</span>`).join("") +
+          (orbit.excluded_concepts ? `<span class="atom excluded"><i aria-hidden="true">⊘</i>Sin ${escapeHtml(orbit.excluded_concepts)}</span>` : "");
+        const note = document.querySelector<HTMLElement>("#orbit-note")!;
+        const filled = orbit.method?.roles_filled ?? orbit.destinations.length;
+        note.hidden = filled >= 5;
+        note.textContent = `Solo ${filled} destinos cumplen tus exclusiones y son distintos entre sí: mostramos ${filled} perspectivas en lugar de cinco.`;
+        document.querySelector("#orbit-grid")!.innerHTML = orbit.destinations
+          .map((d: any, i: number) => cardMarkup({ ...d, icon: roleIcon[d.role] }, i)).join("");
         document.querySelector("#bottom-orbit")!.innerHTML = orbit.bottom_perspective.map((b: any) =>
           `<li><b>#${b.global_rank} ${escapeHtml(b.name)}</b> <span>${escapeHtml(b.verdict)}</span></li>`).join("");
+        orbitResults.hidden = false;
+        orbitResults.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (error) {
-        document.querySelector("#orbit-grid")!.textContent = error instanceof Error ? error.message : "Error desconocido.";
+        const message = friendlyError(error);
+        document.querySelector("#error-title")!.textContent = message.startsWith("Encontramos")
+          ? "Revisa tu descripción." : "No pudimos completar la exploración.";
+        errorMessage.textContent = message;
+        errorPanel.hidden = false;
+      } finally {
+        loading.hidden = true;
       }
     }
 
     async function collapseFuture(choice: { keep: string; sacrifice: string }) {
       activeChoices.push(choice);
       document.querySelector("#particle-caption")!.textContent =
-        `Sacrificando ${choice.sacrifice}… las líneas temporales están colapsando`;
+        `Conservas ${choice.keep}: descartando los escenarios que priorizan ${choice.sacrifice}…`;
       chamber.classList.add("collapsing");
       await simulate(true);
       chamber.classList.remove("collapsing");
-      document.querySelector("#particle-caption")!.textContent = "Cada luz es un posible tú";
+      document.querySelector("#particle-caption")!.textContent = "Cada luz es una forma posible de priorizar tus gustos";
     }
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       activeChoices = [];
-      await simulate(false);
+      await Promise.all([loadOrbit(), simulate(false)]);
     });
 
     document.querySelector("#reset-loop")!.addEventListener("click", async () => {
@@ -714,8 +817,8 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
         classicResults.innerHTML = renderClassic(data);
         classicStatus.textContent = data.mode.toUpperCase();
       } catch (error) {
-        classicResults.innerHTML = `<div class="error-panel" role="alert"><strong>No se pudo recomendar.</strong><p></p></div>`;
-        classicResults.querySelector("p")!.textContent = error instanceof Error ? error.message : "Error desconocido.";
+        classicResults.innerHTML = `<div class="error-panel" role="alert"><strong>No pudimos recomendar todavía.</strong><p></p></div>`;
+        classicResults.querySelector("p")!.textContent = friendlyError(error);
         classicStatus.textContent = "ERROR";
       } finally {
         classicResults.removeAttribute("aria-busy");
