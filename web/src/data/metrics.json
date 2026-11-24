@@ -22,56 +22,56 @@
     "bottom_error_rate": 0.015
   },
   "simulated_users": {
-    "queries": 61,
-    "anchor_hit_at_1": 0.7241,
+    "queries": 48,
+    "anchor_hit_at_1": 0.6903,
     "loop_hit_at_1": [
-      0.8483,
-      0.8968,
-      0.9049,
-      0.9188
+      0.8446,
+      0.9131,
+      0.9221,
+      0.9238
     ],
     "random_hit_at_1": [
-      0.8483,
-      0.8727,
-      0.8939,
-      0.9072
+      0.8446,
+      0.8982,
+      0.9113,
+      0.9222
     ],
     "gain_3q": {
-      "informativa_menos_azar": 0.0116,
+      "informativa_menos_azar": 0.0015,
       "ci95": [
-        0.0047,
-        0.0192
+        0.0,
+        0.0043
       ],
-      "mejora_vs_sin_preguntas": 0.0705,
+      "mejora_vs_sin_preguntas": 0.0792,
       "ci95_mejora": [
-        0.0412,
-        0.1011
+        0.0421,
+        0.1215
       ]
     },
     "concentrated": {
-      "anchor_hit_at_1": 0.5923,
+      "anchor_hit_at_1": 0.5401,
       "loop_hit_at_1": [
-        0.6379,
-        0.6905,
-        0.712,
-        0.7327
+        0.6226,
+        0.7021,
+        0.7093,
+        0.7138
       ],
       "random_hit_at_1": [
-        0.6379,
-        0.6707,
-        0.6946,
-        0.7165
+        0.6226,
+        0.6808,
+        0.6967,
+        0.7121
       ],
       "gain_3q": {
-        "informativa_menos_azar": 0.0162,
+        "informativa_menos_azar": 0.0017,
         "ci95": [
-          0.0064,
-          0.0271
+          -0.0004,
+          0.0054
         ],
-        "mejora_vs_sin_preguntas": 0.0948,
+        "mejora_vs_sin_preguntas": 0.0911,
         "ci95_mejora": [
-          0.0576,
-          0.1353
+          0.0483,
+          0.1399
         ]
       }
     }
@@ -80,22 +80,22 @@
     "spread": 0.5,
     "role_unchanged_pct": {
       "Ancla": 100.0,
-      "Superviviente": 94.1,
-      "Portal": 84.4,
-      "Especialista": 87.4,
-      "Comodín": 79.5
+      "Superviviente": 93.1,
+      "Portal": 83.9,
+      "Especialista": 84.6,
+      "Comodín": 75.3
     },
-    "portfolio_jaccard_mean": 0.9158,
-    "portfolio_identical_pct": 75.2
+    "portfolio_jaccard_mean": 0.9041,
+    "portfolio_identical_pct": 72.3
   },
   "orbit_audit": {
     "queries": 10,
     "all_contracts_pass": true,
-    "mean_resilience": 90.38
+    "mean_resilience": 88.27
   },
   "monte_carlo": {
-    "max_diff_pp_at_50k": 0.418,
+    "max_diff_pp_at_50k": 0.395,
     "seed_agreement_min": 1.0
   },
-  "tests": 63
+  "tests": 82
 }

@@ -300,7 +300,7 @@ const clock = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60))
             <span class="level-n">Nivel 3 · Usuarios simulados</span>
             <strong class="level-big">{pct(su.loop_hit_at_1[3], 0)}</strong>
             <h3>Strange Loop encuentra tu destino ideal</h3>
-            <p>Con gustos ocultos en {su.queries} consultas: el top 1 clásico acierta {pct(su.anchor_hit_at_1)}, Strange Loop {pct(su.loop_hit_at_1[0])} y, tras 3 preguntas, {pct(su.loop_hit_at_1[3])}.</p>
+            <p>Con gustos ocultos en {su.queries} consultas: el top 1 clásico acierta {pct(su.anchor_hit_at_1)}, Strange Loop {pct(su.loop_hit_at_1[0])} y, tras 3 preguntas, {pct(su.loop_hit_at_1[3])}. Caso optimista: los usuarios simulados comparten la utilidad del modelo; no es evaluación humana.</p>
             <ol class="steps-chart" aria-label="Acierto según número de preguntas">
               <li style={`--v:${su.anchor_hit_at_1}`}><b>{pct(su.anchor_hit_at_1)}</b><span>Top 1</span></li>
               {su.loop_hit_at_1.map((v, i) => <li class="hot" style={`--v:${v}`}><b>{pct(v)}</b><span>{i === 0 ? "Loop" : `+${i}P`}</span></li>)}

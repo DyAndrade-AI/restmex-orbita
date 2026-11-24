@@ -27,15 +27,83 @@ def test_entropy_extremes():
     assert _entropy(np.array([], dtype=int), 40) == 0.0
 
 
-def test_counterfactual_shift_solves_the_tie_equation():
-    # Facetas × destinos. El destino 1 gana solo en la faceta 0.
-    matrix = np.array([[0.2, 0.9], [0.8, 0.1], [0.7, 0.2]])
-    cf = _counterfactual(matrix, [{"label": "a"}, {"label": "b"}, {"label": "c"}], 0, 1)
-    diff = matrix[:, 1] - matrix[:, 0]
-    s = -diff.mean() / (diff.max() - diff.mean())
-    assert cf["facet"] == "a" and cf["priority_shift"] == int(np.ceil(s * 100))
-    weaker = _counterfactual(np.array([[0.9, 0.1], [0.8, 0.2]]), [{"label": "a"}, {"label": "b"}], 0, 1)
-    assert weaker["priority_shift"] is None
+LABELS = [{"label": "a"}, {"label": "b"}, {"label": "c"}]
+
+
+def _gap(matrix, relevance, anchor, dest, facet, shift):
+    k = matrix.shape[0]
+    w = np.full(k, (1 - shift) / k)
+    w[facet] += shift
+    return 0.16 * (relevance[dest] - relevance[anchor]) + 0.84 * w @ (matrix[:, dest] - matrix[:, anchor])
+
+
+def test_counterfactual_shift_is_sufficient_and_minimal():
+    rng = np.random.default_rng(0)
+    checked = 0
+    for _ in range(500):
+        matrix, relevance = rng.random((3, 6)), rng.random(6)
+        anchor = int(np.argmax(relevance))
+        for dest in range(6):
+            cf = _counterfactual(matrix, relevance, LABELS, anchor, dest)
+            f = [x["label"] for x in LABELS].index(cf["facet"])
+            s = cf["priority_shift"]
+            if s is None:
+                # Imposible para CUALQUIER ponderación: ni siquiera el mejor vértice del símplex.
+                best = max(_gap(matrix, relevance, anchor, dest, j, 1.0) for j in range(3))
+                assert best < 0
+            elif s == 0:
+                assert _gap(matrix, relevance, anchor, dest, f, 0.0) >= 0
+            else:
+                checked += 1
+                assert _gap(matrix, relevance, anchor, dest, f, s / 100) >= 0
+                # Minimalidad sobre toda dirección v (no solo la faceta elegida).
+                assert all(_gap(matrix, relevance, anchor, dest, j, (s - 1) / 100) < 0 for j in range(3))
+            assert cf == _counterfactual(matrix, relevance, LABELS, anchor, dest)  # determinista
+    assert checked > 50
+
+
+def test_counterfactual_against_itself_is_zero():
+    matrix = np.array([[0.3, 0.1], [0.2, 0.9]])
+    assert _counterfactual(matrix, np.array([1.0, 0.0]), LABELS[:2], 0, 0)["priority_shift"] == 0
+
+
+def test_roles_respect_hard_exclusions_and_are_distinct(engine):
+    from restmex_recommender.futures import constellation_inputs, select_roles
+    for query in ["Quiero arquitectura colonial y gastronomía, sin playa",
+                  "Quiero bosque, cabañas, gastronomía y aventura, sin playa",
+                  "Pueblos con cenotes, sin Tulum"]:
+        for risk in (0.0, 0.55, 1.0):
+            x = constellation_inputs(engine, query, risk)
+            # Forzar la peor situación: nadie cumple el umbral blando.
+            x["eligible"][:] = False
+            x["eligible"][x["anchor"]] = True
+            sel = select_roles(x, risk)
+            assert len(set(sel)) == len(sel) == 5
+            assert not x["unsafe"][sel].any()
+        tulum = [i for i, d in enumerate(engine.destinations) if d["town"] == "Tulum"]
+        if "Tulum" in query and tulum:
+            assert x["unsafe"][tulum[0]]
+
+
+def test_too_few_safe_destinations_shrinks_instead_of_breaking(engine):
+    from restmex_recommender.futures import constellation_inputs, select_roles
+    x = constellation_inputs(engine, "Quiero bosque y gastronomía, sin playa", 0.55)
+    x["unsafe"][:] = True
+    keep = np.argsort(-x["relevance"])[:3]
+    x["unsafe"][keep] = False
+    x["anchor"] = int(keep[0])
+    sel = select_roles(x, 0.55)
+    assert sorted(sel) == sorted(keep.tolist())
+
+
+def test_constellation_keeps_5_plus_5_and_honest_copy(engine):
+    out = engine.recommend_futures(QUERY)
+    ranking = engine.recommend(QUERY)
+    assert out["destinations"][0]["town"] == ranking["top"][0]["town"]
+    assert len({d["town"] for d in out["destinations"]}) == 5
+    assert len(out["bottom_perspective"]) == 5
+    for row in out["bottom_perspective"]:
+        assert "supera al Ancla si solo importa" not in row["verdict"]
 
 
 def test_information_gain_and_collapse_are_consistent(engine):

@@ -7,7 +7,6 @@ import pytest
 from restmex_recommender import Recommender
 from restmex_recommender.futures import _extract_facets
 from restmex_recommender.orbit_eval import role_sensitivity, simulate_users
-from restmex_recommender.text import parse_query
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -20,7 +19,7 @@ def engine():
 
 
 def labels(engine, query):
-    return [f["label"] for f in _extract_facets(engine, parse_query(query).positive)]
+    return [f["label"] for f in _extract_facets(engine, query)]
 
 
 @pytest.mark.parametrize("query, expected", [
@@ -37,7 +36,40 @@ def test_synonyms_form_one_atom(engine, query, expected):
 def test_concrete_atoms_unchanged(engine):
     # El ejemplo del video: los sustantivos concretos siguen saliendo del IDF.
     assert labels(engine, "Busco arquitectura colonial, museos, mezcal y naturaleza, sin playa") == [
-        "arquitectura / colonial", "museos", "mezcal", "naturaleza"]
+        "arquitectura colonial", "museos", "mezcal", "naturaleza"]
+
+
+# Casos de aceptación de la revisión + paráfrasis que no se usaron para diseñar las reglas.
+@pytest.mark.parametrize("query, expected", [
+    ("Quiero cascadas, vegetación y aventura al aire libre", ["cascadas", "vegetación", "aventura"]),
+    ("Busco un viaje con niños pequeños y actividades familiares", ["familia"]),
+    ("Quiero vino, viñedos y recorridos por bodegas", ["vino"]),
+    ("Me interesan viñedos, vino y recorridos por bodegas", ["vino"]),
+    ("Quiero gastronomía y naturaleza, pero sin playa", ["gastronomía", "naturaleza"]),
+    ("Busco tranquilidad, descanso y desconectarme", ["descanso"]),
+    ("Quiero bosque, cabañas, gastronomía y aventura, sin playa",
+     ["bosque y montaña", "gastronomía", "aventura"]),
+    ("Un lugar para hacer senderismo en la montaña y comer rico", ["bosque y montaña", "gastronomía"]),
+    ("Nadar en cenotes y visitar ruinas mayas", ["cenotes", "arqueología"]),
+    ("Aguas termales y spa para relajarme con mi novia", ["aguas termales", "romántico", "descanso"]),
+    ("Tres noches de hotel cerca de la playa", ["playa"]),
+])
+def test_atoms_are_coherent(engine, query, expected):
+    assert labels(engine, query) == expected
+
+
+@pytest.mark.parametrize("query", [
+    "Quiero gastronomía y naturaleza, pero sin playa",
+    "Quiero arquitectura colonial, gastronomía tradicional y actividades culturales, pero sin playa",
+    "Me gustaría naturaleza y comida, no quiero mar",
+])
+def test_exclusion_is_never_a_positive_atom(engine, query):
+    assert not {"playa", "mar"} & set(labels(engine, query))
+
+
+def test_contradiction_is_reported_not_inverted(engine):
+    with pytest.raises(ValueError):
+        labels(engine, "Quiero playa, sin mar")
 
 
 def test_simulated_users_curves(engine):

@@ -32,8 +32,10 @@ export function basinMarkup(destination: Destination, index: number): string {
   const sacrifice = index === 0
     ? "Es el futuro con mayor gravedad dentro del multiverso actual."
     : shift === null
-      ? `Su portal se abre desde ${destination.sacrifice.facet}.`
-      : `Requiere mover ${shift}% de atención hacia ${destination.sacrifice.facet}.`;
+      ? `Ningún reparto de atención lo iguala al primero sin el ruido de experiencia: gana solo por esa variación simulada.`
+      : shift === 0
+        ? `Con tus facetas pesadas por igual ya iguala al primero en la utilidad de facetas.`
+        : `Con ${shift} % de atención desplazada hacia ${destination.sacrifice.facet} iguala al primero en la utilidad de facetas (sin ruido).`;
   const review = destination.evidence?.Review ?? "";
   return `
     <article class="basin-card" style="--basin-index:${index}">

@@ -9,6 +9,7 @@ interface Future {
   dominant_facet: string;
   stability?: number;
   counterfactual: { facet: string; priority_shift: number | null };
+  eligibility?: string;
   evidence?: { Review: string; Type: string; Polarity: number };
 }
 
@@ -25,11 +26,14 @@ export default function cardMarkup(future: Future, index: number): string {
   if (future.role === "Ancla") {
     explanation = `Es la coincidencia directa. Su eje dominante es ${future.dominant_facet}.`;
   } else if (shift === null) {
-    explanation = `Abre una ruta diferente a través de ${future.counterfactual.facet}.`;
+    explanation = `Está por su rol, no por afinidad: ninguna ponderación de tus facetas lo iguala al Ancla. Su fuerza: ${future.counterfactual.facet}.`;
   } else if (shift === 0) {
-    explanation = `Supera al Ancla si miramos ${future.counterfactual.facet} por separado.`;
+    explanation = `Con tus facetas pesadas por igual ya iguala al Ancla en la utilidad de facetas (el ranking 5 + 5 pesa la consulta completa).`;
   } else {
-    explanation = `Mover ${shift}% de atención hacia ${future.counterfactual.facet} abre este futuro.`;
+    explanation = `Con ${shift} % de tu atención desplazada hacia ${future.counterfactual.facet}, iguala al Ancla en la utilidad de facetas (no en el ranking 5 + 5).`;
+  }
+  if (future.eligibility === "umbral relajado") {
+    explanation += " Ningún destino seguro cumplía el umbral de afinidad del rol: se relajó ese umbral, nunca tus exclusiones.";
   }
 
   const review = future.evidence?.Review ?? "";
