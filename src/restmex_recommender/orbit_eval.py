@@ -4,8 +4,13 @@
    ideal es argmax 0.16·r + 0.84·w*·M (la misma utilidad del modelo, sin ruido). Responde con
    honestidad a las preguntas de sacrificio y medimos cuánto acierta el modo del multiverso tras
    0..T preguntas, comparando la pregunta de máxima información contra una pregunta al azar.
-   Dos poblaciones: "prior" (w* sale del mismo Dirichlet que el modelo, caso optimista) y
-   "concentrada" (gustos dominados por una faceta, α = 0.35: el modelo está mal especificado).
+   Poblaciones (cada una rompe un supuesto del modelo; ninguna es validación humana):
+   - "prior": w* del mismo Dirichlet que el modelo y su misma utilidad (caso optimista).
+   - "concentrada": gustos dominados por una faceta (α = 0.35): prior mal especificado.
+   - "relevancia_0.50": el usuario pesa r con 0.50 en vez de 0.16: utilidad distinta a la del modelo.
+   - "rendimientos_decrecientes": utilidad 0.16·r + 0.84·w*·√M (la del modelo es lineal en M).
+   - "ruido_15" / "ruido_30": cada respuesta se invierte con probabilidad 0.15 / 0.30
+     (respuesta inconsistente, cambio de opinión o faceta mal interpretada).
 2. Sensibilidad de los pesos de rol: cada coeficiente de ROLE_WEIGHTS se multiplica por un factor en
    [1 − s, 1 + s] y se mide con qué frecuencia cada rol conserva el mismo destino.
 """
@@ -30,7 +35,16 @@ from .futures import (
 if TYPE_CHECKING:
     from .engine import Recommender
 
-POPULATIONS = {"prior": None, "concentrada": 0.35}
+# alpha: concentración del Dirichlet de w* (None = la del modelo); relevance: peso de r en la
+# utilidad del usuario; concave: √M; flip: probabilidad de responder al revés.
+POPULATIONS = {
+    "prior": {},
+    "concentrada": {"alpha": 0.35},
+    "relevancia_0.50": {"relevance": 0.50},
+    "rendimientos_decrecientes": {"concave": True},
+    "ruido_15": {"flip": 0.15},
+    "ruido_30": {"flip": 0.30},
+}
 
 
 def _mode_top(winners: np.ndarray, towns: int, k: int = 5) -> np.ndarray:
@@ -56,10 +70,15 @@ def simulate_users(
     if k < 2:
         return None
     labels = [f["label"] for f in facets]
+    spec = POPULATIONS[population]
     rng = np.random.default_rng(seed)
-    alpha = POPULATIONS[population] or (28.0 - 24.0 * risk) / k
+    alpha = spec.get("alpha") or (28.0 - 24.0 * risk) / k
     hidden = rng.dirichlet(np.full(k, alpha), size=users)
-    utility = 0.16 * relevance[None, :] + 0.84 * (hidden @ matrix)
+    lam = spec.get("relevance", 0.16)
+    taste = np.sqrt(np.clip(matrix, 0.0, None)) if spec.get("concave") else matrix
+    utility = lam * relevance[None, :] + (1.0 - lam) * (hidden @ taste)
+    # Mismas respuestas invertidas para ambas políticas: la comparación es pareada.
+    flips = np.random.default_rng(seed + 10_000).random((users, max_questions + 1)) < spec.get("flip", 0.0)
     utility[:, unsafe] = -np.inf
     ideal = np.argmax(utility, axis=1)
     anchor = int(np.argmax(relevance))
@@ -90,6 +109,8 @@ def simulate_users(
                     if pair is not None:
                         a, b = pair
                         keep, drop = (a, b) if hidden[u, a] >= hidden[u, b] else (b, a)
+                        if flips[u, t]:
+                            keep, drop = drop, keep
                         narrowed = active & (weights[:, keep] >= weights[:, drop])
                         if narrowed.sum() >= 50:  # mismo mínimo que simulate_multiverse
                             active = narrowed
@@ -146,6 +167,14 @@ def summarize_users(rows: Sequence[dict]) -> dict:
             "ci95_mejora": _bootstrap_mean_ci(lift, seed=100 + t),
         }
     out["hit_at_1_gain"] = gains
+    # Experimento D: consultas donde preguntar al azar acierta MÁS que la pregunta informativa.
+    out["queries_where_random_beats_informative_at_1q"] = sum(
+        r["curves"]["azar"]["hit_at_1"][1] > r["curves"]["informativa"]["hit_at_1"][1] for r in rows)
+    out["queries_where_questions_hurt_at_3q"] = sum(
+        r["curves"]["informativa"]["hit_at_1"][-1] < r["curves"]["informativa"]["hit_at_1"][0]
+        for r in rows)
+    out["mean_questions_asked"] = round(float(np.mean(
+        [r["curves"]["informativa"]["mean_questions_asked"] for r in rows])), 3)
     return out
 
 
@@ -181,7 +210,7 @@ def role_sensitivity(
         for d in range(draws):
             factors = {c: float(rng.uniform(1 - spread, 1 + spread)) for c in coefficients}
             sel = select_roles(x, risk, _perturbed(ROLE_WEIGHTS, factors))
-            same[qi, d] = [a == b for a, b in zip(sel, base)]
+            same[qi, d] = [i < min(len(sel), len(base)) and sel[i] == base[i] for i in range(len(roles))]
             jaccard[qi, d] = len(set(sel) & set(base)) / len(set(sel) | set(base))
     per_coef = {f"{r}.{c}": round(float(np.mean(v)) * 100, 1) for (r, c), v in one_at_a_time.items()}
     return {

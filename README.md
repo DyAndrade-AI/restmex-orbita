@@ -37,15 +37,18 @@ opción supere al Ancla. El proceso es determinista y sigue usando exclusivament
 
 ## Validación sin humanos (usuarios simulados y sensibilidad)
 
-`make validate-orbit` (≈90 s) responde las dos dudas obvias sobre lo experimental:
+`make validate-orbit` (≈3 min) responde las dos dudas obvias sobre lo experimental:
 
-- **¿Sirven las preguntas de Strange Loop?** Usuarios simulados con gustos ocultos: el top 1
-  clásico acierta su destino ideal el 72 %, Strange Loop sin preguntas el 85 % y con 3 preguntas
-  el 92 %; la pregunta de máxima información supera a una al azar (IC95 excluye 0), también con
-  gustos fuera del prior del modelo.
+- **¿Sirven las preguntas de Strange Loop?** Con usuarios simulados que comparten la utilidad del
+  modelo (caso optimista), el top 1 clásico acierta su destino ideal el 69 %, Strange Loop sin
+  preguntas el 84 % y con 3 preguntas el 92 %. Cuando se rompe un supuesto (otra utilidad,
+  respuestas con 30 % de error), la mejora con preguntas deja de ser significativa: su IC95
+  incluye 0. Son usuarios simulados, no personas.
 - **¿Dependen los roles de pesos elegidos a mano?** Con los 13 pesos perturbados ±50 % a la vez, la
-  cartera de cinco futuros se conserva en un 92 % (Jaccard medio).
+  cartera de cinco futuros se conserva en un 90 % (Jaccard medio).
 
+Las cifras exactas se generan desde el artefacto en
+[docs/orbit_validation.md](docs/orbit_validation.md).
 Detalle y límites en [docs/metodologia.md §8 bis](docs/metodologia.md). Después,
 `make web-metrics` copia las cifras a `web/src/data/metrics.json`, que es lo que muestra la web.
 

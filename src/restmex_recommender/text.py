@@ -167,6 +167,21 @@ def parse_query(query: str) -> QueryIntent:
 
 
 
+def positive_segments(query: str) -> List[str]:
+    """Elementos coordinados de la parte positiva ("a, b y c al aire libre" → 3 segmentos).
+
+    Se cortan en la puntuación ANTES de normalizar (normalize_text la borra) y en conjunciones;
+    cada segmento es un sintagma: núcleo + modificadores ("gastronomía tradicional")."""
+    raw = NEGATIVE_PATTERN.sub(" , ", unicodedata.normalize("NFKC", str(query or "")).lower())
+    segments = []
+    for part in re.split(r"[,.;:!?]", raw):
+        for piece in re.split(r"\b(?:y|e|o|u|pero|ni|ademas|además|tambien|también)\b", part):
+            piece = canonical_text(piece)
+            if piece:
+                segments.append(piece)
+    return segments
+
+
 def phonetic_key(word: str) -> str:
     """Clave fonética aproximada del español para corregir faltas comunes (plallas → playas)."""
     w = canonical_text(word)

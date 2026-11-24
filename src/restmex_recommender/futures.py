@@ -15,6 +15,9 @@ from .text import (
     SPANISH_STOP_WORDS,
     canonical_text,
     expand_for_lexical,
+    normalize_text,
+    parse_query,
+    positive_segments,
 )
 
 if TYPE_CHECKING:
@@ -54,35 +57,72 @@ ROLE_DEFINITIONS = {
 }
 
 
-# Intenciones que no son un sustantivo concreto: sus sinónimos deben formar UN átomo (antes
-# "niños" y "familia" eran dos gustos que "competían" sin competir). Solo afecta a Órbita y
-# Strange Loop; el ranking 5 + 5 sigue usando CONCEPT_EXPANSIONS sin cambios.
-FACET_CONCEPTS = (
-    ("romántico", ("romantico", "romantica", "romanticos", "pareja", "aniversario", "enamorados",
-                   "novia", "novio"), "romantico pareja aniversario cena atardecer"),
-    ("familia", ("familia", "familiar", "familias", "ninos", "nino", "ninas", "hijos", "infantil"),
+# Conceptos de faceta. Cada uno es UN átomo de gusto aunque la consulta use varios sinónimos
+# ("niños" + "familiares" → familia). Los conceptos léxicos reutilizan CONCEPT_EXPANSIONS como
+# sonda; los disparadores extra de aquí solo afectan a Órbita y Strange Loop (el ranking 5 + 5
+# no cambia). Las frases de varias palabras ("aire libre") se reconocen antes que los tokens.
+_LEXICAL_LABELS = {
+    "playa": "playa", "cenote": "cenotes", "pirámide": "arqueología", "vino": "vino",
+    "bosque": "bosque y montaña", "colonial": "arquitectura colonial", "cascada": "cascadas",
+    "termal": "aguas termales", "desierto": "desierto", "comida": "gastronomía",
+}
+_EXTRA_TRIGGERS = {
+    "pirámide": ("ruinas", "maya", "mayas", "zona arqueologica"),
+    "comida": ("comer",),
+}
+FACET_CONCEPTS = tuple(
+    (_LEXICAL_LABELS[triggers[0]], triggers + _EXTRA_TRIGGERS.get(triggers[0], ()), probe)
+    for triggers, probe in CONCEPT_EXPANSIONS.items()
+) + (
+    ("romántico", ("romantico", "romantica", "pareja", "aniversario", "enamorados", "novia",
+                   "novio"), "romantico pareja aniversario cena atardecer"),
+    ("familia", ("familia", "familiar", "ninos", "nino", "ninas", "hijos", "infantil"),
      "familia familiar ninos juegos parque infantil"),
-    ("vida nocturna", ("nocturna", "nocturno", "bar", "bares", "antro", "antros", "fiesta",
-                       "fiestas", "noche"), "vida nocturna bar bares antro fiesta musica noche"),
-    ("descanso", ("tranquilo", "tranquila", "tranquilos", "tranquilas", "tranquilidad", "descansar",
-                  "descanso", "relajarse", "relajante", "relajacion", "desconectar",
-                  "desconectarme", "paz"), "tranquilo tranquilidad descanso relajarse paz silencio"),
-    ("vistas", ("fotografia", "fotos", "foto", "mirador", "miradores", "vistas", "panoramica"),
+    # Sin "noche": en viajes suele ser duración ("tres noches"), no un gusto.
+    ("vida nocturna", ("vida nocturna", "nocturna", "nocturno", "bar", "antro", "fiesta"),
+     "vida nocturna bar bares antro fiesta musica noche"),
+    ("descanso", ("tranquilo", "tranquila", "tranquilidad", "descansar", "descanso", "relajarse",
+                  "relajante", "relajacion", "desconectar", "paz"),
+     "tranquilo tranquilidad descanso relajarse paz silencio"),
+    ("vistas", ("fotografia", "fotos", "foto", "mirador", "vistas", "panoramica"),
      "fotografia fotos mirador vista vistas panoramica"),
-    ("aventura", ("aventura", "aventuras", "extrema", "extremo", "extremos", "tirolesa", "rappel",
-                  "cuatrimoto", "cuatrimotos", "escalada", "canopy"),
+    ("aventura", ("aventura", "aire libre", "extrema", "extremo", "tirolesa", "rappel",
+                  "cuatrimoto", "escalada", "canopy"),
      "aventura tirolesa rappel cuatrimoto escalada extremo"),
-    ("lago y río", ("lago", "lagos", "laguna", "lagunas", "lancha", "lanchas", "rio", "rios"),
-     "lago laguna lancha rio paseo agua"),
-    ("café", ("cafe", "cafetal", "cafetales"), "cafe cafetal cafetales finca"),
-    ("artesanía", ("artesania", "artesanias", "artesanal", "artesanales", "alfareria", "textiles"),
+    ("lago y río", ("lago", "laguna", "lancha", "rio"), "lago laguna lancha rio paseo agua"),
+    ("café", ("cafe", "cafetal"), "cafe cafetal cafetales finca"),
+    ("artesanía", ("artesania", "artesanal", "alfareria", "textiles"),
      "artesania artesanias artesanal alfareria textiles"),
 )
-# Modificadores que el IDF trataba como gustos propios ("pequeños", "vida", "altura").
-FACET_FILLER = frozenset(
-    "algo lugar lugares vida pequenos pequenas actividades actividad altura nuestro nuestra "
-    "mucho mucha muy buen buena".split()
-)
+# Un término sin concepto solo es faceta si DISCRIMINA entre pueblos: la entropía normalizada
+# de su peso en los 40 perfiles debe ser < 0.90. Medido sobre el corpus, no sobre la evaluación:
+# "ver", "rico", "aire", "libre", "tradicional" ≥ 0.92 (aparecen igual en todos); "viñedos" 0.26,
+# "vegetación" 0.81, "naturaleza" 0.82. Un término uniforme no puede ser un eje de decisión.
+FACET_MAX_SPREAD = 0.90
+
+
+def _forms(token: str) -> set:
+    """Variantes de un token canónico: sin clítico ("relajarme") y sin plural ("viñedos")."""
+    forms = {token}
+    for clitic in ("me", "te", "se", "nos"):
+        stem = token[: -len(clitic)]
+        if token.endswith(clitic) and stem.endswith(("ar", "er", "ir")):
+            forms.add(stem)
+    for form in list(forms):
+        if form.endswith("es") and len(form) > 4:
+            forms.add(form[:-2])
+        if form.endswith("s") and len(form) > 3:
+            forms.add(form[:-1])
+    return forms
+
+
+_CONCEPT_LABELS = {label for label, _, _ in FACET_CONCEPTS}
+_CONCEPT_INDEX = [
+    (label, {f for t in triggers if " " not in t for f in _forms(canonical_text(t))},
+     tuple(canonical_text(t) for t in triggers if " " in t), probe)
+    for label, triggers, probe in FACET_CONCEPTS
+]
+
 
 # Pesos de diseño de cada rol (un solo lugar para auditarlos; ver orbit_eval.role_sensitivity).
 ROLE_WEIGHTS = {
@@ -105,57 +145,72 @@ def _role_stability(matrix: np.ndarray, relevance: np.ndarray, selected: Sequenc
     return [round(float(np.mean((top10 == d).any(axis=1))) * 100.0, 1) for d in selected]
 
 
-def _extract_facets(engine: "Recommender", text: str, limit: int = 5) -> List[dict]:
-    """Convierte una consulta en conceptos de dominio y términos raros del corpus."""
-    canonical = canonical_text(text)
-    tokens = set(canonical.split())
-    consumed = set()
+def _token_spread(engine: "Recommender", token: str) -> float:
+    """Entropía normalizada (0–1) del peso del término entre los perfiles de pueblo."""
+    rows = [engine.profile_index[(town, "ALL")] for town in engine.towns]
+    column = engine.lexical_profiles[rows][:, engine.vectorizer.vocabulary_[token]].toarray().ravel()
+    total = float(column.sum())
+    if total <= 0:
+        return 1.0
+    share = column[column > 0] / total
+    return float(-(share * np.log(share)).sum() / np.log(len(rows)))
+
+
+def _extract_facets(engine: "Recommender", query: str, limit: int = 5) -> List[dict]:
+    """Átomos de gusto: un concepto por núcleo de cada segmento coordinado de la consulta.
+
+    1. La consulta se corta en segmentos (comas, "y", "pero"); la exclusión ya no está.
+    2. En cada segmento, los conceptos de dominio son núcleos; el resto del segmento son
+       modificadores que se suman a la sonda del núcleo ("gastronomía tradicional").
+    3. Un segmento sin concepto da como mucho UNA faceta: su término más raro entre los que
+       discriminan entre pueblos (FACET_MAX_SPREAD).
+    4. Nada que coincida con la exclusión puede ser faceta positiva ("playa … sin playa")."""
+    intent = parse_query(query)
+    excluded = {f for t in canonical_text(intent.negative).split() for f in _forms(t)}
+    vocabulary, idf = engine.vectorizer.vocabulary_, engine.vectorizer.idf_
+    spelled = {canonical_text(w): w for w in normalize_text(query).split()}  # "vegetación"
     facets: List[dict] = []
-
-    for triggers, expansion in CONCEPT_EXPANSIONS.items():
-        trigger_tokens = set(canonical_text(" ".join(triggers)).split())
-        matches = sorted(tokens.intersection(trigger_tokens))
-        if not matches:
-            continue
-        consumed.update(matches)
-        facets.append(
-            {
-                "label": " / ".join(matches[:3]),
-                "probe": expansion,
-                "source": "concepto turístico",
-            }
-        )
-
-    for label, triggers, expansion in FACET_CONCEPTS:
-        matches = tokens.intersection(triggers) - consumed
-        if matches:
-            consumed.update(matches)
-            facets.append({"label": label, "probe": expansion, "source": "concepto turístico"})
-
-    candidates = []
-    vocabulary = engine.vectorizer.vocabulary_
-    idf = engine.vectorizer.idf_
-    for token in re.findall(r"[a-záéíóúüñ]{3,}", canonical):
-        if (
-            token in consumed
-            or token in SPANISH_STOP_WORDS
-            or token in QUERY_FILLER
-            or token in FACET_FILLER
-            or token not in vocabulary
-        ):
-            continue
-        candidates.append((float(idf[vocabulary[token]]), token))
-
-    seen = {item["label"] for item in facets}
-    for _, token in sorted(set(candidates), key=lambda item: (-item[0], item[1])):
-        if token not in seen:
-            facets.append({"label": token, "probe": token, "source": "señal del usuario"})
-            seen.add(token)
-        if len(facets) >= limit:
-            break
+    for segment in positive_segments(query):
+        padded = f" {segment} "
+        tokens = [t for t in segment.split() if not _forms(t) & excluded]
+        consumed, heads = set(), []
+        for label, singles, phrases, probe in _CONCEPT_INDEX:
+            hits = [t for t in tokens if _forms(t) & singles]
+            hits += [w for p in phrases if f" {p} " in padded for w in p.split()]
+            consumed.update(hits)  # un concepto excluido ("sin mar") también se lleva "playa"
+            if hits and not singles & excluded:
+                heads.append((label, probe))
+        rest = [
+            t for t in tokens
+            if t not in consumed and t in vocabulary and len(t) >= 3
+            and t not in SPANISH_STOP_WORDS and t not in QUERY_FILLER
+        ]
+        if heads:
+            label, probe = heads[0]
+            heads[0] = (label, " ".join([probe, *rest]))
+        else:
+            rest = [t for t in rest if _token_spread(engine, t) < FACET_MAX_SPREAD]
+            if rest:
+                best = max(rest, key=lambda t: (idf[vocabulary[t]], t))
+                heads = [(spelled.get(best, best), " ".join(rest))]
+        for label, probe in heads:
+            known = next((f for f in facets if f["label"] == label), None)
+            if known:
+                known["probe"] = f"{known['probe']} {probe}"
+            else:
+                source = "concepto turístico" if label in _CONCEPT_LABELS else "señal del usuario"
+                facets.append({"label": label, "probe": probe, "source": source})
 
     if not facets:
-        facets.append({"label": canonical, "probe": canonical, "source": "intención completa"})
+        remaining = [
+            t for t in canonical_text(intent.positive).split()
+            if not _forms(t) & excluded and t not in SPANISH_STOP_WORDS and t not in QUERY_FILLER
+            and not any(_forms(t) & singles and singles & excluded for _, singles, _, _ in _CONCEPT_INDEX)
+        ]
+        if not remaining:
+            raise ValueError("La consulta pide y excluye lo mismo; aclara qué buscas.")
+        text = " ".join(remaining)
+        facets.append({"label": text, "probe": text, "source": "intención completa"})
     return facets[:limit]
 
 
@@ -196,45 +251,89 @@ def _pick(
     selected: List[int],
     distances: np.ndarray,
     risk: float,
-    eligible: Optional[np.ndarray] = None,
+    eligible: np.ndarray,
+    unsafe: np.ndarray,
     penalty: float = ROLE_WEIGHTS["diversidad"]["penalty"],
 ) -> int:
-    score = role_score.copy()
+    """Mejor candidato del rol, o −1 si no queda ningún destino seguro sin repetir.
+
+    Restricción dura (unsafe): nunca se relaja. Umbral blando de plausibilidad (eligible): solo
+    se relaja si ningún destino seguro lo cumple, y la tarjeta lo declara."""
+    score = role_score.astype(np.float64).copy()
     if selected:
         diversity = distances[:, selected].mean(axis=1)
         score = (1.0 - penalty * risk) * score + penalty * risk * diversity
         score[selected] = -np.inf
-    if eligible is not None and (eligible & np.isfinite(score)).any():
-        score[~eligible] = -np.inf  # si nadie es elegible se ignora el filtro en vez de repetir
+    score[unsafe] = -np.inf
+    if (eligible & np.isfinite(score)).any():
+        score[~eligible] = -np.inf
+    if not np.isfinite(score).any():
+        return -1
     return int(np.argmax(score))
 
 
+# Utilidad declarada de Órbita y Strange Loop (Strange Loop le suma ruido Gumbel).
+UTILITY_RELEVANCE = 0.16
+COUNTERFACTUAL_SCOPE = (
+    "U_w(d) = 0.16·r(d) + 0.84·Σ_f w_f M[f,d]; w(s) = (1−s)·uniforme + s·v. Es la utilidad de "
+    "facetas de Strange Loop, no el ranking 5 + 5: r no se descompone en facetas."
+)
+
+
+def _utility_gap(matrix: np.ndarray, relevance: np.ndarray, anchor: int, destination: int,
+                 facet: int, shift: float) -> float:
+    """U_w(s)(destino) − U_w(s)(ancla) con w(s) = (1−s)·uniforme + s·e_facet."""
+    k = matrix.shape[0]
+    w = np.full(k, (1.0 - shift) / k)
+    w[facet] += shift
+    diff = matrix[:, destination].astype(np.float64) - matrix[:, anchor]
+    rel = float(relevance[destination]) - float(relevance[anchor])
+    return UTILITY_RELEVANCE * rel + (1.0 - UTILITY_RELEVANCE) * float(w @ diff)
+
+
 def _counterfactual(
-    matrix: np.ndarray, facets: Sequence[dict], anchor: int, destination: int
+    matrix: np.ndarray, relevance: np.ndarray, facets: Sequence[dict], anchor: int, destination: int
 ) -> Dict[str, object]:
-    differences = matrix[:, destination] - matrix[:, anchor]
+    """Mínimo desplazamiento de atención s* para que el destino iguale al Ancla en U.
+
+    Δ(s) es lineal en w, así que para cualquier s el mejor v del símplex es e_f* con
+    f* = argmax_f (M[f,d] − M[f,ancla]): s* es mínimo sobre TODAS las direcciones, y si
+    Δ(1) < 0 ninguna ponderación de facetas lo pone delante (imposible, no "difícil")."""
+    differences = matrix[:, destination].astype(np.float64) - matrix[:, anchor]
     facet_idx = int(np.argmax(differences))
-    mean_difference = float(differences.mean())
-    best_difference = float(differences[facet_idx])
-    if best_difference > 1e-7 and mean_difference < 0:
-        shift = -mean_difference / (best_difference - mean_difference)
-        shift_percent = int(np.clip(np.ceil(shift * 100.0), 1, 100))
-    elif best_difference > 1e-7:
+    start = _utility_gap(matrix, relevance, anchor, destination, facet_idx, 0.0)
+    end = _utility_gap(matrix, relevance, anchor, destination, facet_idx, 1.0)
+    if start >= 0:
         shift_percent = 0
-    else:
+    elif end < 0:
         shift_percent = None
+    else:
+        shift_percent = int(np.clip(np.ceil(-start / (end - start) * 100.0 - 1e-9), 1, 100))
+        # Comprobación con la misma función: el % anunciado alcanza y uno menos no.
+        while _utility_gap(matrix, relevance, anchor, destination, facet_idx,
+                           shift_percent / 100.0) < 0:
+            shift_percent += 1
     return {
         "facet": facets[facet_idx]["label"],
         "priority_shift": shift_percent,
-        "advantage": round(best_difference * 100.0, 1),
+        "advantage": round(float(differences[facet_idx]) * 100.0, 1),
+        "utility_gap_at_equal_attention": round(start * 100.0, 2),
+        "scope": "utilidad de facetas U (no el ranking 5 + 5)",
     }
+
+
+def _hard_excluded(engine: "Recommender", scored: dict) -> np.ndarray:
+    """Restricción dura: evidencia explícita de incumplir la exclusión (explain.violation_mask,
+    la misma regla que el ranking 5 + 5) o pueblo nombrado en ella ("sin Tulum")."""
+    named = engine._entity_mask(scored["intent"].negative) >= 1.0
+    return np.asarray(scored["violations"]["mask"], dtype=bool) | named
 
 
 def constellation_inputs(engine: "Recommender", query: str, risk: float) -> dict:
     """Todo lo que la selección de roles necesita, calculado una vez por consulta."""
     scored = engine._score_query(query)
     relevance = scored["scores"]
-    facets = _extract_facets(engine, scored["intent"].positive)
+    facets = _extract_facets(engine, query)
     matrix = _facet_scores(engine, facets, scored["intent"].preferred_types)
     robust, worst, volatility = _scenario_metrics(matrix)
 
@@ -242,11 +341,12 @@ def constellation_inputs(engine: "Recommender", query: str, risk: float) -> dict
     profiles = engine.lexical_profiles[profile_rows]
     similarities = (profiles @ profiles.T).toarray().astype(np.float32)
     distances = np.clip(1.0 - similarities, 0.0, 1.0)
-    anchor = int(np.argmax(relevance))
+    unsafe = _hard_excluded(engine, scored)
+    if unsafe.all():
+        raise ValueError("Las exclusiones descartan todos los destinos; relaja alguna.")
+    # Con restricciones duras activas (por defecto) coincide con el top 1 del ranking 5 + 5.
+    anchor = int(np.argmax(np.where(unsafe, -np.inf, relevance)))
     threshold = float(np.quantile(relevance, 0.60 - 0.35 * risk))
-    # Frontera negativa = evidencia explícita de incumplimiento (explain.violation_mask), la
-    # misma regla que el ranking 5 + 5; ya no un cuantil fijo que excluía siempre 14 pueblos.
-    unsafe = scored["violations"]["mask"]
     eligible = ~unsafe & (relevance >= threshold)
     eligible[anchor] = True
     return {
@@ -276,8 +376,11 @@ def select_roles(x: dict, risk: float, weights: Optional[dict] = None, count: in
     ]
     selected = [x["anchor"]]
     for role_idx in range(1, count):
-        selected.append(_pick(role_scores[role_idx], selected, x["distances"], risk,
-                              x["eligible"], w["diversidad"]["penalty"]))
+        pick = _pick(role_scores[role_idx], selected, x["distances"], risk,
+                     x["eligible"], x["unsafe"], w["diversidad"]["penalty"])
+        if pick < 0:  # menos roles antes que un destino que incumpla una exclusión
+            break
+        selected.append(pick)
     return selected
 
 
@@ -299,7 +402,7 @@ def build_future_constellation(
     for role_idx, destination_idx in enumerate(selected):
         item = engine.destinations[destination_idx]
         evidence_idx = int(scored["best_evidence"][destination_idx])
-        counterfactual = _counterfactual(matrix, facets, anchor, destination_idx)
+        counterfactual = _counterfactual(matrix, relevance, facets, anchor, destination_idx)
         if role_idx == 0:
             counterfactual = {
                 "facet": facets[int(np.argmax(matrix[:, destination_idx]))]["label"],
@@ -323,6 +426,8 @@ def build_future_constellation(
                 "keywords": item["keywords"]["ALL"][:6],
                 "evidence": engine.evidence[evidence_idx] if evidence_idx >= 0 else None,
                 "review_count": item["review_count"],
+                # El umbral blando solo se relaja si ningún destino seguro lo cumplía.
+                "eligibility": "estricta" if x["eligible"][destination_idx] else "umbral relajado",
             }
         )
 
@@ -335,15 +440,17 @@ def build_future_constellation(
             verdict = "Imposible bajo las restricciones: incumple una exclusión con evidencia explícita."
             cf = {"facet": None, "priority_shift": None, "advantage": 0.0}
         else:
-            cf = _counterfactual(matrix, facets, anchor, idx)
+            cf = _counterfactual(matrix, relevance, facets, anchor, idx)
             if cf["priority_shift"] is None:
-                verdict = ("Ninguna redistribución de atención entre las facetas lo hace superar al "
-                           "Ancla: es más débil en todas.")
+                verdict = ("Ninguna ponderación de tus facetas lo iguala al Ancla en la utilidad "
+                           "de facetas: ni con toda la atención en su mejor faceta.")
             elif cf["priority_shift"] == 0:
-                verdict = f"Ya supera al Ancla si solo importa {cf['facet']}."
+                verdict = (f"Con atención repartida por igual ya iguala al Ancla en la utilidad de "
+                           f"facetas; el ranking 5 + 5 lo deja abajo porque pesa la consulta completa.")
             else:
-                verdict = (f"Tendría que moverse {cf['priority_shift']} % de la atención hacia "
-                           f"{cf['facet']} para superar al Ancla.")
+                verdict = (f"Con {cf['priority_shift']} % de la atención desplazada hacia "
+                           f"{cf['facet']} igualaría al Ancla en la utilidad de facetas "
+                           f"(no cambia su puesto en el ranking 5 + 5).")
         bottom_view.append({
             "town": item["town"], "name": item["display_name"],
             "global_rank": int(np.flatnonzero(order == idx)[0]) + 1,
@@ -368,6 +475,8 @@ def build_future_constellation(
             "scenarios": len(facets) if len(facets) > 1 else 1,
             "inventory": len(engine.towns),
             "deterministic": True,
+            "roles_filled": len(selected),
+            "counterfactual_scope": COUNTERFACTUAL_SCOPE,
             "negative_boundary": bool(intent.negative),
         },
     }
@@ -507,7 +616,7 @@ def multiverse_core(
     scored = engine._score_query(query)
     intent = scored["intent"]
     relevance = scored["scores"]
-    facets = _extract_facets(engine, intent.positive)
+    facets = _extract_facets(engine, query)
     matrix = _facet_scores(engine, facets, intent.preferred_types)
 
     seed_material = f"{intent.original}|{risk:.4f}|strange-loop-v1".encode("utf-8")
@@ -518,7 +627,8 @@ def multiverse_core(
     alpha = np.full(len(facets), concentration / len(facets), dtype=np.float64)
     weights = generator.dirichlet(alpha, size=futures).astype(np.float32)
 
-    possible_scores = 0.16 * relevance[None, :] + 0.84 * (weights @ matrix)
+    possible_scores = (UTILITY_RELEVANCE * relevance[None, :]
+                       + (1.0 - UTILITY_RELEVANCE) * (weights @ matrix))
     # Cada línea temporal también incluye variación no observada de la experiencia. El ruido
     # Gumbel convierte la afinidad en una elección probabilística sin perder reproducibilidad.
     experience_scale = 0.015 + 0.065 * risk
@@ -527,7 +637,7 @@ def multiverse_core(
         scale=experience_scale,
         size=possible_scores.shape,
     ).astype(np.float32)
-    unsafe = scored["violations"]["mask"]
+    unsafe = _hard_excluded(engine, scored)
     possible_scores[:, unsafe] = -1e6  # restricción dura con evidencia explícita
 
     winners = np.argmax(possible_scores, axis=1).astype(np.int16)
@@ -593,7 +703,7 @@ def simulate_multiverse(
         identity_order = np.argsort(-mean_taste)[:2]
         item = engine.destinations[int(destination)]
         evidence_idx = int(scored["best_evidence"][destination])
-        counterfactual = _counterfactual(matrix, facets, anchor, int(destination))
+        counterfactual = _counterfactual(matrix, relevance, facets, anchor, int(destination))
         p_hat = count / len(active_indices)
         se = float(np.sqrt(p_hat * (1 - p_hat) / len(active_indices)))
         destinations.append(

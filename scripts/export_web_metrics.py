@@ -51,12 +51,23 @@ def main() -> None:
             "loop_hit_at_1": prior["informativa"]["hit_at_1"],
             "random_hit_at_1": prior["azar"]["hit_at_1"],
             "gain_3q": prior["hit_at_1_gain"]["3"],
+            "gain_1q": prior["hit_at_1_gain"]["1"],
             "concentrated": {
                 "anchor_hit_at_1": concentrated["anchor_hit_at_1"],
                 "loop_hit_at_1": concentrated["informativa"]["hit_at_1"],
                 "random_hit_at_1": concentrated["azar"]["hit_at_1"],
                 "gain_3q": concentrated["hit_at_1_gain"]["3"],
             },
+        },
+        # Poblaciones que rompen un supuesto del modelo (resultados adversos incluidos).
+        "stress": {
+            name: {
+                "queries": row["queries"],
+                "loop_hit_at_1": row["informativa"]["hit_at_1"],
+                "gain_3q": row["hit_at_1_gain"]["3"],
+                "info_minus_random_1q": row["hit_at_1_gain"]["1"],
+            }
+            for name, row in orbit["strange_loop"].items()
         },
         "role_sensitivity": {
             "spread": roles["spread"], "role_unchanged_pct": roles["role_unchanged_pct"],

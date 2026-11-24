@@ -182,19 +182,42 @@ del reporte aparecen vacías hasta que participen evaluadores.
 
 ## 6. Átomos de gusto
 
-`_extract_facets` convierte la parte positiva de la consulta en hasta 5 facetas:
+Un átomo es una dimensión sobre la que Strange Loop reparte atención, así que debe ser **una
+preferencia independiente expresada por el usuario**. `_extract_facets` (hasta 5 átomos):
 
-- conceptos turísticos con expansión controlada (playa, cenote, vino, bosque…);
-- **intenciones abstractas agrupadas** (`FACET_CONCEPTS`: romántico, familia, vida nocturna,
-  descanso, vistas, aventura, lago y río, café, artesanía). Antes, “niños pequeños, actividades
-  para la familia” producía cuatro átomos (*pequeños, actividades, niños, familia*) que
-  “competían” sin competir y abrían futuros artificiales; ahora es un solo átomo *familia*. Solo
-  afecta a Órbita y Strange Loop: el ranking 5 + 5 no cambia (sus métricas siguen idénticas);
-- las palabras de la consulta más raras del corpus (mayor idf), sin relleno como “quiero”,
-  “viaje”, “vida”, “pequeños” o “altura”.
+1. **Segmentación sintáctica.** La parte positiva se corta en elementos coordinados (comas, “y”,
+   “pero”; `text.positive_segments`, antes de normalizar porque la normalización borra la
+   puntuación). Cada segmento es un sintagma: núcleo + modificadores.
+2. **Conceptos de dominio como núcleos** (`FACET_CONCEPTS`: los de `CONCEPT_EXPANSIONS` con
+   etiqueta fija + romántico, familia, vida nocturna, descanso, vistas, aventura, lago y río, café,
+   artesanía). Se reconocen frases (“aire libre”), plurales y clíticos (`_forms`: “viñedos” →
+   viñedo, “relajarme” → relajar). Varios sinónimos del mismo concepto son **un** átomo, y la
+   etiqueta es fija, así que dos paráfrasis dan el mismo átomo. Los demás tokens del segmento son
+   **modificadores**: se suman a la sonda del núcleo (“gastronomía *tradicional*”), no son átomos.
+3. **Segmento sin concepto → como mucho un átomo**, el término más raro (idf) entre los que
+   **discriminan entre pueblos**: entropía normalizada de su peso en los 40 perfiles < 0.90
+   (`FACET_MAX_SPREAD`). Es una propiedad medida en el corpus, no una lista de palabras: “ver”,
+   “rico”, “aire”, “libre” y “tradicional” tienen ≥ 0.92 (aparecen igual en todos los pueblos y no
+   pueden decidir nada); “viñedos” 0.26, “vegetación” 0.81, “naturaleza” 0.82.
+4. **La exclusión gana siempre.** Un concepto que coincide con la exclusión (“sin mar” → playa)
+   nunca es átomo positivo. Si la consulta pide y excluye lo mismo (“playa pero sin playa”), Órbita
+   y Strange Loop responden con error explícito en vez de invertir la intención.
 
-Las pruebas `tests/test_orbit_eval.py` fijan estos casos y verifican que los sustantivos
-concretos (“museos”, “mezcal”) siguen saliendo del idf.
+| Consulta | Antes | Ahora |
+|---|---|---|
+| cascadas, vegetación y aventura al aire libre | cascadas, aventura, vegetacion, libre, aire | cascadas, vegetación, aventura |
+| niños pequeños y actividades familiares | familia, familiares | familia |
+| vino, viñedos y recorridos por bodegas | vino, bodegas, vinedos, recorridos | vino |
+| tranquilidad, descanso y desconectarme | descanso | descanso |
+| colonial, gastronomía tradicional, culturales, sin playa | arquitectura / colonial, gastronomia, culturales, tradicional | arquitectura colonial, gastronomía, culturales |
+| bosque, cabañas, gastronomía y aventura, sin playa | bosque, gastronomia, aventura, cabanas | bosque y montaña, gastronomía, aventura |
+| nadar en cenotes y visitar ruinas mayas | cenotes, mayas, nadar, ruinas, visitar | cenotes, arqueología |
+
+Solo afecta a Órbita y Strange Loop: el ranking 5 + 5 no usa `_extract_facets` y sus métricas no
+cambian. `tests/test_orbit_eval.py` fija estos casos y paráfrasis que no se usaron para diseñar
+las reglas. Límite: las reglas son de dominio y en español. Un gusto expresado con vocabulario
+fuera de los conceptos y poco discriminativo en el corpus se pierde como átomo, aunque sigue
+contando en $r$.
 
 Cada faceta $f$ tiene una fila $M[f,d] = 0.68\,\tilde s_{lex} + 0.32\,\tilde s_{evi}$ calculada
 con la sonda léxica de la faceta.
@@ -217,14 +240,37 @@ rango al eliminar cada faceta; $\rho$ es el riesgo. Las fórmulas exactas están
   destino sigue en el top 10. Ejemplo (colonial, sin playa): Ancla 100 %, Superviviente 100 %,
   Especialista 0.9 %. El Especialista es frágil por diseño.
 
-**Contrafactual mínimo.** Sea $\Delta_f = M[f,d] - M[f,a]$. Al trasladar una fracción $s$ de la
-atención uniforme hacia la mejor faceta $f^*$, el destino empata con el Ancla cuando
-$(1-s)\bar\Delta + s\Delta_{f^*} = 0$, es decir, $s^* = -\bar\Delta/(\Delta_{f^*} - \bar\Delta)$
-(prueba `test_counterfactual_shift_solves_the_tie_equation`).
+**Contrafactual mínimo (sobre una utilidad declarada).** No existe una transformación exacta
+entre pesos de faceta y el ranking 5 + 5: $r$ se calcula con la consulta completa (TF-IDF, E5,
+cobertura, entidades, penalizaciones) y no se descompone en facetas. Por eso el contrafactual
+**no** promete cambios en el ranking. Se define sobre la utilidad de facetas de Strange Loop, sin
+ruido:
 
-- Si $\Delta_{f^*} \le 0$, ninguna redistribución basta.
-- Si $d$ incumple una restricción, el caso es **imposible bajo las restricciones**.
-- El contrafactual opera en el espacio de facetas léxicas: no incluye E5 ni las penalizaciones.
+$$U_w(d) = 0.16\,r(d) + 0.84\,	extstyle\sum_f w_f M[f,d],\qquad w(s) = (1-s)\,	frac{1}{K}\mathbf 1 + s\,v,\ v\in\Delta^{K-1}.$$
+
+$r$ entra con todas sus señales, pero la parte que la atención mueve es $M$. Como
+$\Delta(s) = U(d) - U(a)$ es lineal en $w$, para cualquier $s$ el mejor $v$ es el vértice
+$e_{f^*}$, con $f^* = rg\max_f M[f,d] - M[f,a]$. Entonces:
+
+- $s^* = -\Delta(0)/(\Delta(1) - \Delta(0))$ es **mínimo sobre todas las direcciones** del símplex.
+  Se informa $\lceil 100 s^*
+ceil$ % y se comprueba recalculando $\Delta$. La prueba
+  `test_counterfactual_shift_is_sufficient_and_minimal` verifica en 3,000 casos aleatorios que el
+  % anunciado alcanza el empate y que con 1 punto menos **ninguna** faceta lo alcanza.
+- $\Delta(0) \ge 0$: con atención pareja ya iguala al Ancla en $U$ (aunque esté más abajo en el
+  5 + 5, porque $M$ no captura toda la consulta). La interfaz lo dice así.
+- $\Delta(1) < 0$: **imposible** para cualquier ponderación de facetas. Está en la cartera por su
+  rol, no por afinidad.
+- Si $d$ incumple una exclusión, es **imposible bajo las restricciones** y no se calcula.
+
+**Restricciones en la selección de roles.** La restricción dura (evidencia explícita de
+incumplir la exclusión, o un pueblo nombrado en ella: “sin Tulum”) **nunca** se relaja. Antes,
+si ningún candidato cumplía el filtro, `_pick` ignoraba el filtro completo y podía elegir un
+destino excluido. Ahora solo se relaja el umbral blando de plausibilidad, y la tarjeta lo declara
+(`eligibility: "umbral relajado"`). Si no quedan destinos seguros distintos, la cartera tiene
+menos de cinco roles en vez de uno inválido (`method.roles_filled`). Pruebas:
+`test_roles_respect_hard_exclusions_and_are_distinct`,
+`test_too_few_safe_destinations_shrinks_instead_of_breaking`.
 
 **Bottom 5 en Órbita:** `bottom_perspective` aplica este cálculo a los 5 menos compatibles sin
 forzarlos a ocupar roles.
@@ -246,23 +292,26 @@ Modelo, devuelto en `model` por la API:
 
 **¿Por qué 50,000?** (`artifacts/multiverse_audit.json`, 5 consultas, referencia N = 200,000):
 
+Corrida del 2026-11-24 tras corregir los átomos (`make audit-multiverse` la regenera; las cifras
+anteriores de esta tabla no coincidían con ningún artefacto guardado):
+
 | N | Máx. diferencia de proporción (pp, peor consulta) |
 |---|---|
-| 1,000 | 1.42 |
-| 5,000 | 0.83 |
-| 10,000 | 1.03 |
-| 50,000 | 0.30 |
-| 100,000 | 0.36 |
+| 1,000 | 3.14 |
+| 5,000 | 1.17 |
+| 10,000 | 1.59 |
+| 50,000 | 0.40 |
+| 100,000 | 0.19 |
 
 - El error estándar de peor caso es $0.5/\sqrt N$ = 0.22 pp con N = 50,000.
-- Entre 10 semillas, la desviación estándar máxima de una proporción es 0.22 pp y el destino líder
-  coincide en 10 de 10.
+- Entre 10 semillas, la desviación estándar máxima de una proporción es 0.19 pp, y el destino líder
+  es el mismo en las 10 semillas, en las 5 consultas.
 - Más allá de 50k la mejora queda por debajo de la variación entre semillas. La API devuelve el EE
   y el IC95 de cada proporción.
 
 **Incertidumbre:** $H = -\sum_d \hat p_d \ln \hat p_d / \ln 40 \in [0,1]$. Está validada en
 casos extremos: 0 con un solo destino, 1 con uniforme y $\ln 2/\ln 40$ con dos. Aumenta de forma
-monótona con el riesgo en las 5 consultas auditadas (por ejemplo, de 0.03 a 0.38 en playa).
+monótona con el riesgo en las 5 consultas auditadas (por ejemplo, de 0.02 a 0.56 en playa).
 
 **Preguntas de sacrificio.** Para cada par de facetas $(i, j)$, la partición $w_i \ge w_j$ divide
 los escenarios. Se elige la de mayor
@@ -287,60 +336,53 @@ entre sí no tiene significado y no se informa.
 
 ## 8 bis. Validación sin humanos: usuarios simulados y sensibilidad de roles
 
-`make validate-orbit` → `artifacts/orbit_validation.json` (65 consultas: banco + auditoría + el
-ejemplo del video; modo léxico; 100 usuarios por consulta).
+**Fuente única:** `make validate-orbit` escribe `artifacts/orbit_validation.json` y, desde ese
+mismo JSON, las tablas de [`docs/orbit_validation.md`](orbit_validation.md). Las cifras no se
+copian a mano en este documento (antes estaban desactualizadas: decían Ancla 65.0 % y 100 usuarios
+cuando el artefacto tenía 72.4 % y 150).
 
-**Usuarios simulados para Strange Loop.** Cada usuario tiene un peso de gustos oculto $w^*$; su
-destino ideal es $\arg\max_d 0.16\,r(d) + 0.84\,w^{*\top}M[\cdot,d]$. Responde con honestidad
-(“conservo la faceta con mayor $w^*$”) y medimos si el destino más frecuente del multiverso
-restante es su ideal. Dos poblaciones: *prior* (el $w^*$ sale del mismo Dirichlet que el modelo:
-caso optimista) y *concentrada* ($\alpha=0.35$: gustos dominados por una faceta, el modelo está
-mal especificado). Se promedia por consulta; IC95 bootstrap sobre consultas.
+**Tipo de evidencia: usuarios simulados.** Cada usuario tiene un peso oculto $w^*$ y un destino
+ideal; responde las preguntas de sacrificio y medimos si el destino más frecuente del multiverso
+restante es su ideal (Hit@1/Hit@5), con 0–3 preguntas: ninguna, al azar o de máxima información.
+Esto es la ablación E; la “mejora esperada de decisión” no se implementó. Para no evaluar al modelo
+con su propio supuesto, las poblaciones rompen uno a la vez:
 
-| Acierto del destino ideal (Hit@1) | Prior | Concentrada |
-|---|---|---|
-| Ancla (top 1 clásico) | 65.0 % | 53.9 % |
-| Strange Loop, 0 preguntas | 84.9 % | 63.6 % |
-| + 1 pregunta informativa / al azar | 88.9 % / 87.2 % | 68.3 % / 66.5 % |
-| + 3 preguntas informativas / al azar | **91.8 %** / 90.7 % | **73.2 %** / 70.7 % |
-| Mejora con 3 preguntas vs 0 (IC95) | +6.9 pp [4.0, 10.1] | +9.6 pp [5.8, 13.7] |
-| Informativa − azar con 3 preguntas (IC95) | +1.1 pp [0.3, 2.0] | +2.5 pp [1.2, 4.0] |
-
-Lectura: (1) agregar sobre posibles pesos acierta más que el ranking promedio, incluso con la
-población mal especificada; (2) cada pregunta aporta, y la de máxima información aporta más que
-una al azar, con IC que excluye 0. En 40 de 61 consultas preguntar no cambia nada porque todas
-las facetas apuntan al mismo pueblo (p. ej. “vino, viñedos, bodegas”): eso es correcto, no hay
-nada que desempatar. **Límite:** el usuario simulado usa la misma utilidad que el modelo; esto
-prueba coherencia interna y eficiencia de las preguntas, no satisfacción real. Eso lo mide el
-laboratorio humano (§5).
-
-**Sensibilidad de los pesos de rol.** Los 13 coeficientes de `ROLE_WEIGHTS` se multiplican a la vez
-por factores $U(0.5, 1.5)$ (200 sorteos por consulta):
-
-| Rol | Conserva el mismo destino |
+| Población | Qué supuesto rompe |
 |---|---|
-| Ancla | 100 % (no tiene pesos) |
-| Superviviente | 92.8 % |
-| Especialista | 88.4 % |
-| Portal | 86.3 % |
-| Comodín | 79.2 % |
+| prior | ninguno: misma utilidad y mismo Dirichlet (caso optimista, coherencia interna) |
+| concentrada | prior: gustos dominados por una faceta, $\alpha = 0.35$ (experimento A) |
+| relevancia_0.50 | utilidad: el usuario pesa $r$ con 0.50, no 0.16 (B) |
+| rendimientos_decrecientes | utilidad: $0.16r + 0.84\,w^{*\top}\sqrt{M}$, no lineal (B) |
+| ruido_15 / ruido_30 | respuestas: cada una se invierte con p = 0.15 / 0.30 (C) |
 
-La cartera completa coincide en Jaccard medio 0.92 y es idéntica en el 76.6 % de los sorteos.
-Moviendo un solo coeficiente ±50 %, ningún rol cambia en más del 7 % de las consultas (el más
-sensible es la mezcla del Portal). Conclusión: los pesos son de diseño, pero las decisiones no
-dependen de su valor exacto; el Comodín, que por definición equilibra cuatro criterios, es el
-más sensible, como cabe esperar.
+El reporte cuenta además las consultas donde una pregunta al azar acierta más que la informativa
+y donde preguntar empeora el acierto (experimento D). **Nada de esto es validación humana:** mide
+eficiencia de las preguntas y sensibilidad a supuestos falsos, no satisfacción.
+
+**Origen de cada parámetro.**
+
+| Parámetro | Tipo | Evidencia |
+|---|---|---|
+| Pesos del ranking 5 + 5 (señales) | calibrado | partición de calibración del holdout (§4) |
+| `ROLE_WEIGHTS` (Superviviente, Portal, Especialista, Comodín, diversidad) | diseño | sensibilidad ±50 % (tabla generada); no hay datos para estimarlos |
+| $\alpha = (28 - 24\rho)/K$ (Dirichlet), escala Gumbel $0.015 + 0.065\rho$ | diseño | auditoría de riesgo (`multiverse_audit.json`); población *concentrada* |
+| $0.16 / 0.84$ (peso de $r$ en $U$) | diseño | población *relevancia_0.50* mide el costo de equivocarse |
+| `FACET_MAX_SPREAD = 0.90` | diseño, medido en el corpus | separación entre términos genéricos (≥ 0.92) y gustos (≤ 0.86) |
+| Cualquiera de los anteriores como “mejor valor” | **requiere evaluación humana** | laboratorio §5 |
+
+No se ajustó ningún peso con estos experimentos ni con el conjunto de prueba: optimizar contra
+usuarios simulados con la misma utilidad sería circular.
 
 ## 9. Reproducibilidad
 
 ```bash
 make setup                # Python 3.9 de CLT + versiones fijadas
 make build-semantic       # índices + E5 (rankings léxicos idénticos byte a byte entre rebuilds)
-make test                 # 48 pruebas
+make test                 # 82 pruebas
 make evaluate-semantic    # seed + holdout + ablación + adversarial → docs/evaluation_report.md
 python scripts/experiments.py          # comparación de señales → docs/experimentos_hybrid.md
 python scripts/audit_multiverse.py     # convergencia, semillas, riesgo
-python scripts/validate_orbit.py       # usuarios simulados + sensibilidad de roles (~90 s)
+python scripts/validate_orbit.py       # usuarios simulados + sensibilidad → docs/orbit_validation.md
 make benchmark-api && make smoke-e2e
 ```
 
@@ -353,8 +395,10 @@ make benchmark-api && make smoke-e2e
 - El bottom 5 casi nunca contiene al destino correcto (1.5 % frente a 12.5 % al azar).
 - Las restricciones se respetan en el top 5 del seed.
 - Strange Loop es reproducible: hay convergencia medida, la IG es consistente y el colapso es real.
-- Con usuarios simulados, Strange Loop acierta el destino ideal más que el top 1 clásico (84.9 %
-  frente a 65.0 %) y 3 preguntas informativas suben a 91.8 %, mejor que preguntas al azar (§8 bis).
+- Con usuarios simulados que comparten la utilidad del modelo, Strange Loop acierta el destino
+  ideal más que el top 1 clásico, y las preguntas suben el acierto. Al romper la utilidad o meter
+  30 % de respuestas erróneas, la mejora con preguntas ya no es significativa
+  ([orbit_validation.md](orbit_validation.md)). Es coherencia interna, no validación humana.
 
 **Limitaciones abiertas:**
 
@@ -365,7 +409,8 @@ make benchmark-api && make smoke-e2e
 3. El seed está sesgado a favor del sistema.
 4. Los umbrales de evidencia (2× mediana, 0.5 % / 1 %) son heurísticos razonados, no calibrados
    con humanos. Deben ajustarse en la partición calibration.
-5. El contrafactual ignora E5 y las penalizaciones.
+5. El contrafactual se define sobre $U$ (incluye $r$ completo, pero solo $M$ se reparte). No es una
+   afirmación sobre el ranking 5 + 5, y así se comunica.
 6. Los pesos de los roles de Órbita y los parámetros Dirichlet/Gumbel son de diseño, no estimados.
    Mitigado: la cartera es robusta a ±50 % en todos los pesos a la vez (§8 bis), pero no están
    aprendidos de preferencias reales.
